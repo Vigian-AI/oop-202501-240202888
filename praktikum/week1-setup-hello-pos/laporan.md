@@ -90,11 +90,14 @@ public class HelloFunctional {
 
 ## Hasil Eksekusi
 - HelloProcedural
-![Screenshot hasil](./screenshots/output-HelloProcedural.png)
+<img width="1002" height="90" alt="Screenshot 2025-10-10 201924" src="https://github.com/user-attachments/assets/29337483-a1e3-4f87-85a9-3bddd90c5533" />
+
 - HelloOOP
-![Screenshot hasil](./screenshots/output-HelloOOP.png)
+<img width="1007" height="133" alt="Screenshot 2025-10-10 202451" src="https://github.com/user-attachments/assets/2aae21a2-79cc-42b2-9734-310bd77fbe78" />  
+
 - HelloFunctional
-![Screenshot hasil](./screenshots/output-HelloFunctional.png)
+<img width="808" height="157" alt="Screenshot 2025-10-10 203339" src="https://github.com/user-attachments/assets/414524e6-8ebf-413c-a609-520d2a4948f5" />
+
 
 ---
 
