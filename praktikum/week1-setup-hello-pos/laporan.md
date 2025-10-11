@@ -127,15 +127,10 @@ public class HelloFunctional {
 ## Quiz
 1. Apakah OOP selalu lebih baik dari prosedural?  
    **Jawaban:**
-   Tidak selalu. OOP lebih baik ketika kita membutuhkan representasi dunia nyata dengan objek, enkapsulasi data, dan hubungan antar-entitas yang kompleks. Namun, untuk aplikasi kecil, sederhana, atau tugas sekali jalan (script), paradigma prosedural lebih cepat, ringan, dan mudah dipahami tanpa overhead membuat class dan objek.
-
+   Tidak, Pemrograman Berorientasi Objek (OOP) tidak selalu lebih baik daripada pemrograman prosedural; keduanya memiliki kekuatan dan kelemahan, dan pilihan terbaik tergantung pada jenis proyek yang sedang dikerjakan.
 2. Kapan functional programming lebih cocok digunakan dibanding OOP  atau prosedural?    
    **Jawaban:**
-   Functional programming lebih cocok digunakan saat:
-   - Kita bekerja dengan data yang harus diproses secara paralel/konkuren (karena fungsi murni lebih mudah diparalelkan).
-   - Lingkungan membutuhkan reliabilitas tinggi dan minim bug (karena tidak ada *side effect*).
-   - Kasus seperti data transformation (ETL), pemrosesan koleksi besar, AI/ML pipeline, atau sistem event-driven.
-   - Kita ingin mengurangi kompleksitas logika dengan komposisi fungsi ketimbang hierarki kelas yang dalam.  
+   Pemrograman Fungsional (FP) lebih cocok digunakan daripada OOP atau prosedural ketika proyek berfokus pada transformasi data yang kompleks, memerlukan komputasi paralel yang aman, dan membutuhkan kode yang sangat teruji (testable) dan dapat diprediksi (predictable). 
 
 3. Bagaimana paradigma (prosedural, OOP, fungsional) memengaruhi maintainability dan scalability aplikasi?  
    **Jawaban:**
@@ -145,10 +140,7 @@ public class HelloFunctional {
 
 4. Mengapa OOP lebih cocok untuk mengembangkan aplikasi POS dibanding prosedural?  
 **Jawaban:**
-   Karena aplikasi POS (Point of Sale) memiliki banyak entitas berbeda yang saling berhubungan seperti `Produk`, `Transaksi`, `Kasir`, `Pelanggan`, dan `Pembayaran`. Dengan OOP:
-   - Data dan perilaku bisa disatukan dalam class (misalnya `Transaksi` punya method `hitungTotal()`).
-   - Relasi antar-objek jelas (misalnya `Transaksi` berisi daftar `Produk`).
-   - Kode lebih terstruktur, mudah dikembangkan, dan di-*maintain* seiring bertambahnya fitur.
+   OOP (Pemrograman Berorientasi Objek) jauh lebih cocok untuk mengembangkan aplikasi Point of Sale (POS) dibandingkan pemrograman prosedural karena POS adalah sistem yang secara alami kaya akan entitas dunia nyata yang saling berinteraksi dan memerlukan pemeliharaan serta pengembangan fitur yang berkelanjutan.
 
 5. Bagaimana paradigma fungsional dapat membantu mengurangi kode berulang (boilerplate code)?  
 **Jawaban:**
