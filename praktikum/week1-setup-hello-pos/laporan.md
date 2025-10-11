@@ -117,7 +117,7 @@ public class HelloFunctional {
 ## Kesimpulan
   - Pemrograman Prosedural ideal untuk proyek yang tidak kompleks dan diutamakan untuk kecepatan implementasi.
   - Pemrograman Berorientasi Objek (OOP) menyediakan fondasi struktural melalui penggunaan class dan objek, yang sangat          memfasilitasi pengembangan dan skalabilitas program di masa depan.
-  - Pemrograman Fungsional unggul dalam menghasilkan kode yang lebih padat dan mengurangi kode berulang (boilerplate) dengan     memanfaatkan lambda expressio
+  - Pemrograman Fungsional unggul dalam menghasilkan kode yang lebih padat dan mengurangi kode berulang (boilerplate) dengan     memanfaatkan lambda expressio.
 Dengan pemahaman yang kokoh terhadap ketiga model pemrograman ini, seorang pengembang dapat membuat keputusan yang terinformasi untuk memilih metodologi yang paling sesuai dengan kebutuhan spesifik dari aplikasi yang sedang dibangun.
 
 ---
