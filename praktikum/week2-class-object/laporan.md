@@ -31,19 +31,20 @@
 ## Langkah Praktikum
 **Langkah 1**: Persiapan Proyek dan Struktur Direktori
 Anggap Anda membuat folder proyek utama bernama AgriPOS. Anda perlu membuat struktur package yang sesuai dengan yang didefinisikan dalam kode (com.upb.agripos.model, com.upb.agripos.util, com.upb.agripos).
+
 **Langkah 2**: Pembuatan File Kode
 Buat dan simpan tiga file Java (.java) ke dalam direktori package yang sesuai. File Produk.java Lokasi: AgriPOS/src/com/upb/agripos/model/, File CreditBy.java
 Lokasi: AgriPOS/src/com/upb/agripos/util/ , ile MainProduk.java Lokasi: AgriPOS/src/com/upb/agripos/
+
 **Langkah 3**: Kompilasi dan Eksekusi (Manual via Terminal)
 Asumsikan Anda berada di dalam folder AgriPOS/ di Terminal/Command Prompt.
+
   **3.1. Kompilasi**
   Anda harus mengkompilasi semua file .java agar Java Virtual Machine (JVM) dapat membacanya.
+  
   **3.2. Eksekusi**
   Jalankan class utama yang berisi method main(), yaitu com.upb.agripos.MainProduk.
 Bash
-# Jalankan class utama
-# Perhatikan bahwa Anda harus menyertakan nama package lengkap
-java com.upb.agripos.MainProduk
 
 
 ## Kode Program
@@ -149,11 +150,7 @@ public class MainProduk {
 Analisis
 
 - Cara kerja kode:
-    Komponen,Penjelasan Mendalam
-Penerapan Paradigma OOP,"Program telah berhasil menerapkan OOP (Object-Oriented Programming). Inti dari aplikasi ini adalah Class Produk, yang berfungsi sebagai cetak biru untuk entitas produk pertanian. Data (atribut) dan logika (metode) terkait produk dibungkus menjadi satu kesatuan."
-Penyimpanan Informasi Objek,"Setiap kali objek baru (misalnya p1, p2) dibuat menggunakan constructor Produk(), objek tersebut menginstansiasi salinan unik dari atribut kode, nama, harga, dan stok. Ini memastikan bahwa perubahan pada stok p1 (Benih Padi) tidak akan memengaruhi stok p2 (Pupuk Urea)."
-Metode Mutasi Data Terkontrol,"Method tambahStok() dan kurangiStok() berfungsi sebagai API internal untuk memodifikasi atribut stok. Khususnya pada kurangiStok(), terdapat validasi (if (this.stok >= jumlah)) yang mencegah stok menjadi negatif. Ini adalah contoh baik dari Enkapsulasi yang menjaga integritas data."
-Utilitas Statis,"Class CreditBy menggunakan method static (print()). Method statis dapat dipanggil langsung dari nama Class tanpa perlu membuat objek (instansiasi), yang ideal untuk fungsi utilitas sederhana yang tidak terikat pada data objek tertentu."
+    penerapan paradigma oop, penyimpanan informasi objek, metode mutasi data terkontrol, utilitas statis. 
 - Perbedaan dengan minggu sebelumnya:
     - Minggu sebelumnya masih menggunakan pendekatan prosedural, di mana semua data dan logika berada di satu fungsi main().
     - Minggu ini mulai menerapkan pendekatan OOP, membuat kode lebih modular dan mudah diperluas.
@@ -172,32 +169,15 @@ Utilitas Statis,"Class CreditBy menggunakan method static (print()). Method stat
 ## Quiz
 
 1. **Mengapa atribut sebaiknya dideklarasikan sebagai private dalam class?**
+   
    **Jawaban:** Mendeklarasikan atribut sebagai private adalah kunci untuk mencapai Penyembunyian Data (Data Hiding) dan Enkapsulasi.
+   
 2. **Apa fungsi getter dan setter dalam enkapsulasi?**
+   
    **Jawaban:** - Getter, atau Accessor (pengakses), digunakan untuk mengambil atau membaca nilai dari atribut privat.
                 - Setter, atau Mutator (pengubah), digunakan untuk mengubah atau menetapkan nilai baru pada atribut privat.
-4. **Bagaimana cara class Produk mendukung pengembangan aplikasi POS yang lebih kompleks?**
-   **Jawaban:** Abstraksi dan Basis Data Transaksi 🛒
-Representasi Dunia Nyata: Class Produk memungkinkan aplikasi POS memodelkan setiap item fisik (benih, pupuk, cangkul) sebagai satu kesatuan logis. Daripada menyimpan kode, nama, dan harga di array terpisah, semua data tersebut kini terikat erat pada satu objek.
+   
+3. **Bagaimana cara class Produk mendukung pengembangan aplikasi POS yang lebih kompleks?**
+   
+   **Jawaban:** Class Produk mendukung pengembangan aplikasi Point of Sale (POS) yang lebih kompleks dengan menyediakan fondasi modular dan terpusat untuk manajemen data                    dan perilaku barang.
 
-Inti Modul Penjualan: Objek Produk menjadi komponen utama dalam setiap transaksi. Ketika seorang pelanggan membeli barang, sistem POS hanya perlu mereferensikan objek produk tersebut, mencatat harganya, dan memanggil method kurangiStok() untuk memperbarui inventaris.
-
-2. Kontrol Stok yang Terpusat dan Aman 🔐
-Logika Bisnis Terisolasi: Dengan adanya method seperti tambahStok() dan kurangiStok(), semua aturan bisnis terkait stok (misalnya, validasi bahwa stok tidak boleh negatif) diisolasi di dalam Class Produk.
-
-Keamanan Data (Enkapsulasi): Karena atribut stok bersifat private, class lain tidak dapat sembarangan mengubahnya. Modul penjualan tidak dapat langsung mengatur stok ke nilai yang salah; ia harus melalui method kurangiStok(), yang memastikan integritas data.
-
-3. Fleksibilitas Pengembangan Lanjutan 🧩
-Pewarisan (Inheritance): Class Produk dapat dijadikan parent class (kelas induk). Untuk POS yang kompleks, Anda dapat membuat class turunan (anak) seperti:
-
-ProdukBenih extends Produk (mungkin menambahkan atribut tanggalKadaluarsa).
-
-ProdukAlatPertanian extends Produk (mungkin menambahkan atribut garansi).
-
-Ini memungkinkan sistem menangani jenis barang yang berbeda dengan fungsionalitas unik tanpa merusak kode dasar Produk.
-
-Integrasi dengan Modul Lain:
-
-Database: Objek Produk dapat dengan mudah dipetakan ke baris di tabel database.
-
-Antarmuka Pengguna (UI): Data dari getter (getNama(), getHarga()) dapat langsung ditampilkan di layar kasir, dan method seperti tambahStok() dapat dipicu oleh tombol di antarmuka manajemen inventaris.
