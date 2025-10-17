@@ -33,18 +33,17 @@
 Anggap Anda membuat folder proyek utama bernama AgriPOS. Anda perlu membuat struktur package yang sesuai dengan yang didefinisikan dalam kode (com.upb.agripos.model, com.upb.agripos.util, com.upb.agripos).
 
 **Langkah 2**: Pembuatan File Kode
-Buat dan simpan tiga file Java (.java) ke dalam direktori package yang sesuai. File Produk.java Lokasi: AgriPOS/src/com/upb/agripos/model/, File CreditBy.java
-Lokasi: AgriPOS/src/com/upb/agripos/util/ , ile MainProduk.java Lokasi: AgriPOS/src/com/upb/agripos/
+Buat dan simpan tiga file Java (.java) ke dalam direktori package yang sesuai.
+- File Produk.java Lokasi: AgriPOS/src/com/upb/agripos/model/.
+- File CreditBy.java Lokasi: AgriPOS/src/com/upb/agripos/util/.
+- File MainProduk.java Lokasi: AgriPOS/src/com/upb/agripos/.
 
 **Langkah 3**: Kompilasi dan Eksekusi (Manual via Terminal)
 Asumsikan Anda berada di dalam folder AgriPOS/ di Terminal/Command Prompt.
-
-  **3.1. Kompilasi**
+ - Kompilasi
   Anda harus mengkompilasi semua file .java agar Java Virtual Machine (JVM) dapat membacanya.
-  
-  **3.2. Eksekusi**
+- Eksekusi
   Jalankan class utama yang berisi method main(), yaitu com.upb.agripos.MainProduk.
-Bash
 
 
 ## Kode Program
@@ -140,9 +139,9 @@ public class MainProduk {
 
 ---
 
-## Hasil Eksekusi
+Hasil Eksekusi
 
-![Screenshot hasil eksekusi](./screenshots/week-2-class-object.png)
+<img width="998" height="378" alt="Screenshot 2025-10-15 202452" src="https://github.com/user-attachments/assets/f71678fc-741f-4efd-a41c-26fed3396cd6" />
 
 ---
 
