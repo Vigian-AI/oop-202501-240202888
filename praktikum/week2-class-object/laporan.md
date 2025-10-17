@@ -1,73 +1,203 @@
-# Laporan Praktikum Minggu 1 (sesuaikan minggu ke berapa?)
-Topik: [Tuliskan judul topik, misalnya "Class dan Object"]
+# Laporan Praktikum Minggu 2
+
+**Topik:** Class dan Object (Produk Pertanian)
 
 ## Identitas
-- Nama  : [Nama Mahasiswa]
-- NIM   : [NIM Mahasiswa]
-- Kelas : [Kelas]
+
+- **Nama:** Fendy Agustian
+- **NIM:** 240202898
+- **Kelas:** 3IKRB
 
 ---
 
 ## Tujuan
-(Tuliskan tujuan praktikum minggu ini.  
-Contoh: *Mahasiswa memahami konsep class dan object serta dapat membuat class Produk dengan enkapsulasi.*)
+
+- Mahasiswa mampu **menjelaskan konsep class, object, atribut, dan method** dalam OOP.
+- Mahasiswa mampu **menerapkan access modifier dan enkapsulasi** dalam pembuatan class.
+- Mahasiswa mampu **mengimplementasikan class Produk pertanian** dengan atribut dan method yang sesuai.
+- Mahasiswa mampu **mendemonstrasikan instansiasi object** serta menampilkan data produk pertanian di console.
+- Mahasiswa mampu **menyusun laporan praktikum** dengan bukti kode, hasil eksekusi, dan analisis sederhana.
 
 ---
 
 ## Dasar Teori
-(Tuliskan ringkasan teori singkat (3–5 poin) yang mendasari praktikum.  
-Contoh:  
-1. Class adalah blueprint dari objek.  
-2. Object adalah instansiasi dari class.  
-3. Enkapsulasi digunakan untuk menyembunyikan data.)
+
+1. **Class** adalah cetak biru (blueprint), rancangan, atau prototipe yang mendefinisikan sifat (atribut) dan perilaku (method) yang umum untuk semua objek dari jenis tertentu. Class sendiri bukan data, melainkan definisi tentang bagaimana data akan dibuat dan dikelola.
+2. **Object** adalah instansiasi (wujud nyata) dari sebuah Class. Setiap objek memiliki salinan dari atribut yang didefinisikan dalam Class dan dapat menggunakan method yang ada.
+3. **Enkapsulasi** ekanisme penggabungan data (atribut) dengan method (perilaku) yang beroperasi pada data tersebut menjadi satu unit (class), sekaligus mengendalikan akses ke data tersebut. Konsep ini sering disebut sebagai "data hiding" (penyembunyian data).
 
 ---
 
 ## Langkah Praktikum
-(Tuliskan Langkah-langkah dalam prakrikum, contoh:
-1. Langkah-langkah yang dilakukan (setup, coding, run).  
-2. File/kode yang dibuat.  
-3. Commit message yang digunakan.)
+**Langkah 1**: Persiapan Proyek dan Struktur Direktori
+Anggap Anda membuat folder proyek utama bernama AgriPOS. Anda perlu membuat struktur package yang sesuai dengan yang didefinisikan dalam kode (com.upb.agripos.model, com.upb.agripos.util, com.upb.agripos).
+**Langkah 2**: Pembuatan File Kode
+Buat dan simpan tiga file Java (.java) ke dalam direktori package yang sesuai. File Produk.java Lokasi: AgriPOS/src/com/upb/agripos/model/, File CreditBy.java
+Lokasi: AgriPOS/src/com/upb/agripos/util/ , ile MainProduk.java Lokasi: AgriPOS/src/com/upb/agripos/
+**Langkah 3**: Kompilasi dan Eksekusi (Manual via Terminal)
+Asumsikan Anda berada di dalam folder AgriPOS/ di Terminal/Command Prompt.
+  **3.1. Kompilasi**
+  Anda harus mengkompilasi semua file .java agar Java Virtual Machine (JVM) dapat membacanya.
+  **3.2. Eksekusi**
+  Jalankan class utama yang berisi method main(), yaitu com.upb.agripos.MainProduk.
+Bash
+# Jalankan class utama
+# Perhatikan bahwa Anda harus menyertakan nama package lengkap
+java com.upb.agripos.MainProduk
 
----
 
 ## Kode Program
-(Tuliskan kode utama yang dibuat, contoh:  
+
+### Produk.java
 
 ```java
-// Contoh
-Produk p1 = new Produk("BNH-001", "Benih Padi", 25000, 100);
-System.out.println(p1.getNama());
+package com.upb.agripos.model;
+
+public class Produk {
+    private String kode;
+    private String nama;
+    private double harga;
+    private int stok;
+
+    public Produk(String kode, String nama, double harga, int stok) {
+        this.kode = kode;
+        this.nama = nama;
+        this.harga = harga;
+        this.stok = stok;
+    }
+
+    public String getKode() { return kode; }
+    public void setKode(String kode) { this.kode = kode; }
+
+    public String getNama() { return nama; }
+    public void setNama(String nama) { this.nama = nama; }
+
+    public double getHarga() { return harga; }
+    public void setHarga(double harga) { this.harga = harga; }
+
+    public int getStok() { return stok; }
+    public void setStok(int stok) { this.stok = stok; }
+
+    public void tambahStok(int jumlah) {
+        this.stok += jumlah;
+    }
+
+    public void kurangiStok(int jumlah) {
+        if (this.stok >= jumlah) {
+            this.stok -= jumlah;
+        } else {
+            System.out.println("Stok tidak mencukupi!");
+        }
+    }
+}
 ```
-)
+
+### CreditBy.java
+
+```java
+package com.upb.agripos.util;
+
+public class CreditBy {
+    public static void print(String nim, String nama) {
+        System.out.println("\ncredit by: " + nim + " - " + nama);
+    }
+}
+```
+
+### MainProduk.java
+
+```java
+package com.upb.agripos;
+
+import com.upb.agripos.model.Produk;
+import com.upb.agripos.util.CreditBy;
+
+public class MainProduk {
+    public static void main(String[] args) {
+        Produk p1 = new Produk("BNH-001", "Benih Padi IR64", 25000, 100);
+        Produk p2 = new Produk("PPK-101", "Pupuk Urea 50kg", 350000, 40);
+        Produk p3 = new Produk("ALT-501", "Cangkul Baja", 90000, 15);
+
+        System.out.println("Kode: " + p1.getKode() + ", Nama: " + p1.getNama() + ", Harga: " + p1.getHarga() + ", Stok: " + p1.getStok());
+        System.out.println("Kode: " + p2.getKode() + ", Nama: " + p2.getNama() + ", Harga: " + p2.getHarga() + ", Stok: " + p2.getStok());
+        System.out.println("Kode: " + p3.getKode() + ", Nama: " + p3.getNama() + ", Harga: " + p3.getHarga() + ", Stok: " + p3.getStok());
+
+        // Tambah dan kurangi stok
+        p1.tambahStok(50);
+        p2.kurangiStok(20);
+        p3.tambahStok(10);
+
+        System.out.println("\nSetelah update stok:");
+        System.out.println("Kode: " + p1.getKode() + ", Nama: " + p1.getNama() + ", Harga: " + p1.getHarga() + ", Stok: " + p1.getStok());
+        System.out.println("Kode: " + p2.getKode() + ", Nama: " + p2.getNama() + ", Harga: " + p2.getHarga() + ", Stok: " + p2.getStok());
+        System.out.println("Kode: " + p3.getKode() + ", Nama: " + p3.getNama() + ", Harga: " + p3.getHarga() + ", Stok: " + p3.getStok());
+
+        CreditBy.print("240202898", "Fendy Agustian");
+    }
+}
+```
+
 ---
 
 ## Hasil Eksekusi
-(Sertakan screenshot hasil eksekusi program.  
-![Screenshot hasil](screenshots/hasil.png)
-)
+
+![Screenshot hasil eksekusi](./screenshots/week-2-class-object.png)
+
 ---
 
 ## Analisis
-(
-- Jelaskan bagaimana kode berjalan.  
-- Apa perbedaan pendekatan minggu ini dibanding minggu sebelumnya.  
-- Kendala yang dihadapi dan cara mengatasinya.  
-)
+Analisis
+
+- Cara kerja kode:
+    Komponen,Penjelasan Mendalam
+Penerapan Paradigma OOP,"Program telah berhasil menerapkan OOP (Object-Oriented Programming). Inti dari aplikasi ini adalah Class Produk, yang berfungsi sebagai cetak biru untuk entitas produk pertanian. Data (atribut) dan logika (metode) terkait produk dibungkus menjadi satu kesatuan."
+Penyimpanan Informasi Objek,"Setiap kali objek baru (misalnya p1, p2) dibuat menggunakan constructor Produk(), objek tersebut menginstansiasi salinan unik dari atribut kode, nama, harga, dan stok. Ini memastikan bahwa perubahan pada stok p1 (Benih Padi) tidak akan memengaruhi stok p2 (Pupuk Urea)."
+Metode Mutasi Data Terkontrol,"Method tambahStok() dan kurangiStok() berfungsi sebagai API internal untuk memodifikasi atribut stok. Khususnya pada kurangiStok(), terdapat validasi (if (this.stok >= jumlah)) yang mencegah stok menjadi negatif. Ini adalah contoh baik dari Enkapsulasi yang menjaga integritas data."
+Utilitas Statis,"Class CreditBy menggunakan method static (print()). Method statis dapat dipanggil langsung dari nama Class tanpa perlu membuat objek (instansiasi), yang ideal untuk fungsi utilitas sederhana yang tidak terikat pada data objek tertentu."
+- Perbedaan dengan minggu sebelumnya:
+    - Minggu sebelumnya masih menggunakan pendekatan prosedural, di mana semua data dan logika berada di satu fungsi main().
+    - Minggu ini mulai menerapkan pendekatan OOP, membuat kode lebih modular dan mudah diperluas.
+- Kendala:
+    - Tidak menemukan kendala yang begitu berarti
+
 ---
 
 ## Kesimpulan
-(Tuliskan kesimpulan dari praktikum minggu ini.  
-Contoh: *Dengan menggunakan class dan object, program menjadi lebih terstruktur dan mudah dikembangkan.*)
 
+- Program Menjadi Lebih Terstruktur (Modularitas)
+- Mudah Dikembangkan (Maintainability & Extensibility)
+- Mendukung Prinsip Reusability (Dapat Digunakan Kembali🏗️
 ---
 
 ## Quiz
-(1. [Tuliskan kembali pertanyaan 1 dari panduan]  
-   **Jawaban:** …  
 
-2. [Tuliskan kembali pertanyaan 2 dari panduan]  
-   **Jawaban:** …  
+1. **Mengapa atribut sebaiknya dideklarasikan sebagai private dalam class?**
+   **Jawaban:** Mendeklarasikan atribut sebagai private adalah kunci untuk mencapai Penyembunyian Data (Data Hiding) dan Enkapsulasi.
+2. **Apa fungsi getter dan setter dalam enkapsulasi?**
+   **Jawaban:** - Getter, atau Accessor (pengakses), digunakan untuk mengambil atau membaca nilai dari atribut privat.
+                - Setter, atau Mutator (pengubah), digunakan untuk mengubah atau menetapkan nilai baru pada atribut privat.
+4. **Bagaimana cara class Produk mendukung pengembangan aplikasi POS yang lebih kompleks?**
+   **Jawaban:** Abstraksi dan Basis Data Transaksi 🛒
+Representasi Dunia Nyata: Class Produk memungkinkan aplikasi POS memodelkan setiap item fisik (benih, pupuk, cangkul) sebagai satu kesatuan logis. Daripada menyimpan kode, nama, dan harga di array terpisah, semua data tersebut kini terikat erat pada satu objek.
 
-3. [Tuliskan kembali pertanyaan 3 dari panduan]  
-   **Jawaban:** …  )
+Inti Modul Penjualan: Objek Produk menjadi komponen utama dalam setiap transaksi. Ketika seorang pelanggan membeli barang, sistem POS hanya perlu mereferensikan objek produk tersebut, mencatat harganya, dan memanggil method kurangiStok() untuk memperbarui inventaris.
+
+2. Kontrol Stok yang Terpusat dan Aman 🔐
+Logika Bisnis Terisolasi: Dengan adanya method seperti tambahStok() dan kurangiStok(), semua aturan bisnis terkait stok (misalnya, validasi bahwa stok tidak boleh negatif) diisolasi di dalam Class Produk.
+
+Keamanan Data (Enkapsulasi): Karena atribut stok bersifat private, class lain tidak dapat sembarangan mengubahnya. Modul penjualan tidak dapat langsung mengatur stok ke nilai yang salah; ia harus melalui method kurangiStok(), yang memastikan integritas data.
+
+3. Fleksibilitas Pengembangan Lanjutan 🧩
+Pewarisan (Inheritance): Class Produk dapat dijadikan parent class (kelas induk). Untuk POS yang kompleks, Anda dapat membuat class turunan (anak) seperti:
+
+ProdukBenih extends Produk (mungkin menambahkan atribut tanggalKadaluarsa).
+
+ProdukAlatPertanian extends Produk (mungkin menambahkan atribut garansi).
+
+Ini memungkinkan sistem menangani jenis barang yang berbeda dengan fungsionalitas unik tanpa merusak kode dasar Produk.
+
+Integrasi dengan Modul Lain:
+
+Database: Objek Produk dapat dengan mudah dipetakan ke baris di tabel database.
+
+Antarmuka Pengguna (UI): Data dari getter (getNama(), getHarga()) dapat langsung ditampilkan di layar kasir, dan method seperti tambahStok() dapat dipicu oleh tombol di antarmuka manajemen inventaris.
