@@ -29,21 +29,23 @@
 ---
 
 ## Langkah Praktikum
-**Langkah 1**: Persiapan Proyek dan Struktur Direktori
-Anggap Anda membuat folder proyek utama bernama AgriPOS. Anda perlu membuat struktur package yang sesuai dengan yang didefinisikan dalam kode (com.upb.agripos.model, com.upb.agripos.util, com.upb.agripos).
+1. **Membuat Class Produk**
+   - Buat file `Produk.java` pada package `model`.
+   - Tambahkan atribut: `kode`, `nama`, `harga`, dan `stok`.
+   - Gunakan enkapsulasi dengan menjadikan atribut bersifat private dan membuat getter serta setter untuk masing-masing atribut.  
 
-**Langkah 2**: Pembuatan File Kode
-Buat dan simpan tiga file Java (.java) ke dalam direktori package yang sesuai.
-- File Produk.java Lokasi: AgriPOS/src/com/upb/agripos/model/.
-- File CreditBy.java Lokasi: AgriPOS/src/com/upb/agripos/util/.
-- File MainProduk.java Lokasi: AgriPOS/src/com/upb/agripos/.
+2. **Membuat Class CreditBy**
+   - Buat file `CreditBy.java` pada package `util`.
+   - Isi class dengan method statis untuk menampilkan identitas mahasiswa di akhir output: `credit by: <NIM> - <Nama>`.
 
-**Langkah 3**: Kompilasi dan Eksekusi (Manual via Terminal)
-Asumsikan Anda berada di dalam folder AgriPOS/ di Terminal/Command Prompt.
- - Kompilasi
-  Anda harus mengkompilasi semua file .java agar Java Virtual Machine (JVM) dapat membacanya.
-- Eksekusi
-  Jalankan class utama yang berisi method main(), yaitu com.upb.agripos.MainProduk.
+3. **Membuat Objek Produk dan Menampilkan Credit**
+   - Buat file `MainProduk.java`.
+   - Instansiasi minimal tiga objek produk, misalnya "Benih Padi", "Pupuk Urea", dan satu produk alat pertanian.
+   - Tampilkan informasi produk melalui method getter.  
+   - Panggil `CreditBy.print("<NIM>", "<Nama>")` di akhir `main` untuk menampilkan identitas.
+
+4. **Commit dan Push**
+   - Commit dengan pesan: `week2-class-object`.  
 
 
 ## Kode Program
