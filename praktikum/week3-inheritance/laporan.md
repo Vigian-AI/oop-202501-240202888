@@ -1,5 +1,5 @@
-# Laporan Praktikum Minggu 1 (sesuaikan minggu ke berapa?)
-Topik: Bab 3 – Inheritance (Kategori Produk)
+# Laporan Praktikum Minggu 3
+Topik: Bab 3 – Inheritance
 
 ## Identitas
 - Nama  : Vigian Agus Isnaeni
@@ -129,7 +129,7 @@ public class MainInheritance {
 
 ## Hasil Eksekusi
 (Sertakan screenshot hasil eksekusi program.  
-![Screenshot hasil](screenshots/mm.png)
+![Screenshot hasil](screenshots/Inheriatence.png)
 )
 ---
 
