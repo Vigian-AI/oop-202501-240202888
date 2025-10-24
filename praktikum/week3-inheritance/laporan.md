@@ -84,11 +84,26 @@ public class MainInheritance {
 ---
 
 ## Analisis
-- Ketiga subclass (`Benih`, `Pupuk`, dan `AlatPertanian`) **mewarisi atribut dan method** dari superclass `Produk`.  
-- Setiap subclass menambahkan **atribut unik** yang relevan dengan jenis produknya.  
-- Method `deskripsi()` menampilkan informasi lengkap dengan memanfaatkan pewarisan.  
-- Dibanding minggu sebelumnya (tanpa inheritance), kode lebih **efisien**, **terstruktur**, dan **mudah dikembangkan**. 
----
+Ketiga subclass (Benih, Pupuk, AlatPertanian) mewarisi atribut dan method dari superclass Produk, seperti nama, harga, dan stok.
+Masing-masing menambahkan atribut unik:
+
+   - Benih → jenis_tanaman
+
+   - Pupuk → komposisi
+
+   - AlatPertanian → bahan
+
+Method deskripsi() di setiap subclass menggunakan super() untuk menampilkan informasi dasar dari Produk, lalu menambah detail spesifik masing-masing.
+
+Dengan inheritance, kode menjadi:
+
+   -Lebih efisien: tidak perlu menulis ulang atribut umum.
+
+   -Lebih terstruktur: jelas hubungan induk–turunan.
+
+   -Mudah dikembangkan: mudah menambah jenis produk baru.
+
+Dibanding versi tanpa pewarisan, kode sekarang lebih ringkas, rapi, dan mudah dipelihara.
 
 ## Kesimpulan
 - Inheritance membuat program lebih terorganisir dan menghindari duplikasi kode.  
