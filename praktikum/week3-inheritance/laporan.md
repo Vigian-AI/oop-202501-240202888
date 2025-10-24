@@ -105,6 +105,8 @@ Dengan inheritance, kode menjadi:
 
 Dibanding versi tanpa pewarisan, kode sekarang lebih ringkas, rapi, dan mudah dipelihara.
 
+---
+
 ## Kesimpulan
 Dengan menggunakan pewarisan (inheritance):
 
@@ -116,6 +118,7 @@ Dengan menggunakan pewarisan (inheritance):
      
    - Method deskripsi() memanfaatkan super() agar tetap menampilkan informasi dasar dari Produk, lalu menambahkan detail spesifik subclass.
 
+---
 
 ## Quiz
 1. **Apa keuntungan menggunakan inheritance dibanding membuat class terpisah tanpa hubungan?**
