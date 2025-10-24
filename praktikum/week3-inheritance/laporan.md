@@ -97,27 +97,32 @@ Method deskripsi() di setiap subclass menggunakan super() untuk menampilkan info
 
 Dengan inheritance, kode menjadi:
 
-   -Lebih efisien: tidak perlu menulis ulang atribut umum.
+   - Lebih efisien: tidak perlu menulis ulang atribut umum.
 
-   -Lebih terstruktur: jelas hubungan induk–turunan.
+   - Lebih terstruktur: jelas hubungan induk–turunan.
 
-   -Mudah dikembangkan: mudah menambah jenis produk baru.
+   - Mudah dikembangkan: mudah menambah jenis produk baru.
 
 Dibanding versi tanpa pewarisan, kode sekarang lebih ringkas, rapi, dan mudah dipelihara.
 
 ## Kesimpulan
-- Inheritance membuat program lebih terorganisir dan menghindari duplikasi kode.  
-- Subclass dapat memperluas fungsionalitas superclass tanpa perlu menulis ulang atribut dan method dasar.  
-- Praktikum ini memperkuat pemahaman konsep **reusability dan extensibility** dalam OOP.  
----
+Dengan menggunakan pewarisan (inheritance):
+
+   - Kode menjadi lebih efisien, karena bagian umum hanya ditulis sekali.
+
+   - Struktur menjadi lebih teratur, dengan hubungan hierarkis yang jelas antara kelas induk dan turunan.
+
+   - Program lebih mudah dikembangkan, karena subclass baru bisa ditambahkan tanpa mengubah kode lama.
+     
+   - Method deskripsi() memanfaatkan super() agar tetap menampilkan informasi dasar dari Produk, lalu menambahkan detail spesifik subclass.
+
 
 ## Quiz
-1. **Apa keuntungan menggunakan inheritance dibanding membuat class terpisah tanpa hubungan?**  
-   **Jawaban:** Kode menjadi lebih efisien dan mudah dipelihara karena atribut dan method umum hanya didefinisikan satu kali di superclass.  
+1. **Apa keuntungan menggunakan inheritance dibanding membuat class terpisah tanpa hubungan?**
+**Jawaban:** Inheritance membuat program lebih terstruktur dan fleksibel, karena perubahan pada superclass otomatis berlaku untuk semua subclass, sehingga menghemat waktu dan mengurangi kesalahan kode berulang.
 
-2. **Bagaimana cara subclass memanggil konstruktor superclass?**  
-   **Jawaban:** Dengan menggunakan `super(parameter)` di baris pertama konstruktor subclass.  
+2. **Bagaimana cara subclass memanggil konstruktor superclass?**
+**Jawaban:** Subclass memanggil konstruktor superclass menggunakan super().__init__(parameter), agar atribut dari superclass dapat diinisialisasi tanpa harus menulis ulang.
 
-3. **Berikan contoh kasus di POS pertanian selain Benih, Pupuk, dan Alat Pertanian yang bisa dijadikan subclass.**  
-
-   **Jawaban:** Subclass `Pestisida` dengan atribut tambahan seperti `bahanAktif` dan `dosisPenggunaan`.  
+3. **Berikan contoh kasus di POS pertanian selain Benih, Pupuk, dan Alat Pertanian yang bisa dijadikan subclass.**
+**Jawaban:** Subclass ObatTanaman dengan atribut tambahan seperti targetHama dan caraAplikasi, untuk mencatat jenis hama yang dikendalikan dan cara penggunaannya.
