@@ -1,6 +1,6 @@
+<p align="right"> <img src="https://komarev.com/ghpvc/?username=Vigian-AI&repo=oop-202501-240202888&label=Repo%20views&color=212121&style=flat-square" alt="oop-202501-240202888" /> </p>
 
-
-# Praktikum OOP – Agri-POS (20251)
+# Praktikum OOP – Agri-POS (20251)   
 
 Repositori ini adalah **template praktikum** untuk mata kuliah *Pemrograman Berorientasi Objek (OOP)* semester gasal 2025/2026, dengan studi kasus **Agri-POS (Point of Sales Toko Pertanian)**.
 
