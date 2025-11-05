@@ -1,0 +1,21 @@
+package model.pembayaran;
+
+public abstract class Pembayaran {
+    protected String invoiceNo;
+    protected double total;
+
+    public Pembayaran(String invoiceNo, double total) {
+        this.invoiceNo = invoiceNo;
+        this.total = total;
+    }
+
+    public abstract double biaya();               // fee tambahan
+    public abstract boolean prosesPembayaran();   // proses tiap metode
+
+    public double totalBayar() {
+        return total + biaya();
+    }
+
+    public String getInvoiceNo() { return invoiceNo; }
+    public double getTotal() { return total; }
+}
