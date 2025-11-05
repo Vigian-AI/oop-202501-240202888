@@ -105,7 +105,7 @@ public class MainAbstraction {
         CreditBy.print("240202898", "Fendy Agustian");
     }
 }
-...java
+```
 ---
 
 ## Hasil Eksekusi
