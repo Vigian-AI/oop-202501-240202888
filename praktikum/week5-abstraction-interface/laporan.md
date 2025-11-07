@@ -58,14 +58,14 @@ Dalam konteks Agri-POS, **Pembayaran** dapat dimodelkan sebagai abstract class d
 
 ## Kode Program
  
-```java package com.upb.agripos;
+```java package main.java.com.upb.agripos;
 
-import com.upb.agripos.util.CreditBy;
-import model.kontrak.Receiptable;
-import model.pembayaran.Cash;
-import model.pembayaran.EWallet;
-import model.pembayaran.Pembayaran;
-import model.pembayaran.TransferBank;
+import main.java.com.upb.agripos.util.CreditBy;
+import main.java.com.upb.agripos.model.kontrak.Receiptable;
+import main.java.com.upb.agripos.model.pembayaran.Cash;
+import main.java.com.upb.agripos.model.pembayaran.EWallet;
+import main.java.com.upb.agripos.model.pembayaran.Pembayaran;
+import main.java.com.upb.agripos.model.pembayaran.TransferBank;
 
 public class MainAbstraction {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package model.pembayaran;
+package main.java.com.upb.agripos.model.pembayaran;
 
 public abstract class Pembayaran {
     protected String invoiceNo;

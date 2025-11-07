@@ -1,7 +1,7 @@
-package model.pembayaran;
+package main.java.com.upb.agripos.model.pembayaran;
 
-import model.kontrak.Validatable;
-import model.kontrak.Receiptable;
+import main.java.com.upb.agripos.model.kontrak.Receiptable;
+import main.java.com.upb.agripos.model.kontrak.Validatable;
 
 public class EWallet extends Pembayaran implements Validatable, Receiptable {
     private String akun;
