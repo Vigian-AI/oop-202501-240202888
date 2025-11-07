@@ -1,7 +1,7 @@
-package com.upb.agripos.model;
+package main.java.com.upb.agripos;
 
-import com.upb.agripos.util.CreditBy;
-
+import main.java.com.upb.agripos.model.Produk;
+import main.java.com.upb.agripos.util.CreditBy;
 public class MainProduk {
     public static void main(String[] args) {
         Produk p1 = new Produk("BNH-001", "Benih Padi IR64", 25000, 100);

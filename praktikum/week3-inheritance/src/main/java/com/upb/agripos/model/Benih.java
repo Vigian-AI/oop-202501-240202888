@@ -10,6 +10,7 @@ public class Benih extends Produk {
 
     public String getVarietas() { return varietas; }
     public void setVarietas(String varietas) { this.varietas = varietas; }
+    
 
     public String deskripsi() {
         return getNama() + " - Varietas: " + varietas + "\nDeskripsi Produk\n" + "Kode: " + getKode() + " | " + "Harga: " + getHarga() + " | " + "Stok: " + getStok();
