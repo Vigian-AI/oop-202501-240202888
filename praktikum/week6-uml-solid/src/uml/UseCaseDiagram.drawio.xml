@@ -1,0 +1,127 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36" version="29.1.1">
+  <diagram name="AgriPos Use Case" id="agripos-usecase">
+    <mxGraphModel dx="2430" dy="2034" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="system-boundary" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=none;dashed=0;fontSize=16;" value="&lt;b&gt;AgriPos&lt;/b&gt;" vertex="1">
+          <mxGeometry height="870" width="430" x="280" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-admin" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=16;" value="Actor&lt;br&gt;Admin" vertex="1">
+          <mxGeometry height="60" width="30" x="120" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-kasir" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=16;" value="Actor&lt;br&gt;Kasir" vertex="1">
+          <mxGeometry height="60" width="30" x="120" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-kelola-produk" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" value="Kelola Produk" vertex="1">
+          <mxGeometry height="70" width="140" x="320" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-lihat-laporan" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" value="Lihat Laporan" vertex="1">
+          <mxGeometry height="70" width="140" x="320" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-login" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" value="Login" vertex="1">
+          <mxGeometry height="70" width="140" x="320" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-transaksi" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" value="Transaksi" vertex="1">
+          <mxGeometry height="70" width="140" x="320" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="2C93HI8pTktB6HphHaQ6-1" edge="1" parent="1" source="uc-checkout" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;" target="uc-cetak-struk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-checkout" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" value="Checkout" vertex="1">
+          <mxGeometry height="70" width="140" x="320" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-cetak-struk" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" value="Cetak Struk" vertex="1">
+          <mxGeometry height="70" width="140" x="320" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-tambah-keranjang" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" value="Tambah ke&lt;br&gt;Keranjang" vertex="1">
+          <mxGeometry height="70" width="140" x="560" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-hitung-total" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" value="Hitung Total" vertex="1">
+          <mxGeometry height="70" width="140" x="560" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-pembayaran-tunai" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" value="Pembayaran&lt;br&gt;Tunai" vertex="1">
+          <mxGeometry height="70" width="140" x="560" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-pembayaran-ewallet" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" value="Pembayaran&lt;br&gt;E-Wallet" vertex="1">
+          <mxGeometry height="70" width="140" x="560" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="conn-admin-kelola" edge="1" parent="1" source="actor-admin" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=1;fontSize=16;" target="uc-kelola-produk" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="380" as="sourcePoint" />
+            <mxPoint x="440" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-admin-laporan" edge="1" parent="1" source="actor-admin" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=1;fontSize=16;" target="uc-lihat-laporan" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="380" as="sourcePoint" />
+            <mxPoint x="440" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-admin-login" edge="1" parent="1" source="actor-admin" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=1;fontSize=16;" target="uc-login" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="380" as="sourcePoint" />
+            <mxPoint x="440" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-kasir-login" edge="1" parent="1" source="actor-kasir" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=1;fontSize=16;" target="uc-login" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="450" as="sourcePoint" />
+            <mxPoint x="440" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-kasir-transaksi" edge="1" parent="1" source="actor-kasir" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=1;fontSize=16;" target="uc-transaksi" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="450" as="sourcePoint" />
+            <mxPoint x="440" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-kasir-checkout" edge="1" parent="1" source="actor-kasir" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=1;fontSize=16;" target="uc-checkout" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="550" as="sourcePoint" />
+            <mxPoint x="440" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-kasir-cetak" edge="1" parent="1" source="actor-kasir" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;endFill=1;fontSize=16;" target="uc-cetak-struk" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="600" as="sourcePoint" />
+            <mxPoint x="440" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ext-transaksi-tambah" edge="1" parent="1" source="uc-transaksi" style="endArrow=open;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=0;fontSize=16;" target="uc-tambah-keranjang" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="450" as="sourcePoint" />
+            <mxPoint x="440" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ext-transaksi-hitung" edge="1" parent="1" source="uc-transaksi" style="endArrow=open;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=0;fontSize=16;" target="uc-hitung-total" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="500" as="sourcePoint" />
+            <mxPoint x="440" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ext-checkout-tunai" edge="1" parent="1" source="uc-checkout" style="endArrow=open;html=1;rounded=0;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=0;fontSize=16;" target="uc-pembayaran-tunai" value="include">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="550" as="sourcePoint" />
+            <mxPoint x="440" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ext-checkout-ewallet" edge="1" parent="1" source="uc-checkout" style="endArrow=open;html=1;rounded=0;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endFill=0;fontSize=16;" target="uc-pembayaran-ewallet" value="include">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="390" y="600" as="sourcePoint" />
+            <mxPoint x="440" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2C93HI8pTktB6HphHaQ6-2" edge="1" parent="1" source="uc-checkout" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontSize=16;" target="uc-checkout">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2C93HI8pTktB6HphHaQ6-3" parent="1" style="shape=waypoint;sketch=0;size=6;pointerEvents=1;points=[];fillColor=none;resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="-10" y="-10" as="geometry" />
+        </mxCell>
+        <mxCell id="2C93HI8pTktB6HphHaQ6-4" parent="1" style="shape=waypoint;sketch=0;size=6;pointerEvents=1;points=[];fillColor=none;resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="807" y="940" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

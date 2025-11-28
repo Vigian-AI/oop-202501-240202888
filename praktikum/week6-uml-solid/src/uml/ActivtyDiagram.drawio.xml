@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+    <diagram name="Page-1" id="2cc2d294-239e-d60f-22bb-7596b5cce9ef">
+        <mxGraphModel dx="1426" dy="881" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                
+                <!-- Swimlanes -->
+                <mxCell id="kasir_lane" value="Kasir" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f9f9f9;strokeColor=#333333;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="120" width="220" height="800" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="system_lane" value="Sistem Agri-POS" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#01579b;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="260" y="120" width="280" height="800" as="geometry"/>
+                </mxCell>
+                
+                <mxCell id="payment_lane" value="Payment Gateway" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#4a148c;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="540" y="120" width="220" height="800" as="geometry"/>
+                </mxCell>
+
+                <!-- Start Node -->
+                <mxCell id="start" value="Start" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="kasir_lane">
+                    <mxGeometry x="80" y="40" width="60" height="60" as="geometry"/>
+                </mxCell>
+
+                <!-- Kasir Process -->
+                <mxCell id="login" value="Login ke Sistem" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="kasir_lane">
+                    <mxGeometry x="50" y="120" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="scan" value="Scan/Tambah Produk" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="kasir_lane">
+                    <mxGeometry x="50" y="180" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="input_jumlah" value="Input Jumlah" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="kasir_lane">
+                    <mxGeometry x="50" y="240" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="konfirmasi_checkout" value="Konfirmasi Lanjut Checkout?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="kasir_lane">
+                    <mxGeometry x="50" y="300" width="120" height="60" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="pilih_metode" value="Pilih Metode Pembayaran" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="kasir_lane">
+                    <mxGeometry x="50" y="380" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="input_uang" value="Input Jumlah Uang" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="kasir_lane">
+                    <mxGeometry x="50" y="520" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="serahkan_struk" value="Serahkan Struk ke Customer" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="kasir_lane">
+                    <mxGeometry x="50" y="700" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <!-- Sistem Process -->
+                <mxCell id="validasi_stok" value="Validasi Stok" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="240" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="stok_cukup" value="Stok Cukup?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="300" width="120" height="60" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="peringatan_stok" value="Tampilkan Peringatan Stok Tidak Cukup" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="380" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="update_keranjang" value="Update Keranjang" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="440" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="hitung_subtotal" value="Hitung Subtotal &amp; Total" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="500" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="tampilkan_metode" value="Tampilkan Metode Pembayaran" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="560" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="metode_pembayaran" value="Metode Pembayaran?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="620" width="120" height="60" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="generate_code" value="Generate Payment Code" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="700" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="kirim_request" value="Kirim Request ke Payment Gateway" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="760" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="hitung_kembalian" value="Hitung Kembalian" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="520" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="update_stok" value="Update Stok Produk" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="820" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="simpan_transaksi" value="Simpan Transaksi" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="880" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="cetak_struk" value="Cetak Struk" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="940" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <!-- Payment Gateway Process -->
+                <mxCell id="proses_pembayaran" value="Proses Pembayaran" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="payment_lane">
+                    <mxGeometry x="60" y="760" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="pembayaran_berhasil" value="Pembayaran Berhasil?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="payment_lane">
+                    <mxGeometry x="60" y="820" width="120" height="60" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="kirim_konfirmasi" value="Kirim Konfirmasi Sukses" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="payment_lane">
+                    <mxGeometry x="60" y="900" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="kirim_status_gagal" value="Kirim Status Gagal" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="payment_lane">
+                    <mxGeometry x="60" y="960" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="tampilkan_error" value="Tampilkan Error - Coba Lagi?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="payment_lane">
+                    <mxGeometry x="60" y="1020" width="120" height="60" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="batalkan_transaksi" value="Batalkan Transaksi" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="payment_lane">
+                    <mxGeometry x="60" y="1100" width="120" height="40" as="geometry"/>
+                </mxCell>
+
+                <!-- End Nodes -->
+                <mxCell id="end1" value="End" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="kasir_lane">
+                    <mxGeometry x="80" y="360" width="60" height="60" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="end2" value="End" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="kasir_lane">
+                    <mxGeometry x="80" y="760" width="60" height="60" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="end3" value="End" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="payment_lane">
+                    <mxGeometry x="80" y="1160" width="60" height="60" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="end4" value="End" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="system_lane">
+                    <mxGeometry x="80" y="440" width="60" height="60" as="geometry"/>
+                </mxCell>
+
+                <!-- Connections -->
+                <mxCell id="conn1" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="start" target="login">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="110" y="100" as="sourcePoint"/>
+                        <mxPoint x="160" y="50" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn2" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="login" target="scan">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="110" y="160" as="sourcePoint"/>
+                        <mxPoint x="160" y="110" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn3" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="scan" target="input_jumlah">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="110" y="220" as="sourcePoint"/>
+                        <mxPoint x="160" y="170" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn4" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="input_jumlah" target="konfirmasi_checkout">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="110" y="280" as="sourcePoint"/>
+                        <mxPoint x="160" y="230" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn5" value="Ya" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="konfirmasi_checkout" target="pilih_metode">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="110" y="360" as="sourcePoint"/>
+                        <mxPoint x="160" y="310" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn6" value="Tidak" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="konfirmasi_checkout" target="end1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="50" y="330" as="sourcePoint"/>
+                        <mxPoint x="0" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="input_jumlah" target="validasi_stok">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="170" y="260" as="sourcePoint"/>
+                        <mxPoint x="200" y="260" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn8" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="validasi_stok" target="stok_cukup">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="300" as="sourcePoint"/>
+                        <mxPoint x="140" y="330" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn9" value="Tidak" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="stok_cukup" target="peringatan_stok">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="80" y="330" as="sourcePoint"/>
+                        <mxPoint x="80" y="380" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn10" value="Ya" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="stok_cukup" target="update_keranjang">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="200" y="330" as="sourcePoint"/>
+                        <mxPoint x="200" y="440" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn11" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="update_keranjang" target="hitung_subtotal">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="480" as="sourcePoint"/>
+                        <mxPoint x="140" y="500" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn12" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="hitung_subtotal" target="tampilkan_metode">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="540" as="sourcePoint"/>
+                        <mxPoint x="140" y="560" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn13" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="pilih_metode" target="metode_pembayaran">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="170" y="400" as="sourcePoint"/>
+                        <mxPoint x="200" y="650" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn14" value="Tunai" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="metode_pembayaran" target="input_uang">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="80" y="650" as="sourcePoint"/>
+                        <mxPoint x="50" y="540" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn15" value="E-Wallet" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="metode_pembayaran" target="generate_code">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="200" y="650" as="sourcePoint"/>
+                        <mxPoint x="200" y="720" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn16" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="input_uang" target="hitung_kembalian">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="170" y="540" as="sourcePoint"/>
+                        <mxPoint x="200" y="540" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn17" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="generate_code" target="kirim_request">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="740" as="sourcePoint"/>
+                        <mxPoint x="140" y="760" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn18" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="kirim_request" target="proses_pembayaran">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="200" y="780" as="sourcePoint"/>
+                        <mxPoint x="540" y="780" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn19" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="proses_pembayaran" target="pembayaran_berhasil">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="120" y="800" as="sourcePoint"/>
+                        <mxPoint x="120" y="850" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn20" value="Ya" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="pembayaran_berhasil" target="kirim_konfirmasi">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="180" y="850" as="sourcePoint"/>
+                        <mxPoint x="180" y="920" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn21" value="Tidak" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="pembayaran_berhasil" target="kirim_status_gagal">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="60" y="850" as="sourcePoint"/>
+                        <mxPoint x="60" y="980" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn22" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="kirim_konfirmasi" target="update_stok">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="180" y="940" as="sourcePoint"/>
+                        <mxPoint x="200" y="840" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn23" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="kirim_status_gagal" target="tampilkan_error">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="120" y="1000" as="sourcePoint"/>
+                        <mxPoint x="120" y="1050" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn24" value="Ya" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="tampilkan_error" target="pilih_metode">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="60" y="1050" as="sourcePoint"/>
+                        <mxPoint x="50" y="400" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn25" value="Tidak" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="tampilkan_error" target="batalkan_transaksi">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="180" y="1050" as="sourcePoint"/>
+                        <mxPoint x="180" y="1120" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn26" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="batalkan_transaksi" target="end3">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="120" y="1140" as="sourcePoint"/>
+                        <mxPoint x="120" y="1190" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn27" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="hitung_kembalian" target="update_stok">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="560" as="sourcePoint"/>
+                        <mxPoint x="140" y="840" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn28" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="update_stok" target="simpan_transaksi">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="860" as="sourcePoint"/>
+                        <mxPoint x="140" y="900" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn29" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="simpan_transaksi" target="cetak_struk">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="920" as="sourcePoint"/>
+                        <mxPoint x="140" y="960" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn30" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="cetak_struk" target="serahkan_struk">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="80" y="980" as="sourcePoint"/>
+                        <mxPoint x="50" y="720" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn31" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="serahkan_struk" target="end2">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="110" y="740" as="sourcePoint"/>
+                        <mxPoint x="110" y="780" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <mxCell id="conn32" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="peringatan_stok" target="end4">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="420" as="sourcePoint"/>
+                        <mxPoint x="140" y="470" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

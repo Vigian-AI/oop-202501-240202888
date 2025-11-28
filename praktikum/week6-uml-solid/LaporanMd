@@ -1,0 +1,127 @@
+# Laporan Praktikum Minggu 6
+Topik: week 6 UML SOLID
+
+## Identitas
+- Nama  : Fendy Agustian
+- NIM   : 240202898
+- Kelas : 3IKRB
+
+---
+## Tujuan Pembelajaran
+
+Mahasiswa mampu:
+
+1. Mahasiswa mampu mengidentifikasi kebutuhan sistem ke dalam diagram UML.
+2. Mahasiswa mampu menggambar UML Class Diagram dengan relasi antar class yang tepat.
+3. Mahasiswa mampu menjelaskan prinsip desain OOP (SOLID).
+4. Mahasiswa mampu menerapkan minimal dua prinsip SOLID dalam kode program.
+
+---
+
+## Deskripsi Tugas
+
+Buatlah **desain arsitektur sistem *Agri-POS*** menggunakan **UML** (minimal empat diagram) dan penerapan **prinsip SOLID**, untuk memenuhi **kebutuhan sistem** yang dijelaskan di bawah ini.
+Anda **diperbolehkan menggunakan tools apa pun** (Graphviz, StarUML, draw.io, PlantUML, Lucidchart, dan lain-lain), asalkan hasil akhir disimpan dan dikumpulkan dalam format **`.png` atau `.pdf`**, bisa dikumpulkan beserta file sumbernya (`.dot`, `.uml`, `.drawio`, dan sebagainya).
+
+## Diagram UML
+
+### 1. Use Case Diagram
+File: `docs/uml_usecase.png`  
+Menjelaskan aktor: **Kasir, Admin, Payment Gateway**  
+Use Case: Kelola Produk, Checkout, Pembayaran, Cetak Struk, Login, Lihat Laporan.
+
+### 2. Activity Diagram (Checkout)
+File: `docs/uml_activity.png`  
+Mencakup swimlane: Kasir, Sistem, Payment Gateway  
+Alur sukses dan gagal (stok habis, saldo tidak cukup).
+
+### 3. Sequence Diagram (Pembayaran)
+File: `docs/uml_sequence.png`  
+Menjelaskan alur:
+- Kasir → Sistem → PaymentService → PaymentMethod (Cash/EWallet)
+- `alt` untuk saldo tidak cukup.
+
+### 4. Class Diagram
+File: `docs/uml_class.png`  
+Kelas utama:
+- Product, CartItem, Transaction, PaymentService  
+- Interface: PaymentMethod  
+- Implementasi: CashPayment, EWalletPayment  
+- Repository: ProductRepository (interface), JdbcProductRepository  
+
+---
+
+## Penerapan Prinsip SOLID
+
+1. **Single Responsibility Principle (SRP)**  
+- `ProductService` hanya mengelola operasi produk.  
+- `PaymentService` hanya menangani alur pembayaran.  
+- `Transaction` hanya menyimpan data transaksi.
+
+2. **Open/Closed Principle (OCP)**  
+- Penambahan metode pembayaran baru tidak perlu mengubah `PaymentService`, cukup membuat class baru yang mengimplementasikan `PaymentMethod`.
+
+3. **Liskov Substitution Principle (LSP)**  
+- `CashPayment` dan `EWalletPayment` dapat menggantikan `PaymentMethod` tanpa mengubah perilaku sistem.
+
+4. **Interface Segregation Principle (ISP)**  
+- Interface pembayaran (`PaymentMethod`) hanya berisi method `pay()`, tidak dibebani fungsi lain.
+
+5. **Dependency Inversion Principle (DIP)**  
+- `PaymentService` bergantung pada interface `PaymentMethod`, bukan implementasi spesifik.
+
+---
+
+## Hasil Eksekusi
+![alt text](activity.drawio.png)
+
+![alt text](ClassDiagram.drawio.png)
+
+![alt text](SequenceDiagram.drawio.png)
+
+![alt text](UseCaseDiagram.drawio.png)
+---
+
+## Analisis
+
+- Semua kebutuhan sistem (FR) dapat divisualisasikan dengan tepat pada Use Case Diagram.  
+- Activity Diagram berhasil menunjukkan alur checkout lengkap dengan percabangan untuk kegagalan.  
+- Sequence Diagram menunjukkan interaksi antar objek secara jelas dengan penggunaan *alt block*.  
+- Class Diagram sudah modular dan mengikuti prinsip SOLID.  
+- Desain mudah diperluas, misalnya menambah metode pembayaran baru tanpa mengubah kode lama (OCP).
+
+Kendala umum:
+- Menjaga konsistensi penamaan di semua diagram.  
+- Menentukan batas tanggung jawab kelas agar SRP tetap terpenuhi.  
+
+---
+
+## Kesimpulan
+
+Melalui praktikum ini mahasiswa memahami bagaimana:
+- Mendesain arsitektur sistem menggunakan UML secara konsisten.
+- Menghubungkan kebutuhan sistem dengan representasi diagram.
+- Menerapkan prinsip SOLID untuk menghasilkan desain yang modular, maintainable, dan extensible.
+- Menyusun dokumentasi arsitektur yang dapat digunakan sebagai dasar implementasi.
+
+---
+
+## Quiz
+
+1. **Jelaskan perbedaan aggregation dan composition serta contoh penerapannya.**  
+**Jawaban:**  
+- *Aggregation* adalah hubungan “has-a” yang longgar; objek masih bisa hidup tanpa pemiliknya.  
+  Contoh: `Transaction` memiliki banyak `CartItem`.  
+- *Composition* adalah hubungan “part-of” yang kuat; jika objek induk dihapus, bagian di dalamnya ikut hilang.  
+  Contoh: `Receipt` memiliki `ReceiptItem`.
+
+2. **Bagaimana prinsip Open/Closed memastikan sistem mudah dikembangkan?**  
+**Jawaban:**  
+Dengan OCP, kelas **boleh diperluas** tetapi **tidak boleh diubah**.  
+Contoh: Menambah metode pembayaran baru cukup membuat kelas baru → tidak perlu mengubah `PaymentService`.
+
+3. **Mengapa Dependency Inversion Principle meningkatkan testability?**  
+**Jawaban:**  
+Karena modul tingkat tinggi bergantung pada interface, bukan implementasi konkret.  
+Dalam pengujian, interface tersebut dapat **di-mock** sehingga mengisolasi perilaku dan mempermudah unit test.
+
