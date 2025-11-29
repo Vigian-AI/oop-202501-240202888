@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="Rg8ZTvOHqxQ6iJWMj5Ou" name="UseCase">
-        <mxGraphModel dx="1428" dy="769" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1504" dy="769" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -92,7 +92,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="RLg0Rsy0tyJ_0VOXpMag" name="ActivityCheckout">
-        <mxGraphModel dx="1428" dy="769" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1504" dy="769" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -227,7 +227,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="ZLxAkIgvHipoRndXIeTx" name="ActivityKelola">
-        <mxGraphModel dx="578" dy="-331" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="654" dy="-331" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -765,14 +765,6 @@
                 <mxCell id="tqsEFuyHmvbgcE98zV4P-47" value="0..*" style="edgeLabel;resizable=0;labelBackgroundColor=none;fontSize=12;align=left;verticalAlign=bottom;" vertex="1" parent="tqsEFuyHmvbgcE98zV4P-45">
                     <mxGeometry x="1" relative="1" as="geometry"/>
                 </mxCell>
-            </root>
-        </mxGraphModel>
-    </diagram>
-    <diagram id="P2ve6cntrE0O9ErbhQsY" name="Page-6">
-        <mxGraphModel dx="1504" dy="769" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
-            <root>
-                <mxCell id="0"/>
-                <mxCell id="1" parent="0"/>
             </root>
         </mxGraphModel>
     </diagram>
