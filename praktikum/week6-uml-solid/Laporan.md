@@ -73,7 +73,7 @@ Kelas utama:
 ---
 
 ## Hasil Eksekusi
-![alt text](activity.drawio.png)
+Activity diagram for Agri-POS checkout process with three swimlanes: Kasir (cashier), Sistem Agri POS (system), and Payment Gateway. The flow begins with Start, followed by Login ke Sistem (system login) and Scan/Tambah Produk (scan/add products). A decision node Validasi Stok (validate stock) branches into two paths: if stock is unavailable, the system displays Tampilkan Peringatan Stok Tidak Cukup (show stock warning) and ends; if stock is available, the flow continues to Input Jumlah (input quantity). Next, a decision node Stok Cukup? (sufficient stock?) branches again: if no, system performs Update Kerangian (update cart) and loops back; if yes, flow proceeds to Pilih Metode Pembayaran (select payment method). A decision node Metode Pembayaran? (payment method?) offers three options: Hitung Kembalian Checkout (calculate change for cash), Tarik Saldo & Tangkat (deduct balance for e-wallet), or request confirmation from Payment Gateway. After payment processing, the system generates Generate Payment Code, sends Kirim Request ke Payment Gateway (send request to payment gateway), and updates Update Stok Produk (product stock). The flow concludes with Simpan Transaksi (save transaction) and Cetak Struk (print receipt), followed by End. The diagram uses standard flowchart symbols with decision diamonds and process rectangles, showing the complete checkout workflow including stock validation, product selection, payment method selection, and transaction completion.
 
 ![alt text](ClassDiagram.drawio.png)
 
