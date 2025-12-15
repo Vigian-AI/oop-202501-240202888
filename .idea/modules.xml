@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/oop-202501-240202888.iml" filepath="$PROJECT_DIR$/oop-202501-240202888.iml" />
+      <module fileurl="file://$PROJECT_DIR$/praktikum/week1-setup-hello-pos/week1-setup-hello-pos.iml" filepath="$PROJECT_DIR$/praktikum/week1-setup-hello-pos/week1-setup-hello-pos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/praktikum/week2-class-object/week2-class-object.iml" filepath="$PROJECT_DIR$/praktikum/week2-class-object/week2-class-object.iml" />
+      <module fileurl="file://$PROJECT_DIR$/praktikum/week3-inheritance/week3-inheritance.iml" filepath="$PROJECT_DIR$/praktikum/week3-inheritance/week3-inheritance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/praktikum/week4-polymorphism/week4-polymorphism.iml" filepath="$PROJECT_DIR$/praktikum/week4-polymorphism/week4-polymorphism.iml" />
+      <module fileurl="file://$PROJECT_DIR$/praktikum/week5-abstraction-interface/week5-abstraction-interface.iml" filepath="$PROJECT_DIR$/praktikum/week5-abstraction-interface/week5-abstraction-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/praktikum/week7-koleksi-keranjang/week7-koleksi-keranjang.iml" filepath="$PROJECT_DIR$/praktikum/week7-koleksi-keranjang/week7-koleksi-keranjang.iml" />
+    </modules>
+  </component>
+</project>
