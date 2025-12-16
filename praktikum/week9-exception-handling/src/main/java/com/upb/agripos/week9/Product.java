@@ -1,14 +1,16 @@
-package main.java.com.upb.agripos;
+package main.java.com.upb.agripos.week9;
 
 public class Product {
     private final String code;
     private final String name;
     private final double price;
+    private int stock;
 
-    public Product(String code, String name, double price) {
+    public Product(String code, String name, double price, int stock) {
         this.code = code;
         this.name = name;
         this.price = price;
+        this.stock = stock;
     }
 
     public String getCode() { 
@@ -22,9 +24,17 @@ public class Product {
     public double getPrice() { 
         return price; 
     }
+    
+    public int getStock() { 
+        return stock; 
+    }
+    
+    public void reduceStock(int qty) { 
+        this.stock -= qty; 
+    }
 
     @Override
     public String toString() {
-        return code + " - " + name + " (Rp " + price + ")";
+        return code + " - " + name + " (Rp " + price + ") | Stok: " + stock;
     }
 }

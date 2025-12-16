@@ -1,8 +1,7 @@
-package main.java.com.upb.agripos;
+package main.java.com.upb.agripos.week7;
 
 public class MainCart {
     public static void main(String[] args) {
-        // ===== GANTI DENGAN NAMA DAN NIM ANDA =====
         System.out.println("Hello, I am Fendy Agustian-240202898 (Week7)");
         System.out.println("===========================================\n");
 
