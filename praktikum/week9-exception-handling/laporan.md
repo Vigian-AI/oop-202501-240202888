@@ -1,180 +1,218 @@
-# Laporan Praktikum Minggu 9  
-**Topik: Exception Handling**
+# Laporan Praktikum Minggu 9
 
----
+Topik: **Exception Handling**
 
 ## Identitas
-- **Nama**  : Fendy Agustian  
-- **NIM**   : 240202898  
-- **Kelas** : 3IKRB  
+
+* Nama  : Fendy Agustian
+* NIM   : 240202898
+* Kelas : 3IKRB
 
 ---
 
 ## Tujuan
-Tujuan dari praktikum minggu ke-9 ini adalah:
-- Memahami perbedaan antara **error** dan **exception** dalam pemrograman Java.
-- Mampu mengimplementasikan **try–catch–finally** untuk menangani kesalahan program.
-- Mampu membuat **custom exception** sesuai kebutuhan aplikasi.
-- Mengintegrasikan exception handling ke dalam studi kasus **keranjang belanja (Agri-POS)**.
-- Memahami penerapan **Singleton Pattern** untuk pengelolaan data terpusat.
+
+* Mahasiswa mampu menjelaskan perbedaan antara error dan exception.
+* Mahasiswa mampu mengimplementasikan `try-catch-finally`.
+* Mahasiswa mampu membuat custom exception sesuai kebutuhan aplikasi.
+* Mahasiswa mampu menerapkan exception handling pada sistem keranjang belanja.
+* Mahasiswa mampu memahami dan menerapkan design pattern Singleton.
 
 ---
 
 ## Dasar Teori
-1. **Exception** adalah kondisi tidak normal yang masih dapat ditangani oleh program.
-2. **Error** merupakan kondisi fatal yang umumnya tidak dapat dipulihkan.
-3. **Try–catch–finally** digunakan untuk mencegah program berhenti secara tiba-tiba.
-4. **Custom exception** dibuat untuk menghasilkan pesan kesalahan yang spesifik.
-5. **Singleton Pattern** memastikan hanya terdapat satu instance dari suatu class.
+
+1. **Exception** adalah kesalahan yang dapat ditangani oleh program menggunakan mekanisme `try-catch`.
+2. **Error** adalah kesalahan fatal yang tidak dapat ditangani oleh program.
+3. **Custom Exception** memungkinkan pembuatan kesalahan yang spesifik sesuai domain aplikasi.
+4. Blok **finally** selalu dieksekusi baik terjadi exception maupun tidak.
+5. **Singleton Pattern** memastikan hanya ada satu instance objek dalam aplikasi.
 
 ---
 
 ## Langkah Praktikum
-1. Membuat project Java untuk praktikum minggu 9.
-2. Membuat beberapa **custom exception**, yaitu:
+
+1. Membuat struktur project `week9-exception-handling`.
+2. Membuat beberapa custom exception:
    - `InvalidQuantityException`
    - `ProductNotFoundException`
    - `InsufficientStockException`
-   - `CartEmptyException`
 3. Memodifikasi class `Product` dengan atribut stok.
-4. Mengimplementasikan **exception handling** pada class `ShoppingCart`.
-5. Menerapkan **Singleton Pattern** pada class `ProductService`.
-6. Menguji program dengan berbagai skenario kesalahan.
-7. Melakukan commit dan push ke repository.
+4. Mengimplementasikan exception handling pada class `ShoppingCart`.
+5. Menerapkan Singleton Pattern pada `ProductService`.
+6. Membuat class `MainExceptionDemo` untuk pengujian.
+7. Melakukan compile dan run program.
+8. Commit dan push dengan format:
 
-**Commit message:**
-```text
-week9-exception: implement custom exception dan singleton pattern
-Kode Program
-InvalidQuantityException.java
-java
-package com.upb.agripos;
+   `week9-exception: implement exception handling dan singleton`
 
-public class InvalidQuantityException extends Exception {
-    public InvalidQuantityException(String message) {
-        super(message);
-    }
-}
-Product.java
-java
+---
 
-package com.upb.agripos;
+## Kode Program
 
-public class Product {
-    private String code;
-    private String name;
-    private double price;
-    private int stock;
+### MainExceptionDemo.java
 
-    public Product(String code, String name, double price, int stock) {
-        this.code = code;
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-    }
+```java
+package main.java.com.upb.agripos;
 
-    public String getCode() { return code; }
-    public String getName() { return name; }
-    public double getPrice() { return price; }
-    public int getStock() { return stock; }
-
-    public void reduceStock(int qty) {
-        this.stock -= qty;
-    }
-}
-ShoppingCart.java
-java
-
-package com.upb.agripos;
-
-import java.util.HashMap;
-import java.util.Map;
-
-public class ShoppingCart {
-    private final Map<Product, Integer> items = new HashMap<>();
-
-    public void addProduct(Product product, int quantity)
-            throws InvalidQuantityException {
-
-        if (quantity <= 0) {
-            throw new InvalidQuantityException("Kuantitas harus lebih dari 0.");
-        }
-
-        items.put(product, items.getOrDefault(product, 0) + quantity);
-    }
-}
-ProductService.java (Singleton Pattern)
-java
-
-package com.upb.agripos;
-
-public class ProductService {
-    private static ProductService instance;
-
-    private ProductService() {}
-
-    public static ProductService getInstance() {
-        if (instance == null) {
-            instance = new ProductService();
-        }
-        return instance;
-    }
-}
-MainExceptionDemo.java
-java
-
-package com.upb.agripos;
+import main.java.com.upb.agripos.exceptions.CartEmptyException;
+import main.java.com.upb.agripos.exceptions.InsufficientStockException;
+import main.java.com.upb.agripos.exceptions.InvalidQuantityException;
+import main.java.com.upb.agripos.exceptions.ProductNotFoundException;
+import main.java.com.upb.agripos.models.Product;
+import main.java.com.upb.agripos.models.ShoppingCart;
+import main.java.com.upb.agripos.services.ProductService;
 
 public class MainExceptionDemo {
     public static void main(String[] args) {
-        System.out.println("Hello, I am Fendy Agustian-240202898 (Week9)");
-
-        ShoppingCart cart = new ShoppingCart();
-        Product p1 = new Product("P001", "Beras Premium", 75000, 10);
-
+        // Ganti dengan nama dan NIM Anda
+        System.out.println("Hello, I am [Fendy Agustian]-[240202898] (Week9)");
+        System.out.println("=".repeat(50));
+        System.out.println("DEMO EXCEPTION HANDLING DAN CUSTOM EXCEPTION\n");
+        
+        // Get Singleton instance
+        ProductService productService = ProductService.getInstance();
+        
+        // Tampilkan katalog produk
+        productService.tampilkanKatalog();
+        
+        // Buat keranjang belanja
+        ShoppingCart keranjang = new ShoppingCart();
+        
         try {
-            cart.addProduct(p1, -3);
-        } catch (InvalidQuantityException e) {
-            System.out.println("Error: " + e.getMessage());
-        } finally {
-            System.out.println("Blok finally dieksekusi.");
+            // Demo 1: Menambah produk dengan kuantitas valid
+            System.out.println("\n1. Menambah produk dengan kuantitas valid:");
+            Product beras = productService.getProduk("P001");
+            keranjang.tambahProduk(beras, 2);
+            
+            Product pupuk = productService.getProduk("P002");
+            keranjang.tambahProduk(pupuk, 1);
+            
+            // Tampilkan keranjang
+            keranjang.tampilkanKeranjang();
+            
+            // Demo 2: Exception - Kuantitas invalid
+            System.out.println("\n2. Demo InvalidQuantityException:");
+            try {
+                keranjang.tambahProduk(beras, -5);
+            } catch (InvalidQuantityException e) {
+                System.out.println("❌ Error: " + e.getMessage());
+                System.out.println("   Tipe Exception: " + e.getClass().getSimpleName());
+            }
+            
+            // Demo 3: Exception - Stok tidak mencukupi
+            System.out.println("\n3. Demo InsufficientStockException:");
+            try {
+                Product bibit = productService.getProduk("P003");
+                keranjang.tambahProduk(bibit, 300); // Minta lebih dari stok
+            } catch (InsufficientStockException e) {
+                System.out.println("❌ Error: " + e.getMessage());
+                System.out.println("   Produk: " + e.getProduct().getName());
+                System.out.println("   Diminta: " + e.getRequestedQuantity());
+                System.out.println("   Tersedia: " + e.getAvailableStock());
+            }
+            
+            // Demo 4: Exception - Produk tidak ditemukan saat menghapus
+            System.out.println("\n4. Demo ProductNotFoundException:");
+            try {
+                Product produkTidakAda = new Product("P999", "Produk Tidak Ada", 10000, 10);
+                keranjang.hapusProduk(produkTidakAda, 1);
+            } catch (ProductNotFoundException e) {
+                System.out.println("❌ Error: " + e.getMessage());
+            }
+            
+            // Demo 5: Exception - Checkout dengan keranjang kosong
+            System.out.println("\n5. Demo CartEmptyException:");
+            ShoppingCart keranjangKosong = new ShoppingCart();
+            try {
+                keranjangKosong.checkout();
+            } catch (CartEmptyException e) {
+                System.out.println("❌ Error: " + e.getMessage());
+            }
+            
+            // Demo 6: Try-catch-finally
+            System.out.println("\n6. Demo Try-Catch-Finally:");
+            try {
+                System.out.println("Mencoba menambah produk...");
+                keranjang.tambahProduk(productService.getProduk("P004"), 5);
+                System.out.println("Berhasil menambah produk!");
+            } catch (InvalidQuantityException | InsufficientStockException e) {
+                System.out.println("Terjadi error: " + e.getMessage());
+            } finally {
+                System.out.println("Blok finally selalu dieksekusi!");
+            }
+            
+            // Tampilkan keranjang terakhir
+            System.out.println("\n7. Status akhir keranjang:");
+            keranjang.tampilkanKeranjang();
+            
+            // Demo 7: Checkout berhasil
+            System.out.println("\n8. Demo Checkout Berhasil:");
+            keranjang.setDiscount(10000); // Beri diskon Rp 10,000
+            double totalBayar = keranjang.checkout();
+            System.out.println("✅ Checkout berhasil!");
+            System.out.println("Total yang harus dibayar: Rp" + String.format("%,.0f", totalBayar));
+            
+            // Tampilkan stok setelah checkout
+            System.out.println("\n9. Stok produk setelah checkout:");
+            productService.tampilkanKatalog();
+            
+        } catch (Exception e) {
+            System.out.println("\n⚠️ Exception tidak terduga: " + e.getMessage());
+            e.printStackTrace();
         }
+        
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("Program selesai dengan exception handling yang aman!");
     }
 }
-Hasil Eksekusi
-Output program yang dihasilkan:
-(Screenshot hasil eksekusi disertakan pada folder screenshots/hasil.png)
+```
 
-Analisis
-Program berjalan dengan membuat objek ShoppingCart dan Product.
 
-Ketika kuantitas bernilai negatif, program melempar InvalidQuantityException.
+## Hasil Eksekusi
 
-Exception ditangkap oleh blok catch sehingga program tidak berhenti secara paksa.
+*(Hasil eksekusi program disertakan pada folder `screenshots/hasil.png`)*
 
-Blok finally tetap dieksekusi untuk memastikan proses akhir tetap berjalan.
 
-Dibandingkan dengan minggu sebelumnya (ArrayList dan HashMap), praktikum minggu ini lebih fokus pada penanganan kesalahan program.
+## Analisis
 
-Kendala yang dihadapi adalah memahami alur lempar dan tangkap exception, yang dapat diatasi dengan mencoba berbagai skenario kesalahan.
+- Program berjalan dengan membuat objek `Product` dan `ShoppingCart`.
+- Ketika kuantitas bernilai negatif, program melempar `InvalidQuantityException`.
+- Exception ditangkap oleh blok `catch` sehingga program tidak berhenti secara paksa.
+- Blok `finally` tetap dieksekusi untuk memastikan proses akhir tetap berjalan.
+- Dibandingkan minggu sebelumnya (**ArrayList dan HashMap**), praktikum minggu ini lebih fokus pada **penanganan kesalahan program**.
+- Kendala yang dihadapi adalah memahami alur lempar (`throw`) dan tangkap (`catch`) exception, yang diatasi dengan mencoba berbagai skenario kesalahan.
 
-Kesimpulan
-Exception handling sangat penting untuk menjaga kestabilan aplikasi. Penggunaan custom exception membuat pesan kesalahan lebih jelas dan sesuai dengan konteks aplikasi. Singleton Pattern membantu memastikan pengelolaan data terpusat dalam sistem.
+---
 
-Quiz
-Jelaskan perbedaan error dan exception.
-Jawaban:
-Error adalah kondisi fatal yang tidak dapat ditangani oleh program, sedangkan exception adalah kesalahan yang masih dapat ditangani menggunakan mekanisme try–catch.
+## Kesimpulan
 
-Apa fungsi blok finally dalam try–catch–finally?
-Jawaban:
-Blok finally selalu dieksekusi baik terjadi exception maupun tidak, biasanya digunakan untuk proses cleanup resource.
+- Exception handling sangat penting untuk menjaga kestabilan aplikasi.
+- Penggunaan **custom exception** membuat pesan kesalahan lebih jelas dan sesuai dengan konteks aplikasi.
+- Blok `try-catch-finally` memastikan program tetap berjalan dengan baik meskipun terjadi kesalahan.
 
-Mengapa custom exception diperlukan?
-Jawaban:
-Custom exception diperlukan agar penanganan kesalahan lebih spesifik, pesan error lebih informatif, dan sesuai dengan kebutuhan domain aplikasi.
+---
 
-Berikan contoh kasus bisnis POS yang membutuhkan custom exception.
-Jawaban:
-Contohnya adalah stok produk tidak mencukupi saat checkout, jumlah pembelian bernilai negatif, atau keranjang belanja kosong.
+## Quiz
 
+### 1. Jelaskan perbedaan error dan exception.
+**Jawaban:**  
+Error adalah kondisi fatal yang tidak dapat ditangani oleh program, sedangkan exception adalah kesalahan yang masih dapat ditangani menggunakan mekanisme `try-catch`.
+
+---
+
+### 2. Apa fungsi blok `finally` dalam `try-catch-finally`?
+**Jawaban:**  
+Blok `finally` selalu dieksekusi baik terjadi exception maupun tidak, dan biasanya digunakan untuk proses *cleanup resource*.
+
+---
+
+### 3. Mengapa custom exception diperlukan?
+**Jawaban:**  
+Custom exception diperlukan agar penanganan kesalahan lebih spesifik, pesan error lebih informatif, dan sesuai dengan kebutuhan aplikasi.
+
+---
+
+### 4. Berikan contoh kasus pada sistem POS yang membutuhkan custom exception.
+**Jawaban:**  
+Contohnya adalah jumlah pembelian bernilai negatif, stok produk tidak mencukupi, atau keranjang belanja kosong saat checkout.
