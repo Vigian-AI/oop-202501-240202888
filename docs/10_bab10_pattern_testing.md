@@ -124,16 +124,16 @@ public class ProductController {
 ```java
 package com.upb.agripos;
 
+import com.upb.agripos.dao.ProductDAO;
 import com.upb.agripos.model.Product;
 import com.upb.agripos.view.ConsoleView;
-import com.upb.agripos.dao.ProductDAOImpl;
 
 public class AppMVC {
     public static void main(String[] args) {
         System.out.println("Hello, I am [Nama]-[NIM] (Week10)");
         Product product = new Product("P01", "Pupuk Organik");
         ConsoleView view = new ConsoleView();
-        ProductDAOImpl controller = new ProductDAOImpl(product, view);
+        ProductDAO controller = new ProductDAO(product, view);
         controller.showProduct();
     }
 }

@@ -116,9 +116,10 @@ package com.upb.agripos.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.upb.agripos.model.Product;
 
-public class ProductDAOImpl implements ProductDAO {
+public class ProductDAOImpl implements com.upb.agripos.dao.ProductDAOImpl {
 
     private final Connection connection;
 
@@ -146,10 +147,10 @@ public class ProductDAOImpl implements ProductDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new Product(
-                        rs.getString("code"),
-                        rs.getString("name"),
-                        rs.getDouble("price"),
-                        rs.getInt("stock")
+                            rs.getString("code"),
+                            rs.getString("name"),
+                            rs.getDouble("price"),
+                            rs.getInt("stock")
                     );
                 }
             }
@@ -165,10 +166,10 @@ public class ProductDAOImpl implements ProductDAO {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(new Product(
-                    rs.getString("code"),
-                    rs.getString("name"),
-                    rs.getDouble("price"),
-                    rs.getInt("stock")
+                        rs.getString("code"),
+                        rs.getString("name"),
+                        rs.getDouble("price"),
+                        rs.getInt("stock")
                 ));
             }
         }
@@ -209,19 +210,20 @@ package com.upb.agripos;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import com.upb.agripos.dao.ProductDAO;
+
 import com.upb.agripos.dao.ProductDAOImpl;
+import com.upb.agripos.dao.ProductDAO;
 import com.upb.agripos.model.Product;
 
 public class MainDAOTest {
     public static void main(String[] args) throws Exception {
         Connection conn = DriverManager.getConnection(
-            "jdbc:postgresql://localhost:5432/agripos",
-            "postgres",
-            "1234"
+                "jdbc:postgresql://localhost:5432/agripos",
+                "postgres",
+                "1234"
         );
 
-        ProductDAO dao = new ProductDAOImpl(conn);
+        ProductDAOImpl dao = new ProductDAO(conn);
 
         dao.insert(new Product("P01", "Pupuk Organik", 25000, 10));
         dao.update(new Product("P01", "Pupuk Organik Premium", 30000, 8));

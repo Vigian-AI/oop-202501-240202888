@@ -1,19 +1,18 @@
-# Compiled class file
-*.class
-
-# Environment variables
+# Ignore environment files
 .env
 
-# Maven target directory
+# Ignore build output
 target/
 
-# Log files
-*.log
-
-# IDE files
+# Ignore IDE-specific files
 .idea/
 *.iml
+*.ipr
+*.iws
 
-# OS files
+# Ignore logs
+*.log
+
+# Ignore OS-specific files
 .DS_Store
 Thumbs.db
