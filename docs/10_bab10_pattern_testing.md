@@ -97,8 +97,9 @@ public class ConsoleView {
 ```
 
 ### 3. Controller (WAJIB DIISI)
+
 ```java
-package com.upb.agripos.controller;
+package com.upb.agripos.dao;
 
 import com.upb.agripos.model.Product;
 import com.upb.agripos.view.ConsoleView;
@@ -119,19 +120,20 @@ public class ProductController {
 ```
 
 ### 4. Main Program (Integrasi MVC)
+
 ```java
 package com.upb.agripos;
 
 import com.upb.agripos.model.Product;
 import com.upb.agripos.view.ConsoleView;
-import com.upb.agripos.controller.ProductController;
+import com.upb.agripos.dao.ProductDAOImpl;
 
 public class AppMVC {
     public static void main(String[] args) {
         System.out.println("Hello, I am [Nama]-[NIM] (Week10)");
         Product product = new Product("P01", "Pupuk Organik");
         ConsoleView view = new ConsoleView();
-        ProductController controller = new ProductController(product, view);
+        ProductDAOImpl controller = new ProductDAOImpl(product, view);
         controller.showProduct();
     }
 }

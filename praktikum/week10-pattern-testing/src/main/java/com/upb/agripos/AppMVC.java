@@ -2,7 +2,7 @@ package com.upb.agripos;
 
 import com.upb.agripos.model.Product;
 import com.upb.agripos.view.ConsolView;
-import com.upb.agripos.controller.ProductController;
+import com.upb.agripos.dao.ProductController;
 
 public class AppMVC {
     public static void main(String[] args) {
