@@ -1,4 +1,4 @@
-# Laporan Praktikum Minggu 1 (sesuaikan minggu ke berapa?)
+git sta# Laporan Praktikum Minggu 1 (sesuaikan minggu ke berapa?)
 Topik: [Tuliskan judul topik, misalnya "Class dan Object"]
 
 ## Identitas

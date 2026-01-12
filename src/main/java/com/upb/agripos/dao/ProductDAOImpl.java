@@ -1,5 +1,6 @@
 package com.upb.agripos.dao;
 
+import com.zaxxer.hikari.HikariDataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,16 +8,17 @@ import com.upb.agripos.model.Product;
 
 public class ProductDAOImpl implements ProductDAO {
 
-    private final Connection connection;
+    private final HikariDataSource dataSource;
 
-    public ProductDAOImpl(Connection connection) {
-        this.connection = connection;
+    public ProductDAOImpl(HikariDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
     public void insert(Product p) throws Exception {
         String sql = "INSERT INTO products(code, name, price, stock) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, p.getCode());
             ps.setString(2, p.getName());
             ps.setDouble(3, p.getPrice());
@@ -28,7 +30,8 @@ public class ProductDAOImpl implements ProductDAO {
     @Override
     public Product findByCode(String code) throws Exception {
         String sql = "SELECT * FROM products WHERE code = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, code);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -48,7 +51,8 @@ public class ProductDAOImpl implements ProductDAO {
     public List<Product> findAll() throws Exception {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM products";
-        try (PreparedStatement ps = connection.prepareStatement(sql);
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(new Product(
@@ -65,7 +69,8 @@ public class ProductDAOImpl implements ProductDAO {
     @Override
     public void update(Product p) throws Exception {
         String sql = "UPDATE products SET name=?, price=?, stock=? WHERE code=?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, p.getName());
             ps.setDouble(2, p.getPrice());
             ps.setInt(3, p.getStock());
@@ -77,7 +82,8 @@ public class ProductDAOImpl implements ProductDAO {
     @Override
     public void delete(String code) throws Exception {
         String sql = "DELETE FROM products WHERE code=?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, code);
             ps.executeUpdate();
         }

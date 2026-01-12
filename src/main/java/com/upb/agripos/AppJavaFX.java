@@ -1,82 +1,60 @@
-package com.upb.agripos;// Import necessary JavaFX and other classes
+package com.upb.agripos;
+
+import com.upb.agripos.config.DatabaseConnection;
+import com.upb.agripos.controller.PosController;
+import com.upb.agripos.dao.ProductDAOImpl;
+import com.upb.agripos.service.CartService;
+import com.upb.agripos.service.ProductService;
+import com.upb.agripos.view.PosView;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import com.upb.agripos.controller.ProductController;
-import com.upb.agripos.model.Product;
-import com.upb.agripos.service.ProductService;
 
 public class AppJavaFX extends Application {
 
-    private TableView<Product> tableView;
-    private TextField txtCode, txtName, txtPrice, txtStock;
-    private ProductController productController;
-
-    // Apply @SuppressWarnings("unchecked") to the method declaration
-    @SuppressWarnings("unchecked")
     @Override
     public void start(Stage primaryStage) {
-        // Initialize input fields
-        txtCode = new TextField();
-        txtCode.setPromptText("Kode Produk");
+        // Print identity
+        System.out.println("Hello World, I am Vg-240202888");
 
-        txtName = new TextField();
-        txtName.setPromptText("Nama Produk");
+        // Initialize database
+        var dbConn = DatabaseConnection.getInstance();
+        var dataSource = dbConn.getDataSource();
 
-        txtPrice = new TextField();
-        txtPrice.setPromptText("Harga");
+        // Initialize DAO
+        var productDAO = new ProductDAOImpl(dataSource);
 
-        txtStock = new TextField();
-        txtStock.setPromptText("Stok");
+        // Initialize Services
+        var productService = new ProductService(productDAO);
+        var cartService = new CartService(productService);
 
-        // Initialize buttons as local variables
-        Button btnAdd = new Button("Tambah Produk");
-        Button btnDelete = new Button("Hapus Produk");
+        // Initialize Controller
+        var controller = new PosController(productService, cartService);
 
-        // Initialize ProductController with required arguments
-        productController = new ProductController(txtCode, txtName, txtPrice, txtStock, btnAdd, new ListView<>(), new ProductService());
+        // Initialize View
+        var view = new PosView();
 
-        // Initialize TableView
-        tableView = new TableView<>();
-        TableColumn<Product, String> codeColumn = new TableColumn<>("Kode");
-        codeColumn.setCellValueFactory(cellData -> cellData.getValue().codeProperty());
-
-        TableColumn<Product, String> nameColumn = new TableColumn<>("Nama");
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-
-        TableColumn<Product, Double> priceColumn = new TableColumn<>("Harga");
-        priceColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
-
-        TableColumn<Product, Integer> stockColumn = new TableColumn<>("Stok");
-        stockColumn.setCellValueFactory(cellData -> cellData.getValue().stockProperty().asObject());
-
-        tableView.getColumns().addAll(codeColumn, nameColumn, priceColumn, stockColumn);
-
-        btnAdd.setOnAction(event -> productController.addProduct(txtCode, txtName, txtPrice, txtStock, tableView));
-        btnDelete.setOnAction(event -> productController.deleteProduct(tableView));
-
-        // Layout
-        VBox layout = new VBox(10, tableView, txtCode, txtName, txtPrice, txtStock, btnAdd, btnDelete);
-
-        // Scene
-        Scene scene = new Scene(layout, 600, 400);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Agri-POS - Kelola Produk");
-        primaryStage.show();
+        // Bind actions
+        view.getBtnAddProduct().setOnAction(e -> controller.addProduct(
+            view.getTxtCode(), view.getTxtName(), view.getTxtPrice(), view.getTxtStock(), view.getProductTable()
+        ));
+        view.getBtnDeleteProduct().setOnAction(e -> controller.deleteProduct(view.getProductTable()));
+        view.getBtnAddToCart().setOnAction(e -> controller.addToCart(
+            view.getProductTable(), view.getCartList(), view.getTotalLabel()
+        ));
+        view.getBtnCheckout().setOnAction(e -> controller.checkout(view.getCartList(), view.getTotalLabel()));
 
         // Load initial data
-        productController.loadData(tableView);
+        controller.loadProducts(view.getProductTable());
+
+        // Scene
+        Scene scene = new Scene(view, 800, 600);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Agri-POS");
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 }
-
-// Update the run configuration to include JavaFX runtime arguments
-// Add the following VM options:
-// --module-path "C:\Users\Vg_\javafx-sdk-17.0.17\lib" --add-modules javafx.controls,javafx.fxml
-
-// Ensure the JavaFX SDK is properly installed and the path is correct.
