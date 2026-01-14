@@ -43,6 +43,7 @@ public class AppJavaFX extends Application {
             view.getProductTable(), view.getCartList(), view.getTotalLabel()
         ));
         view.getBtnCheckout().setOnAction(e -> controller.checkout(view.getCartList(), view.getTotalLabel()));
+        view.getBtnRefresh().setOnAction(e -> controller.loadProducts(view.getProductTable()));
 
         // Load initial data
         controller.loadProducts(view.getProductTable());

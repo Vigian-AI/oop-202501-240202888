@@ -44,4 +44,16 @@ public class ProductService {
     public void decreaseStock(String code, int quantity) throws Exception {
         productDAO.decreaseStock(code, quantity);
     }
+
+    public void updateStock(String code, int newStock) throws Exception {
+        if (newStock < 0) {
+            throw new IllegalArgumentException("Stok tidak boleh negatif");
+        }
+        Product product = productDAO.findByCode(code);
+        if (product == null) {
+            throw new IllegalArgumentException("Produk tidak ditemukan");
+        }
+        product.setStock(newStock);
+        productDAO.update(product);
+    }
 }

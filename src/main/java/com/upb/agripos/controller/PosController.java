@@ -3,7 +3,10 @@ package com.upb.agripos.controller;
 import com.upb.agripos.model.Product;
 import com.upb.agripos.service.ProductService;
 import com.upb.agripos.service.CartService;
+import com.upb.agripos.view.ReceiptView;
 import javafx.scene.control.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class PosController {
@@ -97,6 +100,12 @@ public class PosController {
             for (var item : cartService.getCart().getItems()) {
                 productService.decreaseStock(item.getProduct().getCode(), item.getQuantity());
             }
+
+            // Generate receipt text
+            String receipt = generateReceipt();
+            // Show receipt dialog (printable)
+            ReceiptView.showReceipt(receipt);
+
             // For simplicity, just clear cart after "checkout"
             showAlert("Info", "Checkout berhasil. Total: " + cartService.getTotalPrice());
             cartService.clearCart();
@@ -104,6 +113,35 @@ public class PosController {
         } catch (Exception e) {
             showAlert("Error", "Gagal checkout: " + e.getMessage());
         }
+    }
+
+    private String generateReceipt() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("================================\n");
+        sb.append("\tAGRI-POS RECEIPT\n");
+        sb.append("================================\n");
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        sb.append("Tanggal: ").append(LocalDateTime.now().format(fmt)).append("\n");
+        sb.append("--------------------------------\n");
+        sb.append(String.format("%-20s %5s %10s %10s\n", "Item", "Qty", "Harga", "Subtotal"));
+        sb.append("--------------------------------\n");
+        for (var item : cartService.getCart().getItems()) {
+            String name = item.getProduct().getName();
+            int qty = item.getQuantity();
+            double price = item.getProduct().getPrice();
+            double subtotal = item.getTotalPrice();
+            sb.append(String.format("%-20s %5d %10.0f %10.0f\n", name, qty, price, subtotal));
+        }
+        sb.append("--------------------------------\n");
+        sb.append(String.format("%-20s %26.0f\n", "Total:", cartService.getTotalPrice()));
+        sb.append("\n");
+        sb.append(String.format("%-20s %26s\n", "Metode Pembayaran:", "TUNAI"));
+        sb.append(String.format("%-20s %26.0f\n", "Jumlah Dibayar:", cartService.getTotalPrice()));
+        sb.append(String.format("%-20s %26.0f\n", "Kembalian:", 0.0));
+        sb.append("\n\n");
+        sb.append("\tTerima Kasih Atas Belanja Anda\n");
+        sb.append("================================\n");
+        return sb.toString();
     }
 
     private void updateCartDisplay(ListView<String> cartList, Label totalLabel) {
@@ -128,3 +166,4 @@ public class PosController {
         alert.showAndWait();
     }
 }
+

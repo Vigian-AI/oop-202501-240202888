@@ -9,6 +9,7 @@ public class PosView extends VBox {
     private TableView<Product> productTable;
     private TextField txtCode, txtName, txtPrice, txtStock;
     private Button btnAddProduct, btnDeleteProduct, btnAddToCart, btnCheckout;
+    private Button btnRefresh; // added refresh button
     private ListView<String> cartList;
     private Label totalLabel;
 
@@ -28,8 +29,9 @@ public class PosView extends VBox {
 
         btnAddProduct = new Button("Tambah Produk");
         btnDeleteProduct = new Button("Hapus Produk");
+        btnRefresh = new Button("Refresh"); // new button
 
-        HBox formBox = new HBox(10, txtCode, txtName, txtPrice, txtStock, btnAddProduct, btnDeleteProduct);
+        HBox formBox = new HBox(10, txtCode, txtName, txtPrice, txtStock, btnAddProduct, btnDeleteProduct, btnRefresh);
 
         // Product Table
         productTable = new TableView<>();
@@ -106,5 +108,9 @@ public class PosView extends VBox {
 
     public Label getTotalLabel() {
         return totalLabel;
+    }
+
+    public Button getBtnRefresh() { // getter for refresh
+        return btnRefresh;
     }
 }
