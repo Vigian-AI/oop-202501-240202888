@@ -13,8 +13,14 @@ public class DatabaseConnection {
     private HikariDataSource dataSource;
 
     private DatabaseConnection() {
-        Dotenv dotenv = Dotenv.load();
+        // Load .env if present; don't fail if it's missing (allows running without an .env file)
+        Dotenv dotenv = Dotenv.configure()
+            .ignoreIfMissing()
+            .load();
         String password = dotenv.get("DB_PASSWORD");
+        if (password == null) {
+            password = "";
+        }
         String url = "jdbc:postgresql://localhost:5432/agripos";
         String adminUrl = "jdbc:postgresql://localhost:5432/postgres";
 
