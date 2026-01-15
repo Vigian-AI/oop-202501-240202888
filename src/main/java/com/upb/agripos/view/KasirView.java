@@ -1,6 +1,7 @@
 package com.upb.agripos.view;
 
 import com.upb.agripos.model.Product;
+import com.upb.agripos.model.Transaction;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,6 +11,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -20,6 +24,9 @@ public class KasirView extends VBox {
     private ListView<String> cartList;
     private Label totalLabel;
     private Label userInfoLabel;
+    private Button btnLogout;
+    private TabPane tabPane;
+    private TableView<Transaction> historyTable;
 
     public KasirView() {
         // ========== MAIN STYLING ==========
@@ -31,26 +38,31 @@ public class KasirView extends VBox {
         VBox headerBox = createHeaderBox();
 
         // ========== USER INFO ==========
+        HBox userInfoBox = new HBox(10);
+        userInfoBox.setAlignment(Pos.CENTER_LEFT);
         userInfoLabel = new Label("👤 User: -");
         userInfoLabel.setStyle("-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
+        btnLogout = createStyledButton("🚪 Logout", "#c62828");
+        userInfoBox.getChildren().addAll(userInfoLabel, btnLogout);
 
-        // ========== PRODUCT TABLE SECTION ==========
-        VBox tableSection = createTableSection();
+        // ========== TAB PANE ==========
+        tabPane = new TabPane();
+        tabPane.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-border-radius: 5;");
 
-        // ========== MAIN CONTENT BOX ==========
-        HBox contentBox = new HBox(20);
-        contentBox.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-border-radius: 5;");
+        // Tab Penjualan
+        Tab tabPenjualan = new Tab("Penjualan");
+        tabPenjualan.setClosable(false);
+        tabPenjualan.setContent(createPenjualanTab());
 
-        VBox leftPanel = new VBox(15, tableSection);
-        VBox.setVgrow(tableSection, Priority.ALWAYS);
+        // Tab History
+        Tab tabHistory = new Tab("History Penjualan");
+        tabHistory.setClosable(false);
+        tabHistory.setContent(createHistoryTab());
 
-        VBox rightPanel = createCartPanel();
-        HBox.setHgrow(leftPanel, Priority.ALWAYS);
-
-        contentBox.getChildren().addAll(leftPanel, rightPanel);
+        tabPane.getTabs().addAll(tabPenjualan, tabHistory);
 
         // ========== ASSEMBLE MAIN LAYOUT ==========
-        this.getChildren().addAll(headerBox, userInfoLabel, contentBox);
+        this.getChildren().addAll(headerBox, userInfoBox, tabPane);
     }
 
     private VBox createHeaderBox() {
@@ -67,7 +79,11 @@ public class KasirView extends VBox {
         return headerBox;
     }
 
-    private VBox createTableSection() {
+    private VBox createPenjualanTab() {
+        VBox penjualanTab = new VBox(10);
+        penjualanTab.setStyle("-fx-background-color: #fafafa; -fx-padding: 12;");
+
+        // ========== PRODUCT TABLE SECTION ==========
         VBox tableSection = new VBox(10);
         tableSection.setStyle("-fx-border-color: #e0e0e0; -fx-border-radius: 5; " +
                 "-fx-background-color: #fafafa; -fx-padding: 12;");
@@ -103,7 +119,65 @@ public class KasirView extends VBox {
         tableSection.getChildren().addAll(tableLabel, productTable, btnAddToCart);
         VBox.setVgrow(productTable, Priority.ALWAYS);
 
-        return tableSection;
+        // ========== CART PANEL ==========
+        VBox cartPanel = createCartPanel();
+
+        // ========== MAIN CONTENT BOX ==========
+        HBox contentBox = new HBox(20);
+        contentBox.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-border-radius: 5;");
+
+        VBox leftPanel = new VBox(15, tableSection);
+        VBox.setVgrow(tableSection, Priority.ALWAYS);
+        HBox.setHgrow(leftPanel, Priority.ALWAYS);
+
+        contentBox.getChildren().addAll(leftPanel, cartPanel);
+
+        penjualanTab.getChildren().add(contentBox);
+        VBox.setVgrow(contentBox, Priority.ALWAYS);
+
+        return penjualanTab;
+    }
+
+    private VBox createHistoryTab() {
+        VBox historyTab = new VBox(10);
+        historyTab.setStyle("-fx-background-color: #fafafa; -fx-padding: 12;");
+
+        Label historyLabel = new Label("📜 Riwayat Penjualan");
+        historyLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
+
+        // History Table
+        historyTable = new TableView<>();
+        historyTable.setStyle("-fx-font-size: 11; -fx-padding: 5;");
+
+        TableColumn<Transaction, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idCol.setPrefWidth(50);
+
+        TableColumn<Transaction, Double> totalCol = new TableColumn<>("Total");
+        totalCol.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
+        totalCol.setPrefWidth(100);
+
+        TableColumn<Transaction, String> paymentCol = new TableColumn<>("Pembayaran");
+        paymentCol.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
+        paymentCol.setPrefWidth(100);
+
+        TableColumn<Transaction, String> statusCol = new TableColumn<>("Status");
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusCol.setPrefWidth(80);
+
+        TableColumn<Transaction, String> dateCol = new TableColumn<>("Tanggal");
+        dateCol.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(
+            cell.getValue().getTransactionDate().format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))
+        ));
+        dateCol.setPrefWidth(150);
+
+        historyTable.getColumns().addAll(idCol, totalCol, paymentCol, statusCol, dateCol);
+        historyTable.setPrefHeight(300);
+
+        historyTab.getChildren().addAll(historyLabel, historyTable);
+        VBox.setVgrow(historyTable, Priority.ALWAYS);
+
+        return historyTab;
     }
 
     private VBox createCartPanel() {
@@ -207,5 +281,17 @@ public class KasirView extends VBox {
 
     public Label getUserInfoLabel() {
         return userInfoLabel;
+    }
+
+    public Button getBtnLogout() {
+        return btnLogout;
+    }
+
+    public TableView<Transaction> getHistoryTable() {
+        return historyTable;
+    }
+
+    public TabPane getTabPane() {
+        return tabPane;
     }
 }

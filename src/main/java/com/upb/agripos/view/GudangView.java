@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 
 public class GudangView extends VBox {
     private TextField txtCode, txtName, txtPrice, txtStock;
-    private Button btnAddProduct, btnDeleteProduct, btnIncreaseStock, btnDecreaseStock, btnRefresh;
+    private Button btnAddProduct, btnDeleteProduct, btnIncreaseStock, btnDecreaseStock, btnRefresh, btnLogout;
     private TableView<Product> productTable;
     private Label userInfoLabel;
 
@@ -29,8 +29,12 @@ public class GudangView extends VBox {
         VBox headerBox = createHeaderBox();
 
         // ========== USER INFO ==========
+        HBox userInfoBox = new HBox(10);
+        userInfoBox.setAlignment(Pos.CENTER_LEFT);
         userInfoLabel = new Label("👤 User: -");
         userInfoLabel.setStyle("-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #d84315;");
+        btnLogout = createStyledButton("🚪 Logout", "#c62828");
+        userInfoBox.getChildren().addAll(userInfoLabel, btnLogout);
 
         // ========== PRODUCT FORM SECTION ==========
         VBox formSection = createFormSection();
@@ -49,7 +53,7 @@ public class GudangView extends VBox {
         contentBox.getChildren().addAll(leftPanel);
 
         // ========== ASSEMBLE MAIN LAYOUT ==========
-        this.getChildren().addAll(headerBox, userInfoLabel, contentBox);
+        this.getChildren().addAll(headerBox, userInfoBox, contentBox);
     }
 
     private VBox createHeaderBox() {
@@ -238,5 +242,9 @@ public class GudangView extends VBox {
 
     public Label getUserInfoLabel() {
         return userInfoLabel;
+    }
+
+    public Button getBtnLogout() {
+        return btnLogout;
     }
 }

@@ -1,5 +1,6 @@
 package com.upb.agripos.service;
 
+import com.upb.agripos.dao.CartDAO;
 import com.upb.agripos.model.Cart;
 import com.upb.agripos.model.CartItem;
 import com.upb.agripos.model.Product;
@@ -7,10 +8,12 @@ import com.upb.agripos.model.Product;
 public class CartService {
     private final Cart cart;
     private final ProductService productService;
+    private final CartDAO cartDAO;
 
-    public CartService(ProductService productService) {
+    public CartService(ProductService productService, CartDAO cartDAO) {
         this.cart = new Cart();
         this.productService = productService;
+        this.cartDAO = cartDAO;
     }
 
     public void addItem(String productCode, int quantity) throws Exception {
@@ -52,5 +55,9 @@ public class CartService {
 
     public void clearCart() {
         cart.clear();
+    }
+
+    public int saveCart(int userId) {
+        return cartDAO.saveCart(cart, userId);
     }
 }

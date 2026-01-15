@@ -3,6 +3,8 @@ package com.upb.agripos.service;
 import com.upb.agripos.dao.UserDAO;
 import com.upb.agripos.model.User;
 
+import java.util.List;
+
 public class UserService {
     private final UserDAO userDAO;
     private User currentUser;
@@ -40,5 +42,19 @@ public class UserService {
 
     public boolean isLoggedIn() {
         return currentUser != null;
+    }
+
+    public boolean addUser(String username, String password, String fullName, String role) {
+        if (username == null || username.trim().isEmpty() ||
+            password == null || password.trim().isEmpty() ||
+            fullName == null || fullName.trim().isEmpty() ||
+            role == null || role.trim().isEmpty()) {
+            return false;
+        }
+        return userDAO.addUser(username, password, fullName, role);
+    }
+
+    public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
     }
 }

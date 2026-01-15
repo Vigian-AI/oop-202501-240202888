@@ -2,13 +2,17 @@ package com.upb.agripos;
 
 import com.upb.agripos.config.DatabaseConnection;
 import com.upb.agripos.controller.PosController;
+import com.upb.agripos.controller.AdminController;
 import com.upb.agripos.dao.ProductDAOImpl;
+import com.upb.agripos.dao.CartDAO;
 import com.upb.agripos.service.CartService;
 import com.upb.agripos.service.ProductService;
+import com.upb.agripos.service.TransactionService;
 import com.upb.agripos.service.UserService;
 import com.upb.agripos.view.GudangView;
 import com.upb.agripos.view.KasirView;
 import com.upb.agripos.view.LoginView;
+import com.upb.agripos.view.AdminView;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -27,38 +31,43 @@ public class AppJavaFX extends Application {
 
         // Initialize DAO
         var productDAO = new ProductDAOImpl(dataSource);
+        var cartDAO = CartDAO.getInstance();
 
         // Initialize Services
         var productService = new ProductService(productDAO);
-        var cartService = new CartService(productService);
+        var cartService = new CartService(productService, cartDAO);
         var userService = new UserService();
+        var transactionService = new TransactionService();
         // Show login screen first
-        showLoginScreen(primaryStage, productService, cartService, userService);
+        showLoginScreen(primaryStage, productService, cartService, userService, transactionService);
     }
 
-    private void showLoginScreen(Stage primaryStage, ProductService productService, CartService cartService, UserService userService) {
+    private void showLoginScreen(Stage primaryStage, ProductService productService, CartService cartService, UserService userService, TransactionService transactionService) {
         LoginView loginView = new LoginView(primaryStage, userService);
-        loginView.setOnLoginSuccess(() -> showMainApp(primaryStage, productService, cartService, userService));
+        loginView.setOnLoginSuccess(() -> showMainApp(primaryStage, productService, cartService, userService, transactionService));
         Scene loginScene = new Scene(loginView, 500, 600);
         primaryStage.setScene(loginScene);
         primaryStage.setTitle("Agri-POS - Login");
         primaryStage.show();
     }
 
-    private void showMainApp(Stage primaryStage, ProductService productService, CartService cartService, UserService userService) {
+    private void showMainApp(Stage primaryStage, ProductService productService, CartService cartService, UserService userService, TransactionService transactionService) {
         var current = userService.getCurrentUser();
         
         if (current != null && "gudang".equalsIgnoreCase(current.getRole())) {
             // Show Gudang View
-            showGudangApp(primaryStage, productService, cartService, userService, current);
+            showGudangApp(primaryStage, productService, cartService, userService, transactionService, current);
+        } else if (current != null && "admin".equalsIgnoreCase(current.getRole())) {
+            // Show Admin View
+            showAdminApp(primaryStage, productService, cartService, userService, transactionService, current);
         } else {
             // Show Kasir View
-            showKasirApp(primaryStage, productService, cartService, userService, current);
+            showKasirApp(primaryStage, productService, cartService, userService, transactionService, current);
         }
     }
 
-    private void showGudangApp(Stage primaryStage, ProductService productService, CartService cartService, UserService userService, com.upb.agripos.model.User current) {
-        var controller = new PosController(productService, cartService, userService);
+    private void showGudangApp(Stage primaryStage, ProductService productService, CartService cartService, UserService userService, TransactionService transactionService, com.upb.agripos.model.User current) {
+        var controller = new PosController(productService, cartService, userService, transactionService);
         var view = new GudangView();
 
         // Display current user info
@@ -73,6 +82,12 @@ public class AppJavaFX extends Application {
         view.getBtnDecreaseStock().setOnAction(e -> controller.decreaseStock(view.getProductTable()));
         view.getBtnRefresh().setOnAction(e -> controller.loadProducts(view.getProductTable()));
 
+        // Bind logout action
+        view.getBtnLogout().setOnAction(e -> {
+            userService.logout();
+            showLoginScreen(primaryStage, productService, cartService, userService, transactionService);
+        });
+
         // Load products
         controller.loadProducts(view.getProductTable());
 
@@ -82,8 +97,37 @@ public class AppJavaFX extends Application {
         primaryStage.show();
     }
 
-    private void showKasirApp(Stage primaryStage, ProductService productService, CartService cartService, UserService userService, com.upb.agripos.model.User current) {
-        var controller = new PosController(productService, cartService, userService);
+    private void showAdminApp(Stage primaryStage, ProductService productService, CartService cartService, UserService userService, TransactionService transactionService, com.upb.agripos.model.User current) {
+        var controller = new AdminController(userService, transactionService);
+        var view = new AdminView();
+
+        // Display current user info
+        view.getUserInfoLabel().setText("👤 " + current.getFullName() + " (ADMIN)");
+
+        // Bind action handlers for admin functions
+        view.getBtnAddUser().setOnAction(e -> controller.addUser(
+            view.getTxtUsername(), view.getTxtPassword(), view.getTxtFullName(), view.getCbRole(), view.getUserTable()
+        ));
+        view.getBtnRefreshHistory().setOnAction(e -> controller.loadHistory(view.getHistoryTable()));
+
+        // Bind logout action
+        view.getBtnLogout().setOnAction(e -> {
+            userService.logout();
+            showLoginScreen(primaryStage, productService, cartService, userService, transactionService);
+        });
+
+        // Load initial data
+        controller.loadUsers(view.getUserTable());
+        controller.loadHistory(view.getHistoryTable());
+
+        Scene scene = new Scene(view, 1200, 800);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("🛡️ Agri-POS - Admin Panel");
+        primaryStage.show();
+    }
+
+    private void showKasirApp(Stage primaryStage, ProductService productService, CartService cartService, UserService userService, TransactionService transactionService, com.upb.agripos.model.User current) {
+        var controller = new PosController(productService, cartService, userService, transactionService);
         var view = new KasirView();
 
         // Display current user info
@@ -104,6 +148,15 @@ public class AppJavaFX extends Application {
         } catch (Exception e) {
             System.err.println("Error loading products: " + e.getMessage());
         }
+
+        // Bind logout action
+        view.getBtnLogout().setOnAction(e -> {
+            userService.logout();
+            showLoginScreen(primaryStage, productService, cartService, userService, transactionService);
+        });
+
+        // Load initial data for kasir
+        controller.loadKasirHistory(view.getHistoryTable(), current.getId());
 
         Scene scene = new Scene(view, 1000, 700);
         primaryStage.setScene(scene);

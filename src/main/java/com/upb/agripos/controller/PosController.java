@@ -4,7 +4,10 @@ import com.upb.agripos.model.Product;
 import com.upb.agripos.service.ProductService;
 import com.upb.agripos.service.CartService;
 import com.upb.agripos.service.UserService;
+import com.upb.agripos.service.TransactionService;
 import com.upb.agripos.view.ReceiptView;
+import com.upb.agripos.dao.CartDAO;
+import com.upb.agripos.model.Transaction;
 import javafx.scene.control.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,11 +17,13 @@ public class PosController {
     private final ProductService productService;
     private final CartService cartService;
     private final UserService userService;
+    private final TransactionService transactionService;
 
-    public PosController(ProductService productService, CartService cartService, UserService userService) {
+    public PosController(ProductService productService, CartService cartService, UserService userService, TransactionService transactionService) {
         this.productService = productService;
         this.cartService = cartService;
         this.userService = userService;
+        this.transactionService = transactionService;
     }
 
     public void addProduct(TextField txtCode, TextField txtName, TextField txtPrice, TextField txtStock, TableView<Product> tableView) {
@@ -183,17 +188,34 @@ public class PosController {
             return;
         }
         try {
+            // Get current user
+            var currentUser = userService.getCurrentUser();
+            if (currentUser == null) {
+                showAlert("Error", "User tidak ditemukan");
+                return;
+            }
+
             // Decrease stock for each item in cart
             for (var item : cartService.getCart().getItems()) {
                 productService.decreaseStock(item.getProduct().getCode(), item.getQuantity());
             }
+
+            // Save cart to database
+            int cartId = cartService.saveCart(currentUser.getId());
+            if (cartId == -1) {
+                throw new Exception("Gagal menyimpan keranjang");
+            }
+
+            // Save transaction
+            Transaction transaction = new Transaction(0, cartId, currentUser.getId(), cartService.getTotalPrice(), "TUNAI", "SUCCESS", LocalDateTime.now());
+            transactionService.saveTransaction(transaction);
 
             // Generate receipt text
             String receipt = generateReceipt();
             // Show receipt dialog (printable)
             ReceiptView.showReceipt(receipt);
 
-            // For simplicity, just clear cart after "checkout"
+            // Clear cart after checkout
             showAlert("Info", "Checkout berhasil. Total: " + cartService.getTotalPrice());
             cartService.clearCart();
             updateCartDisplay(cartList, totalLabel);
@@ -252,5 +274,13 @@ public class PosController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-}
 
+    public void loadKasirHistory(TableView<Transaction> historyTable, int userId) {
+        try {
+            historyTable.getItems().clear();
+            historyTable.getItems().addAll(transactionService.getTransactionsByUserId(userId));
+        } catch (Exception e) {
+            showAlert("Error", "Gagal memuat history penjualan: " + e.getMessage());
+        }
+    }
+}

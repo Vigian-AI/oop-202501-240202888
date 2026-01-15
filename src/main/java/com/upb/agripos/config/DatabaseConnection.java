@@ -22,8 +22,6 @@ public class DatabaseConnection {
             password = "";
         }
         String url = "jdbc:postgresql://localhost:5432/agripos";
-        String adminUrl = "jdbc:postgresql://localhost:5432/postgres";
-
 
 
         HikariConfig config = new HikariConfig();
