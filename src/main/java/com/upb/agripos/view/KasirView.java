@@ -14,14 +14,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class PosView extends VBox {
+public class KasirView extends VBox {
     private TableView<Product> productTable;
     private Button btnAddToCart, btnCheckout;
     private ListView<String> cartList;
     private Label totalLabel;
     private Label userInfoLabel;
 
-    public PosView() {
+    public KasirView() {
         // ========== MAIN STYLING ==========
         this.setPadding(new Insets(20));
         this.setSpacing(15);
