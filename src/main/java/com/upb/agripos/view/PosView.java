@@ -10,10 +10,16 @@ public class PosView extends VBox {
     private TextField txtCode, txtName, txtPrice, txtStock;
     private Button btnAddProduct, btnDeleteProduct, btnAddToCart, btnCheckout;
     private Button btnRefresh; // added refresh button
+    private Button btnIncreaseStock, btnDecreaseStock; // new stock buttons
     private ListView<String> cartList;
     private Label totalLabel;
+    private Label userInfoLabel; // show current user info
 
     public PosView() {
+        // user info label (placed at top)
+        userInfoLabel = new Label("User: -");
+        userInfoLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333;");
+        
         // Product Form
         txtCode = new TextField();
         txtCode.setPromptText("Kode Produk");
@@ -30,8 +36,10 @@ public class PosView extends VBox {
         btnAddProduct = new Button("Tambah Produk");
         btnDeleteProduct = new Button("Hapus Produk");
         btnRefresh = new Button("Refresh"); // new button
+        btnIncreaseStock = new Button("Tambah Stok");
+        btnDecreaseStock = new Button("Kurangi Stok");
 
-        HBox formBox = new HBox(10, txtCode, txtName, txtPrice, txtStock, btnAddProduct, btnDeleteProduct, btnRefresh);
+        HBox formBox = new HBox(10, txtCode, txtName, txtPrice, txtStock, btnAddProduct, btnDeleteProduct, btnIncreaseStock, btnDecreaseStock, btnRefresh);
 
         // Product Table
         productTable = new TableView<>();
@@ -62,7 +70,7 @@ public class PosView extends VBox {
 
         // Layout
         HBox mainBox = new HBox(20, new VBox(10, formBox, productTable, btnAddToCart), cartBox);
-        this.getChildren().addAll(mainBox);
+        this.getChildren().addAll(userInfoLabel, mainBox);
         this.setSpacing(10);
     }
 
@@ -102,6 +110,14 @@ public class PosView extends VBox {
         return btnCheckout;
     }
 
+    public Button getBtnIncreaseStock() {
+        return btnIncreaseStock;
+    }
+
+    public Button getBtnDecreaseStock() {
+        return btnDecreaseStock;
+    }
+
     public ListView<String> getCartList() {
         return cartList;
     }
@@ -112,5 +128,9 @@ public class PosView extends VBox {
 
     public Button getBtnRefresh() { // getter for refresh
         return btnRefresh;
+    }
+
+    public Label getUserInfoLabel() {
+        return userInfoLabel;
     }
 }

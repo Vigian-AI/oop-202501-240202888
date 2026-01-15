@@ -3,6 +3,7 @@ package com.upb.agripos.controller;
 import com.upb.agripos.model.Product;
 import com.upb.agripos.service.ProductService;
 import com.upb.agripos.service.CartService;
+import com.upb.agripos.service.UserService;
 import com.upb.agripos.view.ReceiptView;
 import javafx.scene.control.*;
 import java.time.LocalDateTime;
@@ -12,13 +13,20 @@ import java.util.Optional;
 public class PosController {
     private final ProductService productService;
     private final CartService cartService;
+    private final UserService userService;
 
-    public PosController(ProductService productService, CartService cartService) {
+    public PosController(ProductService productService, CartService cartService, UserService userService) {
         this.productService = productService;
         this.cartService = cartService;
+        this.userService = userService;
     }
 
     public void addProduct(TextField txtCode, TextField txtName, TextField txtPrice, TextField txtStock, TableView<Product> tableView) {
+        // only gudang can add products
+        if (!isCurrentUserGudang()) {
+            showAlert("Unauthorized", "Akses ditolak. Hanya user GUDANG yang dapat menambah produk.");
+            return;
+        }
         try {
             String code = txtCode.getText().trim();
             String name = txtName.getText().trim();
@@ -40,6 +48,11 @@ public class PosController {
     }
 
     public void deleteProduct(TableView<Product> tableView) {
+        // only gudang can delete products
+        if (!isCurrentUserGudang()) {
+            showAlert("Unauthorized", "Akses ditolak. Hanya user GUDANG yang dapat menghapus produk.");
+            return;
+        }
         Product selectedProduct = tableView.getSelectionModel().getSelectedItem();
         if (selectedProduct != null) {
             try {
@@ -55,11 +68,85 @@ public class PosController {
     }
 
     public void loadProducts(TableView<Product> tableView) {
+        // Only users with role GUDANG may view the product list
+        if (!isCurrentUserGudang()) {
+            tableView.getItems().clear();
+            showAlert("Unauthorized", "Akses melihat produk dibatasi untuk user GUDANG.");
+            return;
+        }
         try {
             tableView.getItems().clear();
             tableView.getItems().addAll(productService.findAll());
         } catch (Exception e) {
             showAlert("Error", "Gagal memuat produk: " + e.getMessage());
+        }
+    }
+
+    public void increaseStock(TableView<Product> tableView) {
+        if (!isCurrentUserGudang()) {
+            showAlert("Unauthorized", "Akses ditolak. Hanya user GUDANG yang dapat mengubah stok.");
+            return;
+        }
+        Product selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Error", "Pilih produk untuk ditambah stok");
+            return;
+        }
+        TextInputDialog dlg = new TextInputDialog("1");
+        dlg.setTitle("Tambah Stok");
+        dlg.setHeaderText("Masukkan jumlah stok yang ditambahkan untuk " + selected.getName());
+        dlg.setContentText("Jumlah:");
+        dlg.showAndWait().ifPresent(s -> {
+            try {
+                int qty = Integer.parseInt(s.trim());
+                if (qty <= 0) throw new IllegalArgumentException("Jumlah harus positif");
+                int newStock = selected.getStock() + qty;
+                productService.updateStock(selected.getCode(), newStock);
+                tableView.getItems().clear();
+                tableView.getItems().addAll(productService.findAll());
+            } catch (NumberFormatException ex) {
+                showAlert("Error", "Jumlah harus angka");
+            } catch (Exception ex) {
+                showAlert("Error", ex.getMessage());
+            }
+        });
+    }
+
+    public void decreaseStock(TableView<Product> tableView) {
+        if (!isCurrentUserGudang()) {
+            showAlert("Unauthorized", "Akses ditolak. Hanya user GUDANG yang dapat mengubah stok.");
+            return;
+        }
+        Product selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Error", "Pilih produk untuk dikurangi stok");
+            return;
+        }
+        TextInputDialog dlg = new TextInputDialog("1");
+        dlg.setTitle("Kurangi Stok");
+        dlg.setHeaderText("Masukkan jumlah stok yang dikurangi untuk " + selected.getName());
+        dlg.setContentText("Jumlah:");
+        dlg.showAndWait().ifPresent(s -> {
+            try {
+                int qty = Integer.parseInt(s.trim());
+                if (qty <= 0) throw new IllegalArgumentException("Jumlah harus positif");
+                productService.decreaseStock(selected.getCode(), qty);
+                tableView.getItems().clear();
+                tableView.getItems().addAll(productService.findAll());
+            } catch (NumberFormatException ex) {
+                showAlert("Error", "Jumlah harus angka");
+            } catch (Exception ex) {
+                showAlert("Error", ex.getMessage());
+            }
+        });
+    }
+
+    private boolean isCurrentUserGudang() {
+        try {
+            var u = userService.getCurrentUser();
+            return u != null && "gudang".equalsIgnoreCase(u.getRole());
+        } catch (Exception e) {
+            return false;
         }
     }
 
