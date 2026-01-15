@@ -5,7 +5,10 @@ import com.upb.agripos.controller.PosController;
 import com.upb.agripos.dao.ProductDAOImpl;
 import com.upb.agripos.service.CartService;
 import com.upb.agripos.service.ProductService;
+import com.upb.agripos.service.UserService;
+import com.upb.agripos.view.LoginView;
 import com.upb.agripos.view.PosView;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -27,11 +30,22 @@ public class AppJavaFX extends Application {
         // Initialize Services
         var productService = new ProductService(productDAO);
         var cartService = new CartService(productService);
+        var userService = new UserService();
+        // Show login screen first
+        showLoginScreen(primaryStage, productService, cartService, userService);
+    }
 
-        // Initialize Controller
+    private void showLoginScreen(Stage primaryStage, ProductService productService, CartService cartService, UserService userService) {
+        LoginView loginView = new LoginView(primaryStage, userService);
+        loginView.setOnLoginSuccess(() -> showMainApp(primaryStage, productService, cartService));
+        Scene loginScene = new Scene(loginView, 500, 600);
+        primaryStage.setScene(loginScene);
+        primaryStage.setTitle("Agri-POS - Login");
+        primaryStage.show();
+    }
+
+    private void showMainApp(Stage primaryStage, ProductService productService, CartService cartService) {
         var controller = new PosController(productService, cartService);
-
-        // Initialize View
         var view = new PosView();
 
         // Bind actions
@@ -48,7 +62,6 @@ public class AppJavaFX extends Application {
         // Load initial data
         controller.loadProducts(view.getProductTable());
 
-        // Scene
         Scene scene = new Scene(view, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Agri-POS");
