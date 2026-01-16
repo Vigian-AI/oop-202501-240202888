@@ -72,6 +72,9 @@ CREATE TABLE transactions (
     payment_method VARCHAR(50),
     status VARCHAR(50) DEFAULT 'SUCCESS',
     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    paid_amount DECIMAL(10, 2) DEFAULT 0,
+    change DECIMAL(10, 2) DEFAULT 0,
+    cashier_name VARCHAR(100),
     FOREIGN KEY (cart_id) REFERENCES carts(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

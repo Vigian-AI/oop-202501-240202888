@@ -26,7 +26,7 @@ public class TransactionDAO {
     }
 
     public void save(Transaction transaction) {
-        String sql = "INSERT INTO transactions (cart_id, user_id, total_amount, payment_method, status, transaction_date) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO transactions (cart_id, user_id, total_amount, payment_method, status, transaction_date, paid_amount, change, cashier_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, transaction.getCartId());
@@ -35,6 +35,9 @@ public class TransactionDAO {
             ps.setString(4, transaction.getPaymentMethod());
             ps.setString(5, transaction.getStatus());
             ps.setTimestamp(6, Timestamp.valueOf(transaction.getTransactionDate()));
+            ps.setDouble(7, transaction.getPaidAmount());
+            ps.setDouble(8, transaction.getChange());
+            ps.setString(9, transaction.getCashierName());
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -49,7 +52,7 @@ public class TransactionDAO {
 
     public List<Transaction> findAll() {
         List<Transaction> transactions = new ArrayList<>();
-        String sql = "SELECT id, cart_id, user_id, total_amount, payment_method, status, transaction_date FROM transactions ORDER BY transaction_date DESC";
+        String sql = "SELECT id, cart_id, user_id, total_amount, payment_method, status, transaction_date, paid_amount, change, cashier_name FROM transactions ORDER BY transaction_date DESC";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -61,7 +64,10 @@ public class TransactionDAO {
                     rs.getDouble("total_amount"),
                     rs.getString("payment_method"),
                     rs.getString("status"),
-                    rs.getTimestamp("transaction_date").toLocalDateTime()
+                    rs.getTimestamp("transaction_date").toLocalDateTime(),
+                    rs.getDouble("paid_amount"),
+                    rs.getDouble("change"),
+                    rs.getString("cashier_name")
                 ));
             }
         } catch (SQLException e) {
@@ -72,7 +78,7 @@ public class TransactionDAO {
 
     public List<Transaction> findByUserId(int userId) {
         List<Transaction> transactions = new ArrayList<>();
-        String sql = "SELECT id, cart_id, user_id, total_amount, payment_method, status, transaction_date FROM transactions WHERE user_id = ? ORDER BY transaction_date DESC";
+        String sql = "SELECT id, cart_id, user_id, total_amount, payment_method, status, transaction_date, paid_amount, change, cashier_name FROM transactions WHERE user_id = ? ORDER BY transaction_date DESC";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -85,7 +91,10 @@ public class TransactionDAO {
                         rs.getDouble("total_amount"),
                         rs.getString("payment_method"),
                         rs.getString("status"),
-                        rs.getTimestamp("transaction_date").toLocalDateTime()
+                        rs.getTimestamp("transaction_date").toLocalDateTime(),
+                        rs.getDouble("paid_amount"),
+                        rs.getDouble("change"),
+                        rs.getString("cashier_name")
                     ));
                 }
             }

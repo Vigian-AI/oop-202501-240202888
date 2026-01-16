@@ -1,11 +1,13 @@
 package com.upb.agripos.controller;
 
 import com.upb.agripos.model.Product;
+import com.upb.agripos.model.payment.PaymentMethod;
 import com.upb.agripos.service.ProductService;
 import com.upb.agripos.service.CartService;
 import com.upb.agripos.service.UserService;
 import com.upb.agripos.service.TransactionService;
 import com.upb.agripos.view.ReceiptView;
+import com.upb.agripos.view.PaymentDialog;
 import com.upb.agripos.dao.CartDAO;
 import com.upb.agripos.model.Transaction;
 import javafx.scene.control.*;
@@ -195,6 +197,19 @@ public class PosController {
                 return;
             }
 
+            // Show payment dialog
+            double totalAmount = cartService.getTotalPrice();
+            PaymentDialog paymentDialog = new PaymentDialog(totalAmount);
+
+            if (!paymentDialog.isConfirmed()) {
+                showAlert("Info", "Pembayaran dibatalkan");
+                return;
+            }
+
+            PaymentMethod paymentMethod = paymentDialog.getSelectedPaymentMethod();
+            double paidAmount = paymentDialog.getPaidAmount();
+            double change = paidAmount - totalAmount;
+
             // Decrease stock for each item in cart
             for (var item : cartService.getCart().getItems()) {
                 productService.decreaseStock(item.getProduct().getCode(), item.getQuantity());
@@ -206,17 +221,29 @@ public class PosController {
                 throw new Exception("Gagal menyimpan keranjang");
             }
 
-            // Save transaction
-            Transaction transaction = new Transaction(0, cartId, currentUser.getId(), cartService.getTotalPrice(), "TUNAI", "SUCCESS", LocalDateTime.now());
+            // Save transaction with payment details
+            String paymentMethodStr = paymentMethod.name();
+            Transaction transaction = new Transaction(
+                0, 
+                cartId, 
+                currentUser.getId(), 
+                totalAmount, 
+                paymentMethodStr, 
+                "SUCCESS", 
+                LocalDateTime.now(),
+                paidAmount,
+                change,
+                currentUser.getFullName()
+            );
             transactionService.saveTransaction(transaction);
 
-            // Generate receipt text
-            String receipt = generateReceipt();
+            // Generate receipt text with payment details
+            String receipt = generateReceipt(transaction);
             // Show receipt dialog (printable)
             ReceiptView.showReceipt(receipt);
 
             // Clear cart after checkout
-            showAlert("Info", "Checkout berhasil. Total: " + cartService.getTotalPrice());
+            showAlert("Info", "Checkout berhasil. Total: " + String.format("Rp %,.0f", totalAmount));
             cartService.clearCart();
             updateCartDisplay(cartList, totalLabel);
         } catch (Exception e) {
@@ -224,7 +251,42 @@ public class PosController {
         }
     }
 
+    private String generateReceipt(Transaction transaction) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("================================\n");
+        sb.append("\tAGRI-POS RECEIPT\n");
+        sb.append("================================\n");
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        sb.append("Tanggal: ").append(transaction.getTransactionDate().format(fmt)).append("\n");
+        sb.append("Kasir: ").append(transaction.getCashierName()).append("\n");
+        sb.append("--------------------------------\n");
+        sb.append(String.format("%-20s %5s %10s %10s\n", "Item", "Qty", "Harga", "Subtotal"));
+        sb.append("--------------------------------\n");
+        for (var item : cartService.getCart().getItems()) {
+            String name = item.getProduct().getName();
+            int qty = item.getQuantity();
+            double price = item.getProduct().getPrice();
+            double subtotal = item.getTotalPrice();
+            sb.append(String.format("%-20s %5d %10.0f %10.0f\n", name, qty, price, subtotal));
+        }
+        sb.append("--------------------------------\n");
+        sb.append(String.format("%-20s %26.0f\n", "Total:", transaction.getTotalAmount()));
+        sb.append("\n");
+        sb.append(String.format("%-20s %26s\n", "Metode Pembayaran:", transaction.getPaymentMethod()));
+
+        if (PaymentMethod.CASH.name().equals(transaction.getPaymentMethod())) {
+            sb.append(String.format("%-20s %26.0f\n", "Jumlah Dibayar:", transaction.getPaidAmount()));
+            sb.append(String.format("%-20s %26.0f\n", "Kembalian:", transaction.getChange()));
+        }
+
+        sb.append("\n\n");
+        sb.append("\tTerima Kasih Atas Belanja Anda\n");
+        sb.append("================================\n");
+        return sb.toString();
+    }
+
     private String generateReceipt() {
+        // Kept for backward compatibility
         StringBuilder sb = new StringBuilder();
         sb.append("================================\n");
         sb.append("\tAGRI-POS RECEIPT\n");
