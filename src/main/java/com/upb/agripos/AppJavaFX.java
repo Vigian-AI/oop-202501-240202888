@@ -1,18 +1,18 @@
 package com.upb.agripos;
 
 import com.upb.agripos.config.DatabaseConnection;
-import com.upb.agripos.controller.PosController;
 import com.upb.agripos.controller.AdminController;
-import com.upb.agripos.dao.ProductDAOImpl;
+import com.upb.agripos.controller.PosController;
 import com.upb.agripos.dao.CartDAO;
+import com.upb.agripos.dao.ProductDAOImpl;
 import com.upb.agripos.service.CartService;
 import com.upb.agripos.service.ProductService;
 import com.upb.agripos.service.TransactionService;
 import com.upb.agripos.service.UserService;
+import com.upb.agripos.view.AdminView;
 import com.upb.agripos.view.GudangView;
 import com.upb.agripos.view.KasirView;
 import com.upb.agripos.view.LoginView;
-import com.upb.agripos.view.AdminView;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -88,6 +88,14 @@ public class AppJavaFX extends Application {
             showLoginScreen(primaryStage, productService, cartService, userService, transactionService);
         });
 
+        // Bind report buttons for gudang
+        if (view.getBtnStockInReport() != null) {
+            view.getBtnStockInReport().setOnAction(e -> controller.showStockInReport());
+        }
+        if (view.getBtnStockOutReport() != null) {
+            view.getBtnStockOutReport().setOnAction(e -> controller.showStockOutReport());
+        }
+
         // Load products
         controller.loadProducts(view.getProductTable());
 
@@ -109,6 +117,14 @@ public class AppJavaFX extends Application {
             view.getTxtUsername(), view.getTxtPassword(), view.getTxtFullName(), view.getCbRole(), view.getUserTable()
         ));
         view.getBtnRefreshHistory().setOnAction(e -> controller.loadHistory(view.getHistoryTable()));
+
+        // Bind action handlers for reports
+        if (view.getBtnDailyReport() != null) {
+            view.getBtnDailyReport().setOnAction(e -> controller.showDailySalesReport());
+        }
+        if (view.getBtnCashierReport() != null) {
+            view.getBtnCashierReport().setOnAction(e -> controller.showCashierSalesReport());
+        }
 
         // Bind logout action
         view.getBtnLogout().setOnAction(e -> {
@@ -140,6 +156,14 @@ public class AppJavaFX extends Application {
             view.getProductTable(), view.getCartList(), view.getTotalLabel()
         ));
         view.getBtnCheckout().setOnAction(e -> controller.checkout(view.getCartList(), view.getTotalLabel()));
+
+        // Bind action handlers for reports
+        if (view.getBtnDailyReport() != null) {
+            view.getBtnDailyReport().setOnAction(e -> controller.showDailySalesReport());
+        }
+        if (view.getBtnCashierReport() != null) {
+            view.getBtnCashierReport().setOnAction(e -> controller.showCashierSalesReport());
+        }
 
         // Load products for all users
         try {

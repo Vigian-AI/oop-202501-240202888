@@ -1,13 +1,19 @@
 package com.upb.agripos.dao;
 
-import com.upb.agripos.config.DatabaseConnection;
-import com.upb.agripos.model.Transaction;
-
-import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sql.DataSource;
+
+import com.upb.agripos.config.DatabaseConnection;
+import com.upb.agripos.model.Transaction;
 
 public class TransactionDAO {
     private static TransactionDAO instance;
@@ -100,6 +106,35 @@ public class TransactionDAO {
             }
         } catch (SQLException e) {
             System.err.println("Error fetching transactions by user: " + e.getMessage());
+        }
+        return transactions;
+    }
+
+    public List<Transaction> findByDateRange(LocalDateTime start, LocalDateTime end) {
+        List<Transaction> transactions = new ArrayList<>();
+        String sql = "SELECT id, cart_id, user_id, total_amount, payment_method, status, transaction_date, paid_amount, change, cashier_name FROM transactions WHERE transaction_date BETWEEN ? AND ? ORDER BY transaction_date DESC";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setTimestamp(1, Timestamp.valueOf(start));
+            ps.setTimestamp(2, Timestamp.valueOf(end));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    transactions.add(new Transaction(
+                        rs.getInt("id"),
+                        rs.getInt("cart_id"),
+                        rs.getInt("user_id"),
+                        rs.getDouble("total_amount"),
+                        rs.getString("payment_method"),
+                        rs.getString("status"),
+                        rs.getTimestamp("transaction_date").toLocalDateTime(),
+                        rs.getDouble("paid_amount"),
+                        rs.getDouble("change"),
+                        rs.getString("cashier_name")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching transactions by date range: " + e.getMessage());
         }
         return transactions;
     }

@@ -2,7 +2,6 @@ package com.upb.agripos.service;
 
 import com.upb.agripos.dao.CartDAO;
 import com.upb.agripos.model.Cart;
-import com.upb.agripos.model.CartItem;
 import com.upb.agripos.model.Product;
 
 public class CartService {
@@ -59,5 +58,9 @@ public class CartService {
 
     public int saveCart(int userId) {
         return cartDAO.saveCart(cart, userId);
+    }
+
+    public java.util.List<com.upb.agripos.model.SoldProduct> getSoldProductsByDateRange(java.time.LocalDateTime start, java.time.LocalDateTime end) {
+        return CartDAO.getInstance().findSoldProductsByDateRange(start, end);
     }
 }

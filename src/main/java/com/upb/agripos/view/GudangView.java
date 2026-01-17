@@ -6,6 +6,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -18,6 +20,8 @@ public class GudangView extends VBox {
     private Button btnAddProduct, btnDeleteProduct, btnIncreaseStock, btnDecreaseStock, btnRefresh, btnLogout;
     private TableView<Product> productTable;
     private Label userInfoLabel;
+    private TabPane tabPane;
+    private Button btnStockInReport, btnStockOutReport;
 
     public GudangView() {
         // ========== MAIN STYLING ==========
@@ -36,6 +40,27 @@ public class GudangView extends VBox {
         btnLogout = createStyledButton("🚪 Logout", "#c62828");
         userInfoBox.getChildren().addAll(userInfoLabel, btnLogout);
 
+        // ========== TAB PANE ==========
+        tabPane = new TabPane();
+        tabPane.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-border-radius: 5;");
+
+        // Tab Manajemen Produk
+        Tab tabManajemen = new Tab("Manajemen Produk");
+        tabManajemen.setClosable(false);
+        tabManajemen.setContent(createManajemenTab());
+
+        // Tab Laporan Stok
+        Tab tabLaporan = new Tab("Laporan Stok");
+        tabLaporan.setClosable(false);
+        tabLaporan.setContent(createLaporanTab());
+
+        tabPane.getTabs().addAll(tabManajemen, tabLaporan);
+
+        // ========== ASSEMBLE MAIN LAYOUT ==========
+        this.getChildren().addAll(headerBox, userInfoBox, tabPane);
+    }
+
+    private HBox createManajemenTab() {
         // ========== PRODUCT FORM SECTION ==========
         VBox formSection = createFormSection();
 
@@ -52,8 +77,29 @@ public class GudangView extends VBox {
 
         contentBox.getChildren().addAll(leftPanel);
 
-        // ========== ASSEMBLE MAIN LAYOUT ==========
-        this.getChildren().addAll(headerBox, userInfoBox, contentBox);
+        return contentBox;
+    }
+
+    private VBox createLaporanTab() {
+        VBox laporanTab = new VBox(15);
+        laporanTab.setStyle("-fx-background-color: #fafafa; -fx-padding: 12;");
+
+        Label laporanLabel = new Label("📊 Laporan Stok Produk");
+        laporanLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #d84315;");
+
+        Label descLabel = new Label("Pilih jenis laporan stok yang ingin ditampilkan:");
+        descLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #666666;");
+
+        // Buttons for reports
+        btnStockInReport = createStyledButton("📥 Laporan Produk Masuk", "#1976d2");
+        btnStockOutReport = createStyledButton("📤 Laporan Produk Keluar", "#f57c00");
+
+        HBox buttonBox = new HBox(15);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().addAll(btnStockInReport, btnStockOutReport);
+
+        laporanTab.getChildren().addAll(laporanLabel, descLabel, buttonBox);
+        return laporanTab;
     }
 
     private VBox createHeaderBox() {
@@ -246,5 +292,13 @@ public class GudangView extends VBox {
 
     public Button getBtnLogout() {
         return btnLogout;
+    }
+
+    public Button getBtnStockInReport() {
+        return btnStockInReport;
+    }
+
+    public Button getBtnStockOutReport() {
+        return btnStockOutReport;
     }
 }

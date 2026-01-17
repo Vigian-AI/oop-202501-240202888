@@ -1,13 +1,17 @@
 package com.upb.agripos.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import com.upb.agripos.config.DatabaseConnection;
 import com.upb.agripos.model.Cart;
 import com.upb.agripos.model.CartItem;
-
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CartDAO {
     private static CartDAO instance;
@@ -60,5 +64,35 @@ public class CartDAO {
         } catch (SQLException e) {
             System.err.println("Error saving cart items: " + e.getMessage());
         }
+    }
+
+    public java.util.List<com.upb.agripos.model.SoldProduct> findSoldProductsByDateRange(java.time.LocalDateTime start, java.time.LocalDateTime end) {
+        java.util.List<com.upb.agripos.model.SoldProduct> list = new java.util.ArrayList<>();
+        String sql = "SELECT ci.product_code, p.name, SUM(ci.quantity) AS qty, SUM(ci.subtotal) AS value " +
+                     "FROM cart_items ci " +
+                     "JOIN carts c ON ci.cart_id = c.id " +
+                     "JOIN transactions t ON t.cart_id = c.id " +
+                     "JOIN products p ON p.code = ci.product_code " +
+                     "WHERE t.transaction_date BETWEEN ? AND ? AND t.status = 'SUCCESS' " +
+                     "GROUP BY ci.product_code, p.name " +
+                     "ORDER BY qty DESC";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setTimestamp(1, Timestamp.valueOf(start));
+            ps.setTimestamp(2, Timestamp.valueOf(end));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new com.upb.agripos.model.SoldProduct(
+                        rs.getString("product_code"),
+                        rs.getString("name"),
+                        rs.getInt("qty"),
+                        rs.getDouble("value")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching sold products by date range: " + e.getMessage());
+        }
+        return list;
     }
 }

@@ -5,7 +5,15 @@ import com.upb.agripos.model.User;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -19,6 +27,7 @@ public class AdminView extends VBox {
     private TableView<Transaction> historyTable;
     private Label userInfoLabel;
     private TabPane tabPane;
+    private Button btnDailyReport, btnCashierReport;
 
     public AdminView() {
         // ========== MAIN STYLING ==========
@@ -51,7 +60,12 @@ public class AdminView extends VBox {
         tabHistory.setClosable(false);
         tabHistory.setContent(createHistoryTab());
 
-        tabPane.getTabs().addAll(tabAddUser, tabHistory);
+        // Tab Laporan
+        Tab tabLaporan = new Tab("Laporan Penjualan");
+        tabLaporan.setClosable(false);
+        tabLaporan.setContent(createLaporanTab());
+
+        tabPane.getTabs().addAll(tabAddUser, tabHistory, tabLaporan);
 
         // ========== ASSEMBLE MAIN LAYOUT ==========
         this.getChildren().addAll(headerBox, userInfoBox, tabPane);
@@ -185,6 +199,28 @@ public class AdminView extends VBox {
         return tabContent;
     }
 
+    private VBox createLaporanTab() {
+        VBox laporanTab = new VBox(15);
+        laporanTab.setStyle("-fx-background-color: #fafafa; -fx-padding: 12;");
+
+        Label laporanLabel = new Label("📊 Laporan Penjualan");
+        laporanLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
+
+        Label descLabel = new Label("Pilih jenis laporan yang ingin ditampilkan:");
+        descLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #666666;");
+
+        // Buttons for reports
+        btnDailyReport = createStyledButton("📅 Laporan Harian", "#1976d2");
+        btnCashierReport = createStyledButton("👤 Laporan Kasir", "#f57c00");
+
+        HBox buttonBox = new HBox(15);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().addAll(btnDailyReport, btnCashierReport);
+
+        laporanTab.getChildren().addAll(laporanLabel, descLabel, buttonBox);
+        return laporanTab;
+    }
+
     private Button createStyledButton(String text, String color) {
         Button button = new Button(text);
         button.setPrefHeight(35);
@@ -231,4 +267,6 @@ public class AdminView extends VBox {
     public TableView<Transaction> getHistoryTable() { return historyTable; }
     public Label getUserInfoLabel() { return userInfoLabel; }
     public TabPane getTabPane() { return tabPane; }
+    public Button getBtnDailyReport() { return btnDailyReport; }
+    public Button getBtnCashierReport() { return btnCashierReport; }
 }
