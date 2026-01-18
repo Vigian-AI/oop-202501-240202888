@@ -27,7 +27,7 @@ public class AdminView extends VBox {
     private TableView<Transaction> historyTable;
     private Label userInfoLabel;
     private TabPane tabPane;
-    private Button btnDailyReport, btnCashierReport;
+    private Button btnCashierReport, btnWarehouseReport;
 
     public AdminView() {
         // ========== MAIN STYLING ==========
@@ -206,16 +206,18 @@ public class AdminView extends VBox {
         Label laporanLabel = new Label("📊 Laporan Penjualan");
         laporanLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
 
-        Label descLabel = new Label("Pilih jenis laporan yang ingin ditampilkan:");
-        descLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #666666;");
+        Label descLabel = new Label("Pilih jenis laporan yang ingin ditampilkan.\n" +
+            "Laporan Kasir menampilkan detail laporan untuk kasir tertentu.\n" +
+            "Laporan Gudang menampilkan inventaris produk dan produk keluar.");
+        descLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #666666;");
 
         // Buttons for reports
-        btnDailyReport = createStyledButton("📅 Laporan Harian", "#1976d2");
-        btnCashierReport = createStyledButton("👤 Laporan Kasir", "#f57c00");
+        btnCashierReport = createStyledButton("👤 Laporan Kasir", "#4caf50");
+        btnWarehouseReport = createStyledButton("📦 Laporan Gudang", "#9c27b0");
 
         HBox buttonBox = new HBox(15);
         buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.getChildren().addAll(btnDailyReport, btnCashierReport);
+        buttonBox.getChildren().addAll(btnCashierReport, btnWarehouseReport);
 
         laporanTab.getChildren().addAll(laporanLabel, descLabel, buttonBox);
         return laporanTab;
@@ -267,6 +269,6 @@ public class AdminView extends VBox {
     public TableView<Transaction> getHistoryTable() { return historyTable; }
     public Label getUserInfoLabel() { return userInfoLabel; }
     public TabPane getTabPane() { return tabPane; }
-    public Button getBtnDailyReport() { return btnDailyReport; }
     public Button getBtnCashierReport() { return btnCashierReport; }
+    public Button getBtnWarehouseReport() { return btnWarehouseReport; }
 }

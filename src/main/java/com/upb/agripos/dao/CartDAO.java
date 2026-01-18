@@ -95,4 +95,35 @@ public class CartDAO {
         }
         return list;
     }
+
+    public java.util.List<com.upb.agripos.model.SoldProduct> findSoldProductsByDateRangeAndUser(java.time.LocalDateTime start, java.time.LocalDateTime end, int userId) {
+        java.util.List<com.upb.agripos.model.SoldProduct> list = new java.util.ArrayList<>();
+        String sql = "SELECT ci.product_code, p.name, SUM(ci.quantity) AS qty, SUM(ci.subtotal) AS value " +
+                     "FROM cart_items ci " +
+                     "JOIN carts c ON ci.cart_id = c.id " +
+                     "JOIN transactions t ON t.cart_id = c.id " +
+                     "JOIN products p ON p.code = ci.product_code " +
+                     "WHERE t.transaction_date BETWEEN ? AND ? AND t.status = 'SUCCESS' AND t.user_id = ? " +
+                     "GROUP BY ci.product_code, p.name " +
+                     "ORDER BY qty DESC";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setTimestamp(1, Timestamp.valueOf(start));
+            ps.setTimestamp(2, Timestamp.valueOf(end));
+            ps.setInt(3, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new com.upb.agripos.model.SoldProduct(
+                        rs.getString("product_code"),
+                        rs.getString("name"),
+                        rs.getInt("qty"),
+                        rs.getDouble("value")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching sold products by date range and user: " + e.getMessage());
+        }
+        return list;
+    }
 }

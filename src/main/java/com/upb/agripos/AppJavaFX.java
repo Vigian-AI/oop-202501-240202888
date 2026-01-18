@@ -106,7 +106,7 @@ public class AppJavaFX extends Application {
     }
 
     private void showAdminApp(Stage primaryStage, ProductService productService, CartService cartService, UserService userService, TransactionService transactionService, com.upb.agripos.model.User current) {
-        var controller = new AdminController(userService, transactionService);
+        var controller = new AdminController(userService, transactionService, productService, cartService);
         var view = new AdminView();
 
         // Display current user info
@@ -119,11 +119,11 @@ public class AppJavaFX extends Application {
         view.getBtnRefreshHistory().setOnAction(e -> controller.loadHistory(view.getHistoryTable()));
 
         // Bind action handlers for reports
-        if (view.getBtnDailyReport() != null) {
-            view.getBtnDailyReport().setOnAction(e -> controller.showDailySalesReport());
-        }
         if (view.getBtnCashierReport() != null) {
             view.getBtnCashierReport().setOnAction(e -> controller.showCashierSalesReport());
+        }
+        if (view.getBtnWarehouseReport() != null) {
+            view.getBtnWarehouseReport().setOnAction(e -> controller.showWarehouseReport());
         }
 
         // Bind logout action
@@ -159,7 +159,7 @@ public class AppJavaFX extends Application {
 
         // Bind action handlers for reports
         if (view.getBtnDailyReport() != null) {
-            view.getBtnDailyReport().setOnAction(e -> controller.showDailySalesReport());
+            view.getBtnDailyReport().setOnAction(e -> controller.showSalesReport());
         }
         if (view.getBtnCashierReport() != null) {
             view.getBtnCashierReport().setOnAction(e -> controller.showCashierSalesReport());

@@ -193,12 +193,14 @@ public class KasirView extends VBox {
         Label laporanLabel = new Label("📊 Laporan Penjualan");
         laporanLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
 
-        Label descLabel = new Label("Pilih jenis laporan yang ingin ditampilkan:");
-        descLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #666666;");
+        Label descLabel = new Label("Pilih jenis laporan yang ingin ditampilkan.\n" +
+            "Anda hanya dapat melihat laporan penjualan Anda sendiri.\n" +
+            "Laporan Penjualan mencakup laporan harian dan bulanan.");
+        descLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #666666;");
 
         // Buttons for reports
-        btnDailyReport = createStyledButton("📅 Laporan Harian", "#1976d2");
-        btnCashierReport = createStyledButton("👤 Laporan Kasir", "#f57c00");
+        btnDailyReport = createStyledButton("� Laporan Penjualan", "#1976d2");
+        btnCashierReport = createStyledButton("📋 Laporan Detail", "#4caf50");
 
         HBox buttonBox = new HBox(15);
         buttonBox.setAlignment(Pos.CENTER);

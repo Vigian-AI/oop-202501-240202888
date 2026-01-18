@@ -14,6 +14,8 @@ import com.upb.agripos.service.TransactionService;
 import com.upb.agripos.service.UserService;
 import com.upb.agripos.view.PaymentDialog;
 import com.upb.agripos.view.ReceiptView;
+import com.upb.agripos.view.ReportDialog;
+import com.upb.agripos.view.WarehouseReportDialog;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -353,28 +355,8 @@ public class PosController {
         }
     }
 
-    public void showDailySalesReport() {
-        TextInputDialog dateDialog = new TextInputDialog(LocalDate.now().toString());
-        dateDialog.setTitle("Laporan Penjualan Harian");
-        dateDialog.setHeaderText("Masukkan tanggal (format: YYYY-MM-DD)");
-        dateDialog.setContentText("Tanggal:");
-
-        Optional<String> dateResult = dateDialog.showAndWait();
-        if (dateResult.isPresent()) {
-            try {
-                LocalDate date = LocalDate.parse(dateResult.get().trim());
-                String report = transactionService.generateDailyReport(date);
-
-                Alert reportAlert = new Alert(Alert.AlertType.INFORMATION);
-                reportAlert.setTitle("Laporan Penjualan Harian");
-                reportAlert.setHeaderText("Laporan untuk tanggal " + date);
-                reportAlert.setContentText(report);
-                reportAlert.setResizable(true);
-                reportAlert.showAndWait();
-            } catch (Exception e) {
-                showAlert("Error", "Format tanggal tidak valid: " + e.getMessage());
-            }
-        }
+    public void showSalesReport() {
+        showCashierSalesReport();
     }
 
     public void showCashierSalesReport() {
@@ -402,14 +384,9 @@ public class PosController {
 
                 if (endResult.isPresent()) {
                     LocalDate endDate = LocalDate.parse(endResult.get().trim());
-                    String report = transactionService.generateCashierReport(currentUser.getId(), startDate, endDate);
-
-                    Alert reportAlert = new Alert(Alert.AlertType.INFORMATION);
-                    reportAlert.setTitle("Laporan Penjualan Kasir");
-                    reportAlert.setHeaderText("Laporan untuk kasir " + currentUser.getFullName());
-                    reportAlert.setContentText(report);
-                    reportAlert.setResizable(true);
-                    reportAlert.showAndWait();
+                    ReportDialog reportDialog = new ReportDialog(transactionService, startDate, endDate,
+                        "Laporan Penjualan Kasir " + currentUser.getFullName());
+                    reportDialog.showAndWait();
                 }
             }
         } catch (Exception e) {
@@ -419,36 +396,10 @@ public class PosController {
 
     public void showStockInReport() {
         try {
-            var products = productService.findAll();
-            int totalProducts = products.size();
-            int totalStock = products.stream().mapToInt(Product::getStock).sum();
-            double totalValue = products.stream().mapToDouble(p -> p.getPrice() * p.getStock()).sum();
-
-            StringBuilder report = new StringBuilder();
-            report.append("================================\n");
-            report.append("    LAPORAN PRODUK MASUK\n");
-            report.append("================================\n");
-            report.append("Tanggal: ").append(LocalDate.now()).append("\n");
-            report.append("Total Jenis Produk: ").append(totalProducts).append("\n");
-            report.append("Total Stok: ").append(totalStock).append(" unit\n");
-            report.append("Total Nilai: Rp ").append(String.format("%,.0f", totalValue)).append("\n");
-            report.append("--------------------------------\n");
-            report.append("Detail Produk:\n");
-            for (Product product : products) {
-                double productValue = product.getPrice() * product.getStock();
-                report.append("- ").append(product.getName())
-                      .append(" (").append(product.getCode()).append(")")
-                      .append(": ").append(product.getStock()).append(" unit")
-                      .append(" = Rp ").append(String.format("%,.0f", productValue)).append("\n");
-            }
-            report.append("================================\n");
-
-            Alert reportAlert = new Alert(Alert.AlertType.INFORMATION);
-            reportAlert.setTitle("Laporan Produk Masuk");
-            reportAlert.setHeaderText("Laporan inventaris produk saat ini");
-            reportAlert.setContentText(report.toString());
-            reportAlert.setResizable(true);
-            reportAlert.showAndWait();
+            LocalDateTime now = LocalDateTime.now();
+            WarehouseReportDialog warehouseDialog = new WarehouseReportDialog(
+                productService, cartService, now.minusDays(30), now, "Laporan Gudang - Inventaris Saat Ini");
+            warehouseDialog.showAndWait();
         } catch (Exception e) {
             showAlert("Error", "Gagal membuat laporan produk masuk: " + e.getMessage());
         }
@@ -477,35 +428,9 @@ public class PosController {
                     java.time.LocalDateTime start = startDate.atStartOfDay();
                     java.time.LocalDateTime end = endDate.atTime(23,59,59);
 
-                    var soldList = cartService.getSoldProductsByDateRange(start, end);
-
-                    int totalProductsSold = soldList.stream().mapToInt(com.upb.agripos.model.SoldProduct::getQuantitySold).sum();
-                    double totalSalesValue = soldList.stream().mapToDouble(com.upb.agripos.model.SoldProduct::getTotalValue).sum();
-
-                    StringBuilder report = new StringBuilder();
-                    report.append("================================\n");
-                    report.append("    LAPORAN PRODUK KELUAR\n");
-                    report.append("================================\n");
-                    report.append("Periode: ").append(startDate).append(" - ").append(endDate).append("\n");
-                    report.append("Total Jenis Produk Terjual: ").append(soldList.size()).append("\n");
-                    report.append("Total Unit Terjual: ").append(totalProductsSold).append(" unit\n");
-                    report.append("Total Nilai Penjualan: Rp ").append(String.format("%,.0f", totalSalesValue)).append("\n");
-                    report.append("--------------------------------\n");
-                    report.append("Detail Produk Terjual:\n");
-                    for (com.upb.agripos.model.SoldProduct sp : soldList) {
-                        report.append("- ").append(sp.getName())
-                              .append(" (").append(sp.getProductCode()).append(")")
-                              .append(": ").append(sp.getQuantitySold()).append(" unit")
-                              .append(" = Rp ").append(String.format("%,.0f", sp.getTotalValue())).append("\n");
-                    }
-                    report.append("================================\n");
-
-                    Alert reportAlert = new Alert(Alert.AlertType.INFORMATION);
-                    reportAlert.setTitle("Laporan Produk Keluar");
-                    reportAlert.setHeaderText("Laporan produk keluar");
-                    reportAlert.setContentText(report.toString());
-                    reportAlert.setResizable(true);
-                    reportAlert.showAndWait();
+                    WarehouseReportDialog warehouseDialog = new WarehouseReportDialog(
+                        productService, cartService, start, end, "Laporan Gudang - " + startDate + " sampai " + endDate);
+                    warehouseDialog.showAndWait();
                 }
             }
         } catch (Exception e) {
