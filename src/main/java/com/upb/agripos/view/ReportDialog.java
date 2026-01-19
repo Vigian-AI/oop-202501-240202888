@@ -2,7 +2,6 @@ package com.upb.agripos.view;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import com.upb.agripos.model.SoldProduct;
 import com.upb.agripos.service.TransactionService;
@@ -10,11 +9,6 @@ import com.upb.agripos.service.TransactionService;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -78,17 +72,7 @@ public class ReportDialog extends Stage {
         topProductsTab.setClosable(false);
         topProductsTab.setContent(createTopProductsTab());
 
-        // Tab Grafik Penjualan
-        Tab chartsTab = new Tab("Grafik Penjualan");
-        chartsTab.setClosable(false);
-        chartsTab.setContent(createChartsTab());
-
-        // Tab Perbandingan Periode
-        Tab comparisonTab = new Tab("Perbandingan Periode");
-        comparisonTab.setClosable(false);
-        comparisonTab.setContent(createComparisonTab());
-
-        tabPane.getTabs().addAll(summaryTab, salesTableTab, topProductsTab, chartsTab, comparisonTab);
+        tabPane.getTabs().addAll(summaryTab, salesTableTab, topProductsTab);
 
         return new Scene(tabPane);
     }
@@ -215,106 +199,6 @@ public class ReportDialog extends Stage {
         table.setItems(FXCollections.observableArrayList(topProducts));
 
         content.getChildren().addAll(titleLabel, table);
-
-        return content;
-    }
-
-    private VBox createChartsTab() {
-        VBox content = new VBox(15);
-        content.setPadding(new Insets(20));
-
-        Label titleLabel = new Label("📊 GRAFIK PENJUALAN");
-        titleLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
-
-        // Daily Sales Chart
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        BarChart<String, Number> dailyChart = new BarChart<>(xAxis, yAxis);
-        dailyChart.setTitle("Penjualan Harian");
-        dailyChart.setPrefHeight(300);
-
-        XYChart.Series<String, Number> dailySeries = new XYChart.Series<>();
-        dailySeries.setName("Penjualan Harian (Rp)");
-
-        Map<LocalDate, Double> dailySales = userId != null ?
-            transactionService.getDailySalesMapByUser(startDate, endDate, userId) :
-            transactionService.getDailySalesMap(startDate, endDate);
-        dailySales.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> dailySeries.getData().add(new XYChart.Data<>(entry.getKey().toString(), entry.getValue())));
-
-        dailyChart.getData().add(dailySeries);
-
-        // Payment Method Chart
-        BarChart<String, Number> paymentChart = new BarChart<>(new CategoryAxis(), new NumberAxis());
-        paymentChart.setTitle("Penjualan berdasarkan Metode Pembayaran");
-        paymentChart.setPrefHeight(300);
-
-        XYChart.Series<String, Number> paymentSeries = new XYChart.Series<>();
-        paymentSeries.setName("Total Penjualan (Rp)");
-
-        Map<String, Double> paymentSales = userId != null ?
-            transactionService.getSalesByPaymentMethodByUser(startDate, endDate, userId) :
-            transactionService.getSalesByPaymentMethod(startDate, endDate);
-        paymentSales.forEach((method, amount) ->
-            paymentSeries.getData().add(new XYChart.Data<>(method, amount)));
-
-        paymentChart.getData().add(paymentSeries);
-
-        content.getChildren().addAll(titleLabel, dailyChart, paymentChart);
-
-        return content;
-    }
-
-    private VBox createComparisonTab() {
-        VBox content = new VBox(15);
-        content.setPadding(new Insets(20));
-
-        Label titleLabel = new Label("📈 PERBANDINGAN PENJUALAN ANTAR PERIODE");
-        titleLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
-
-        // Monthly comparison chart
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        LineChart<String, Number> comparisonChart = new LineChart<>(xAxis, yAxis);
-        comparisonChart.setTitle("Perbandingan Penjualan Bulanan");
-        comparisonChart.setPrefHeight(400);
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Penjualan Bulanan (Rp)");
-
-        // Get comparison data for last 6 months
-        java.time.YearMonth currentYM = java.time.YearMonth.from(startDate);
-        java.util.Map<java.time.YearMonth, Double> comparisonData = transactionService.getSalesComparison(
-            currentYM.getYear(), currentYM.getMonthValue(), 6);
-
-        comparisonData.forEach((ym, sales) ->
-            series.getData().add(new XYChart.Data<>(ym.toString(), sales)));
-
-        comparisonChart.getData().add(series);
-
-        // Summary labels
-        double currentPeriodSales = transactionService.getTotalSalesByPeriod(startDate, endDate);
-        double previousPeriodSales = 0;
-        if (startDate.minusMonths(1).isAfter(java.time.LocalDate.MIN)) {
-            java.time.LocalDate prevStart = startDate.minusMonths(1);
-            java.time.LocalDate prevEnd = endDate.minusMonths(1);
-            previousPeriodSales = transactionService.getTotalSalesByPeriod(prevStart, prevEnd);
-        }
-
-        double growth = previousPeriodSales > 0 ? ((currentPeriodSales - previousPeriodSales) / previousPeriodSales) * 100 : 0;
-
-        Label currentLabel = new Label("💰 Periode Saat Ini: Rp " + String.format("%,.0f", currentPeriodSales));
-        currentLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold;");
-
-        Label previousLabel = new Label("📊 Periode Sebelumnya: Rp " + String.format("%,.0f", previousPeriodSales));
-        previousLabel.setStyle("-fx-font-size: 14;");
-
-        Label growthLabel = new Label("📈 Pertumbuhan: " + String.format("%.1f%%", growth) +
-            (growth >= 0 ? " 📈" : " 📉"));
-        growthLabel.setStyle("-fx-font-size: 14; -fx-text-fill: " + (growth >= 0 ? "#2E7D32" : "#d32f2f") + ";");
-
-        content.getChildren().addAll(titleLabel, comparisonChart, currentLabel, previousLabel, growthLabel);
 
         return content;
     }

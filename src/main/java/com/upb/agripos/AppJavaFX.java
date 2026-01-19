@@ -157,14 +157,6 @@ public class AppJavaFX extends Application {
         ));
         view.getBtnCheckout().setOnAction(e -> controller.checkout(view.getCartList(), view.getTotalLabel()));
 
-        // Bind action handlers for reports
-        if (view.getBtnDailyReport() != null) {
-            view.getBtnDailyReport().setOnAction(e -> controller.showSalesReport());
-        }
-        if (view.getBtnCashierReport() != null) {
-            view.getBtnCashierReport().setOnAction(e -> controller.showCashierSalesReport());
-        }
-
         // Load products for all users
         try {
             view.getProductTable().getItems().clear();

@@ -27,7 +27,6 @@ public class KasirView extends VBox {
     private Button btnLogout;
     private TabPane tabPane;
     private TableView<Transaction> historyTable;
-    private Button btnDailyReport, btnCashierReport;
 
     public KasirView() {
         // ========== MAIN STYLING ==========
@@ -60,12 +59,7 @@ public class KasirView extends VBox {
         tabHistory.setClosable(false);
         tabHistory.setContent(createHistoryTab());
 
-        // Tab Laporan
-        Tab tabLaporan = new Tab("Laporan Penjualan");
-        tabLaporan.setClosable(false);
-        tabLaporan.setContent(createLaporanTab());
-
-        tabPane.getTabs().addAll(tabPenjualan, tabHistory, tabLaporan);
+        tabPane.getTabs().addAll(tabPenjualan, tabHistory);
 
         // ========== ASSEMBLE MAIN LAYOUT ==========
         this.getChildren().addAll(headerBox, userInfoBox, tabPane);
@@ -186,30 +180,6 @@ public class KasirView extends VBox {
         return historyTab;
     }
 
-    private VBox createLaporanTab() {
-        VBox laporanTab = new VBox(15);
-        laporanTab.setStyle("-fx-background-color: #fafafa; -fx-padding: 12;");
-
-        Label laporanLabel = new Label("📊 Laporan Penjualan");
-        laporanLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
-
-        Label descLabel = new Label("Pilih jenis laporan yang ingin ditampilkan.\n" +
-            "Anda hanya dapat melihat laporan penjualan Anda sendiri.\n" +
-            "Laporan Penjualan mencakup laporan harian dan bulanan.");
-        descLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #666666;");
-
-        // Buttons for reports
-        btnDailyReport = createStyledButton("� Laporan Penjualan", "#1976d2");
-        btnCashierReport = createStyledButton("📋 Laporan Detail", "#4caf50");
-
-        HBox buttonBox = new HBox(15);
-        buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.getChildren().addAll(btnDailyReport, btnCashierReport);
-
-        laporanTab.getChildren().addAll(laporanLabel, descLabel, buttonBox);
-        return laporanTab;
-    }
-
     private VBox createCartPanel() {
         VBox cartPanel = new VBox(12);
         cartPanel.setStyle("-fx-border-color: #2E7D32; -fx-border-radius: 5; " +
@@ -323,13 +293,5 @@ public class KasirView extends VBox {
 
     public TabPane getTabPane() {
         return tabPane;
-    }
-
-    public Button getBtnDailyReport() {
-        return btnDailyReport;
-    }
-
-    public Button getBtnCashierReport() {
-        return btnCashierReport;
     }
 }
