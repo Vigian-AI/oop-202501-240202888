@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import com.upb.agripos.model.CartItem;
 import com.upb.agripos.model.Product;
 import com.upb.agripos.model.Transaction;
 import com.upb.agripos.model.payment.PaymentMethod;
@@ -19,7 +20,6 @@ import com.upb.agripos.view.WarehouseReportDialog;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -166,7 +166,7 @@ public class PosController {
         }
     }
 
-    public void addToCart(TableView<Product> productTable, ListView<String> cartList, Label totalLabel) {
+    public void addToCart(TableView<Product> productTable, TableView<CartItem> cartTable, Label totalLabel) {
         Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
         if (selectedProduct != null) {
             TextInputDialog dialog = new TextInputDialog("1");
@@ -179,7 +179,7 @@ public class PosController {
                 try {
                     int quantity = Integer.parseInt(quantityStr.trim());
                     cartService.addItem(selectedProduct.getCode(), quantity);
-                    updateCartDisplay(cartList, totalLabel);
+                    updateCartDisplay(cartTable, totalLabel);
                 } catch (NumberFormatException e) {
                     showAlert("Error", "Jumlah harus angka");
                 } catch (IllegalArgumentException e) {
@@ -193,7 +193,7 @@ public class PosController {
         }
     }
 
-    public void checkout(ListView<String> cartList, Label totalLabel) {
+    public void checkout(TableView<Product> productTable, TableView<CartItem> cartTable, Label totalLabel) {
         if (cartService.getCart().getItems().isEmpty()) {
             showAlert("Error", "Keranjang kosong");
             return;
@@ -254,7 +254,10 @@ public class PosController {
             // Clear cart after checkout
             showAlert("Info", "Checkout berhasil. Total: " + String.format("Rp %,.0f", totalAmount));
             cartService.clearCart();
-            updateCartDisplay(cartList, totalLabel);
+            updateCartDisplay(cartTable, totalLabel);
+            // Refresh product table after stock changes
+            productTable.getItems().clear();
+            productTable.getItems().addAll(productService.findAll());
         } catch (Exception e) {
             showAlert("Error", "Gagal checkout: " + e.getMessage());
         }
@@ -324,11 +327,42 @@ public class PosController {
         return sb.toString();
     }
 
-    private void updateCartDisplay(ListView<String> cartList, Label totalLabel) {
-        cartList.getItems().clear();
-        for (var item : cartService.getCart().getItems()) {
-            cartList.getItems().add(item.getProduct().getName() + " x" + item.getQuantity() + " = " + item.getTotalPrice());
+    public void increaseQuantity(String productCode, TableView<CartItem> cartTable, Label totalLabel) {
+        try {
+            var item = cartService.getCart().getItems().stream()
+                .filter(i -> i.getProduct().getCode().equals(productCode))
+                .findFirst().orElse(null);
+            if (item != null) {
+                cartService.updateQuantity(productCode, item.getQuantity() + 1);
+                updateCartDisplay(cartTable, totalLabel);
+            }
+        } catch (Exception e) {
+            showAlert("Error", "Gagal menambah quantity: " + e.getMessage());
         }
+    }
+
+    public void decreaseQuantity(String productCode, TableView<CartItem> cartTable, Label totalLabel) {
+        try {
+            var item = cartService.getCart().getItems().stream()
+                .filter(i -> i.getProduct().getCode().equals(productCode))
+                .findFirst().orElse(null);
+            if (item != null) {
+                int newQty = item.getQuantity() - 1;
+                if (newQty <= 0) {
+                    cartService.removeItem(productCode);
+                } else {
+                    cartService.updateQuantity(productCode, newQty);
+                }
+                updateCartDisplay(cartTable, totalLabel);
+            }
+        } catch (Exception e) {
+            showAlert("Error", "Gagal mengurangi quantity: " + e.getMessage());
+        }
+    }
+
+    private void updateCartDisplay(TableView<CartItem> cartTable, Label totalLabel) {
+        cartTable.getItems().clear();
+        cartTable.getItems().addAll(cartService.getCart().getItems());
         totalLabel.setText("Total: " + cartService.getTotalPrice());
     }
 

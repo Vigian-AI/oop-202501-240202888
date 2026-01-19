@@ -1,5 +1,8 @@
 package com.upb.agripos.view;
 
+import java.util.function.Consumer;
+
+import com.upb.agripos.model.CartItem;
 import com.upb.agripos.model.Product;
 import com.upb.agripos.model.Transaction;
 
@@ -7,7 +10,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -21,7 +23,9 @@ import javafx.scene.layout.VBox;
 public class KasirView extends VBox {
     private TableView<Product> productTable;
     private Button btnAddToCart, btnCheckout;
-    private ListView<String> cartList;
+    private TableView<CartItem> cartTable;
+    private Consumer<String> onIncreaseQuantity;
+    private Consumer<String> onDecreaseQuantity;
     private Label totalLabel;
     private Label userInfoLabel;
     private Button btnLogout;
@@ -93,26 +97,22 @@ public class KasirView extends VBox {
 
         // Product Table
         productTable = new TableView<>();
-        productTable.setStyle("-fx-font-size: 11; -fx-padding: 5;");
-
-        TableColumn<Product, String> codeCol = new TableColumn<>("Kode");
-        codeCol.setCellValueFactory(cell -> cell.getValue().codeProperty());
-        codeCol.setPrefWidth(80);
+        productTable.setStyle("-fx-font-size: 10; -fx-padding: 5;"); // Lebih kecil font
 
         TableColumn<Product, String> nameCol = new TableColumn<>("Nama Produk");
         nameCol.setCellValueFactory(cell -> cell.getValue().nameProperty());
-        nameCol.setPrefWidth(150);
+        nameCol.setPrefWidth(120); // Lebih kecil
 
         TableColumn<Product, Double> priceCol = new TableColumn<>("Harga");
         priceCol.setCellValueFactory(cell -> cell.getValue().priceProperty().asObject());
-        priceCol.setPrefWidth(100);
+        priceCol.setPrefWidth(70); // Lebih kecil
 
         TableColumn<Product, Integer> stockCol = new TableColumn<>("Stok");
         stockCol.setCellValueFactory(cell -> cell.getValue().stockProperty().asObject());
-        stockCol.setPrefWidth(80);
+        stockCol.setPrefWidth(50); // Lebih kecil
 
-        productTable.getColumns().addAll(codeCol, nameCol, priceCol, stockCol);
-        productTable.setPrefHeight(250);
+        productTable.getColumns().addAll(nameCol, priceCol, stockCol);
+        productTable.setPrefHeight(200); // Lebih kecil
 
         btnAddToCart = createStyledButton("🛒 Tambah ke Keranjang", "#2E7D32");
 
@@ -184,7 +184,7 @@ public class KasirView extends VBox {
         VBox cartPanel = new VBox(12);
         cartPanel.setStyle("-fx-border-color: #2E7D32; -fx-border-radius: 5; " +
                 "-fx-background-color: white; -fx-padding: 15; -fx-border-width: 2;");
-        cartPanel.setPrefWidth(280);
+        cartPanel.setPrefWidth(840);
 
         Label cartTitleLabel = new Label("🛍️ KERANJANG BELANJA");
         cartTitleLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
@@ -192,10 +192,63 @@ public class KasirView extends VBox {
         Separator separator1 = new Separator();
         separator1.setStyle("-fx-padding: 0;");
 
-        // Cart List
-        cartList = new ListView<>();
-        cartList.setStyle("-fx-font-size: 11; -fx-padding: 5;");
-        cartList.setPrefHeight(200);
+        // Cart Table
+        cartTable = new TableView<>();
+        cartTable.setStyle("-fx-font-size: 11; -fx-padding: 5;");
+        cartTable.setPrefHeight(900); // Perbesar tabel keranjang (3x)
+
+        TableColumn<CartItem, String> nameCol = new TableColumn<>("Produk");
+        nameCol.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getProduct().getName()));
+        nameCol.setPrefWidth(120);
+
+        TableColumn<CartItem, Integer> qtyCol = new TableColumn<>("Qty");
+        qtyCol.setCellValueFactory(cell -> new javafx.beans.property.SimpleIntegerProperty(cell.getValue().getQuantity()).asObject());
+        qtyCol.setPrefWidth(50);
+
+        TableColumn<CartItem, Double> priceCol = new TableColumn<>("Harga");
+        priceCol.setCellValueFactory(cell -> new javafx.beans.property.SimpleDoubleProperty(cell.getValue().getProduct().getPrice()).asObject());
+        priceCol.setPrefWidth(80);
+
+        TableColumn<CartItem, Double> totalCol = new TableColumn<>("Total");
+        totalCol.setCellValueFactory(cell -> new javafx.beans.property.SimpleDoubleProperty(cell.getValue().getTotalPrice()).asObject());
+        totalCol.setPrefWidth(80);
+
+        TableColumn<CartItem, Void> actionCol = new TableColumn<>("Aksi");
+        actionCol.setPrefWidth(80);
+        actionCol.setCellFactory(param -> new javafx.scene.control.TableCell<>() {
+            private final Button btnPlus = new Button("+");
+            private final Button btnMinus = new Button("-");
+            private final HBox hbox = new HBox(5, btnMinus, btnPlus);
+
+            {
+                btnPlus.setStyle("-fx-font-size: 10; -fx-padding: 2 5; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+                btnMinus.setStyle("-fx-font-size: 10; -fx-padding: 2 5; -fx-background-color: #f44336; -fx-text-fill: white;");
+                hbox.setAlignment(Pos.CENTER);
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    CartItem cartItem = getTableView().getItems().get(getIndex());
+                    btnPlus.setOnAction(e -> {
+                        if (onIncreaseQuantity != null) {
+                            onIncreaseQuantity.accept(cartItem.getProduct().getCode());
+                        }
+                    });
+                    btnMinus.setOnAction(e -> {
+                        if (onDecreaseQuantity != null) {
+                            onDecreaseQuantity.accept(cartItem.getProduct().getCode());
+                        }
+                    });
+                    setGraphic(hbox);
+                }
+            }
+        });
+
+        cartTable.getColumns().addAll(nameCol, qtyCol, priceCol, totalCol, actionCol);
 
         Separator separator2 = new Separator();
 
@@ -214,13 +267,13 @@ public class KasirView extends VBox {
         cartPanel.getChildren().addAll(
             cartTitleLabel,
             separator1,
-            cartList,
+            cartTable,
             separator2,
             totalLabel,
             btnCheckout
         );
 
-        VBox.setVgrow(cartList, Priority.ALWAYS);
+        VBox.setVgrow(cartTable, Priority.ALWAYS);
         return cartPanel;
     }
 
@@ -271,8 +324,16 @@ public class KasirView extends VBox {
         return btnCheckout;
     }
 
-    public ListView<String> getCartList() {
-        return cartList;
+    public TableView<CartItem> getCartTable() {
+        return cartTable;
+    }
+
+    public void setOnIncreaseQuantity(Consumer<String> callback) {
+        this.onIncreaseQuantity = callback;
+    }
+
+    public void setOnDecreaseQuantity(Consumer<String> callback) {
+        this.onDecreaseQuantity = callback;
     }
 
     public Label getTotalLabel() {

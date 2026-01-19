@@ -153,9 +153,13 @@ public class AppJavaFX extends Application {
 
         // Bind action handlers for sales transaction
         view.getBtnAddToCart().setOnAction(e -> controller.addToCart(
-            view.getProductTable(), view.getCartList(), view.getTotalLabel()
+            view.getProductTable(), view.getCartTable(), view.getTotalLabel()
         ));
-        view.getBtnCheckout().setOnAction(e -> controller.checkout(view.getCartList(), view.getTotalLabel()));
+        view.getBtnCheckout().setOnAction(e -> controller.checkout(view.getProductTable(), view.getCartTable(), view.getTotalLabel()));
+
+        // Set callbacks for cart quantity changes
+        view.setOnIncreaseQuantity(productCode -> controller.increaseQuantity(productCode, view.getCartTable(), view.getTotalLabel()));
+        view.setOnDecreaseQuantity(productCode -> controller.decreaseQuantity(productCode, view.getCartTable(), view.getTotalLabel()));
 
         // Load products for all users
         try {
