@@ -169,12 +169,12 @@ public class AppJavaFX extends Application {
         view.setOnIncreaseQuantity(productCode -> controller.increaseQuantity(productCode, view.getCartTable(), view.getTotalLabel()));
         view.setOnDecreaseQuantity(productCode -> controller.decreaseQuantity(productCode, view.getCartTable(), view.getTotalLabel()));
 
-        // Load products for all users
+        // Load products for all users (use controller helper)
         try {
-            view.getProductTable().getItems().clear();
-            view.getProductTable().getItems().addAll(productService.findAll());
+            controller.loadProducts(view.getProductTable());
         } catch (Exception e) {
-            System.err.println("Error loading products: " + e.getMessage());
+            System.err.println("Error loading products:");
+            e.printStackTrace();
         }
 
         // Bind logout action

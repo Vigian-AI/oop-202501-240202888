@@ -16,9 +16,11 @@ import com.upb.agripos.service.UserService;
 import com.upb.agripos.view.PaymentDialog;
 import com.upb.agripos.view.ReceiptView;
 import com.upb.agripos.view.ReportDialog;
-import com.upb.agripos.view.WarehouseReportDialog;
 import com.upb.agripos.view.TransactionDetailView;
+import com.upb.agripos.view.WarehouseReportDialog;
 
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
@@ -63,8 +65,8 @@ public class PosController {
 
             Product product = new Product(code, name, price, stock);
             productService.insert(product);
-            tableView.getItems().clear();
-            tableView.getItems().addAll(productService.findAll());
+            // reload safely into the table view (handles FilteredList wrappers)
+            loadProducts(tableView);
             clearFields(txtCode, txtName, txtPrice, txtStock);
         } catch (NumberFormatException e) {
             showAlert("Error", "Input tidak valid: " + e.getMessage());
@@ -85,8 +87,7 @@ public class PosController {
         if (selectedProduct != null) {
             try {
                 productService.delete(selectedProduct.getCode());
-                tableView.getItems().clear();
-                tableView.getItems().addAll(productService.findAll());
+                loadProducts(tableView);
             } catch (Exception e) {
                 showAlert("Error", "Gagal menghapus produk: " + e.getMessage());
             }
@@ -96,17 +97,36 @@ public class PosController {
     }
 
     public void loadProducts(TableView<Product> tableView) {
-        // Only users with role GUDANG may view the product list
-        if (!isCurrentUserGudang()) {
-            tableView.getItems().clear();
-            showAlert("Unauthorized", "Akses melihat produk dibatasi untuk user GUDANG.");
-            return;
-        }
         try {
-            tableView.getItems().clear();
-            tableView.getItems().addAll(productService.findAll());
+            var products = productService.findAll();
+            ObservableList<Product> items = tableView.getItems();
+            if (items instanceof FilteredList) {
+                // Update underlying source list for FilteredList
+                ObservableList<Product> src = (ObservableList<Product>) ((FilteredList<Product>) items).getSource();
+                src.setAll(products);
+            } else {
+                items.setAll(products);
+            }
         } catch (Exception e) {
-            showAlert("Error", "Gagal memuat produk: " + e.getMessage());
+            // Log and show a helpful message, then provide fallback sample data so UI is not empty
+            e.printStackTrace();
+            showAlert("Error", "Gagal memuat produk dari database: " + (e.getMessage() != null ? e.getMessage() : "(lihat console)") + ". Menampilkan contoh produk.");
+            try {
+                var sample = java.util.List.of(
+                    new Product("P001", "Contoh Beras 5kg", 75000.0, 10),
+                    new Product("P002", "Contoh Gula 1kg", 12000.0, 25),
+                    new Product("P003", "Contoh Minyak 1L", 18000.0, 15)
+                );
+                ObservableList<Product> items = tableView.getItems();
+                if (items instanceof FilteredList) {
+                    ObservableList<Product> src = (ObservableList<Product>) ((FilteredList<Product>) items).getSource();
+                    src.setAll(sample);
+                } else {
+                    items.setAll(sample);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -130,8 +150,7 @@ public class PosController {
                 if (qty <= 0) throw new IllegalArgumentException("Jumlah harus positif");
                 int newStock = selected.getStock() + qty;
                 productService.updateStock(selected.getCode(), newStock);
-                tableView.getItems().clear();
-                tableView.getItems().addAll(productService.findAll());
+                loadProducts(tableView);
             } catch (NumberFormatException ex) {
                 showAlert("Error", "Jumlah harus angka");
             } catch (Exception ex) {
@@ -159,8 +178,7 @@ public class PosController {
                 int qty = Integer.parseInt(s.trim());
                 if (qty <= 0) throw new IllegalArgumentException("Jumlah harus positif");
                 productService.decreaseStock(selected.getCode(), qty);
-                tableView.getItems().clear();
-                tableView.getItems().addAll(productService.findAll());
+                loadProducts(tableView);
             } catch (NumberFormatException ex) {
                 showAlert("Error", "Jumlah harus angka");
             } catch (Exception ex) {

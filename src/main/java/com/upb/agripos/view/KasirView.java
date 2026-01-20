@@ -6,15 +6,21 @@ import com.upb.agripos.model.CartItem;
 import com.upb.agripos.model.Product;
 import com.upb.agripos.model.Transaction;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -22,6 +28,8 @@ import javafx.scene.layout.VBox;
 
 public class KasirView extends VBox {
     private TableView<Product> productTable;
+    private TextField searchField;
+    private ObservableList<Product> masterProductList;
     private Button btnAddToCart, btnCheckout;
     private TableView<CartItem> cartTable;
     private Consumer<String> onIncreaseQuantity;
@@ -90,50 +98,79 @@ public class KasirView extends VBox {
         // ========== PRODUCT TABLE SECTION ==========
         VBox tableSection = new VBox(10);
         tableSection.setStyle("-fx-border-color: #e0e0e0; -fx-border-radius: 5; " +
-                "-fx-background-color: #fafafa; -fx-padding: 12;");
+            "-fx-background-color: #fafafa; -fx-padding: 12;");
 
         Label tableLabel = new Label("📊 Daftar Produk Tersedia");
         tableLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
 
+        // Search Field
+        searchField = new TextField();
+        searchField.setPromptText("Cari Nama Produk...");
+        searchField.setStyle("-fx-font-size: 12; -fx-padding: 6; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #2E7D32;");
+
         // Product Table
         productTable = new TableView<>();
-        productTable.setStyle("-fx-font-size: 10; -fx-padding: 5;"); // Lebih kecil font
+        productTable.setStyle("-fx-font-size: 10; -fx-padding: 5;");
+        productTable.setPrefHeight(320);
 
         TableColumn<Product, String> nameCol = new TableColumn<>("Nama Produk");
         nameCol.setCellValueFactory(cell -> cell.getValue().nameProperty());
-        nameCol.setPrefWidth(120); // Lebih kecil
+        nameCol.setPrefWidth(160);
 
         TableColumn<Product, Double> priceCol = new TableColumn<>("Harga");
         priceCol.setCellValueFactory(cell -> cell.getValue().priceProperty().asObject());
-        priceCol.setPrefWidth(70); // Lebih kecil
+        priceCol.setPrefWidth(90);
 
         TableColumn<Product, Integer> stockCol = new TableColumn<>("Stok");
         stockCol.setCellValueFactory(cell -> cell.getValue().stockProperty().asObject());
-        stockCol.setPrefWidth(50); // Lebih kecil
+        stockCol.setPrefWidth(70);
 
         productTable.getColumns().addAll(nameCol, priceCol, stockCol);
-        productTable.setPrefHeight(200); // Lebih kecil
+        // Make columns fill the table width and remove right-side empty space
+        productTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // Bind preferred widths proportionally (sum <= 1.0)
+        nameCol.prefWidthProperty().bind(productTable.widthProperty().multiply(0.65));
+        priceCol.prefWidthProperty().bind(productTable.widthProperty().multiply(0.2));
+        stockCol.prefWidthProperty().bind(productTable.widthProperty().multiply(0.15));
+
+        // Data & FilteredList
+        masterProductList = FXCollections.observableArrayList();
+        FilteredList<Product> filteredProducts = new FilteredList<>(masterProductList, p -> true);
+        productTable.setItems(filteredProducts);
+
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            filteredProducts.setPredicate(product -> {
+            if (newVal == null || newVal.isEmpty()) return true;
+            String lower = newVal.toLowerCase();
+            return product.getName().toLowerCase().contains(lower);
+            });
+        });
 
         btnAddToCart = createStyledButton("🛒 Tambah ke Keranjang", "#2E7D32");
 
-        tableSection.getChildren().addAll(tableLabel, productTable, btnAddToCart);
-        VBox.setVgrow(productTable, Priority.ALWAYS);
+        ScrollPane productScroll = new ScrollPane(productTable);
+        productScroll.setFitToWidth(true);
+        productScroll.setFitToHeight(true);
+        productScroll.setStyle("-fx-background-color:transparent;");
+        VBox productBox = new VBox(8, tableLabel, searchField, productScroll, btnAddToCart);
+        VBox.setVgrow(productBox, Priority.ALWAYS);
+        ((ScrollPane)productBox.getChildren().get(2)).setFitToWidth(true);
+        ((ScrollPane)productBox.getChildren().get(2)).setFitToHeight(true);
 
         // ========== CART PANEL ==========
         VBox cartPanel = createCartPanel();
+        ScrollPane cartScroll = new ScrollPane(cartPanel);
+        cartScroll.setFitToWidth(true);
+        cartScroll.setFitToHeight(true);
 
-        // ========== MAIN CONTENT BOX ==========
-        HBox contentBox = new HBox(20);
-        contentBox.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-border-radius: 5;");
+        // ========== SPLIT PANE ==========
+        SplitPane splitPane = new SplitPane();
+        splitPane.setDividerPositions(0.5);
+        splitPane.getItems().addAll(productBox, cartScroll);
+        splitPane.setStyle("-fx-background-color: white; -fx-padding: 0; -fx-border-radius: 5;");
 
-        VBox leftPanel = new VBox(15, tableSection);
-        VBox.setVgrow(tableSection, Priority.ALWAYS);
-        HBox.setHgrow(leftPanel, Priority.ALWAYS);
-
-        contentBox.getChildren().addAll(leftPanel, cartPanel);
-
-        penjualanTab.getChildren().add(contentBox);
-        VBox.setVgrow(contentBox, Priority.ALWAYS);
+        penjualanTab.getChildren().add(splitPane);
+        VBox.setVgrow(splitPane, Priority.ALWAYS);
 
         return penjualanTab;
     }
@@ -184,7 +221,7 @@ public class KasirView extends VBox {
         VBox cartPanel = new VBox(12);
         cartPanel.setStyle("-fx-border-color: #2E7D32; -fx-border-radius: 5; " +
                 "-fx-background-color: white; -fx-padding: 15; -fx-border-width: 2;");
-        cartPanel.setPrefWidth(840);
+        cartPanel.setPrefWidth(360);
 
         Label cartTitleLabel = new Label("🛍️ KERANJANG BELANJA");
         cartTitleLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
@@ -249,6 +286,13 @@ public class KasirView extends VBox {
         });
 
         cartTable.getColumns().addAll(nameCol, qtyCol, priceCol, totalCol, actionCol);
+        // Make cart table fill its container and remove right gap
+        cartTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        nameCol.prefWidthProperty().bind(cartTable.widthProperty().multiply(0.45));
+        qtyCol.prefWidthProperty().bind(cartTable.widthProperty().multiply(0.12));
+        priceCol.prefWidthProperty().bind(cartTable.widthProperty().multiply(0.14));
+        totalCol.prefWidthProperty().bind(cartTable.widthProperty().multiply(0.14));
+        actionCol.prefWidthProperty().bind(cartTable.widthProperty().multiply(0.15));
 
         Separator separator2 = new Separator();
 
