@@ -12,6 +12,7 @@ import com.upb.agripos.service.TransactionService;
 import com.upb.agripos.service.UserService;
 import com.upb.agripos.view.ReportDialog;
 import com.upb.agripos.view.WarehouseReportDialog;
+import com.upb.agripos.view.TransactionDetailView;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
@@ -68,6 +69,17 @@ public class AdminController {
             historyTable.getItems().addAll(transactionService.getAllTransactions());
         } catch (Exception e) {
             showAlert("Error", "Gagal memuat history: " + e.getMessage());
+        }
+    }
+
+    // Show transaction detail (uses TransactionService to fetch cart items and opens a dialog)
+    public void showTransactionDetail(Transaction transaction) {
+        try {
+            if (transaction == null) return;
+            var items = transactionService.getCartItemsByCartId(transaction.getCartId());
+            TransactionDetailView.show(transaction, items);
+        } catch (Exception e) {
+            showAlert("Error", "Gagal menampilkan detail transaksi: " + e.getMessage());
         }
     }
 

@@ -136,6 +136,14 @@ public class AppJavaFX extends Application {
         controller.loadUsers(view.getUserTable());
         controller.loadHistory(view.getHistoryTable());
 
+        // Double-click on history row shows transaction details
+        view.getHistoryTable().setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                var tr = view.getHistoryTable().getSelectionModel().getSelectedItem();
+                if (tr != null) controller.showTransactionDetail(tr);
+            }
+        });
+
         Scene scene = new Scene(view, 1200, 800);
         primaryStage.setScene(scene);
         primaryStage.setTitle("🛡️ Agri-POS - Admin Panel");
@@ -177,6 +185,14 @@ public class AppJavaFX extends Application {
 
         // Load initial data for kasir
         controller.loadKasirHistory(view.getHistoryTable(), current.getId());
+
+        // Double-click on kasir history row shows transaction details
+        view.getHistoryTable().setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                var tr = view.getHistoryTable().getSelectionModel().getSelectedItem();
+                if (tr != null) controller.showTransactionDetail(tr);
+            }
+        });
 
         Scene scene = new Scene(view, 1000, 700);
         primaryStage.setScene(scene);

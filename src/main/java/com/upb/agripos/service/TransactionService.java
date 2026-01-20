@@ -11,6 +11,7 @@ import com.upb.agripos.dao.CartDAO;
 import com.upb.agripos.dao.TransactionDAO;
 import com.upb.agripos.model.SoldProduct;
 import com.upb.agripos.model.Transaction;
+import com.upb.agripos.model.CartItem;
 
 public class TransactionService {
     private final TransactionDAO transactionDAO;
@@ -197,5 +198,10 @@ public class TransactionService {
             comparison.put(ym, sales);
         }
         return comparison;
+    }
+
+    // New helper to fetch cart items for a saved cart id
+    public java.util.List<CartItem> getCartItemsByCartId(int cartId) {
+        return cartDAO.findCartItemsByCartId(cartId);
     }
 }

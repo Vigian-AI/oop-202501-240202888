@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import com.upb.agripos.config.DatabaseConnection;
 import com.upb.agripos.model.Cart;
 import com.upb.agripos.model.CartItem;
+import com.upb.agripos.model.Product;
 
 public class CartDAO {
     private static CartDAO instance;
@@ -125,5 +126,34 @@ public class CartDAO {
             System.err.println("Error fetching sold products by date range and user: " + e.getMessage());
         }
         return list;
+    }
+
+    // New: fetch cart items (with product details) for given cart id
+    public java.util.List<CartItem> findCartItemsByCartId(int cartId) {
+        java.util.List<CartItem> items = new java.util.ArrayList<>();
+        String sql = "SELECT ci.product_code, ci.quantity, ci.subtotal, p.name, p.price, p.stock " +
+                     "FROM cart_items ci " +
+                     "JOIN products p ON p.code = ci.product_code " +
+                     "WHERE ci.cart_id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, cartId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String code = rs.getString("product_code");
+                    String name = rs.getString("name");
+                    double price = rs.getDouble("price");
+                    int stock = rs.getInt("stock");
+                    int qty = rs.getInt("quantity");
+                    // Create product and cart item
+                    Product p = new Product(code, name, price, stock);
+                    CartItem ci = new CartItem(p, qty);
+                    items.add(ci);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching cart items for cart " + cartId + ": " + e.getMessage());
+        }
+        return items;
     }
 }

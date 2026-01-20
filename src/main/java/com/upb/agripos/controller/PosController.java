@@ -17,6 +17,7 @@ import com.upb.agripos.view.PaymentDialog;
 import com.upb.agripos.view.ReceiptView;
 import com.upb.agripos.view.ReportDialog;
 import com.upb.agripos.view.WarehouseReportDialog;
+import com.upb.agripos.view.TransactionDetailView;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -35,6 +36,17 @@ public class PosController {
         this.cartService = cartService;
         this.userService = userService;
         this.transactionService = transactionService;
+    }
+
+    // Show transaction detail dialog for a given transaction
+    public void showTransactionDetail(Transaction transaction) {
+        try {
+            if (transaction == null) return;
+            var items = transactionService.getCartItemsByCartId(transaction.getCartId());
+            TransactionDetailView.show(transaction, items);
+        } catch (Exception e) {
+            showAlert("Error", "Gagal menampilkan detail transaksi: " + e.getMessage());
+        }
     }
 
     public void addProduct(TextField txtCode, TextField txtName, TextField txtPrice, TextField txtStock, TableView<Product> tableView) {
