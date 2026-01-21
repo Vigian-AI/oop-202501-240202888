@@ -1,0 +1,70 @@
+@startuml
+' Sequence diagram: Kelola Barang (Add / Update Stock / Delete / Refresh)
+participant "User (Gudang)" as User
+participant "GudangView" as View
+participant "PosController" as Controller
+participant "ProductService" as Service
+participant "ProductDAO / ProductDAOImpl" as DAO
+database "Database" as DB
+
+== Tambah Produk ==
+User -> View: fill form (code,name,price,stock)
+User -> View: click btnAddProduct
+View -> Controller: addProduct(code,name,price,stock)
+Controller -> Service: insert(new Product(...))
+Service -> DAO: insert(Product)
+DAO -> DB: INSERT INTO products(...)
+DB --> DAO: success
+DAO --> Service: ok
+Service --> Controller: ok
+Controller -> Controller: loadProducts(tableView)
+Controller -> Service: findAll()
+Service -> DAO: findAll()
+DAO -> DB: SELECT * FROM products
+DB --> DAO: result set
+DAO --> Service: List<Product>
+Service --> Controller: List<Product>
+Controller -> View: update product table
+
+== Tambah / Kurangi Stok ==
+User -> View: select product
+User -> View: click btnIncreaseStock / btnDecreaseStock
+View -> Controller: increaseStock()/decreaseStock()
+Controller -> Service: updateStock(code, newStock)
+Service -> DAO: findByCode(code)
+DAO -> DB: SELECT * FROM products WHERE code=?
+DB --> DAO: Product row
+DAO --> Service: Product
+Service -> Service: setStock(newStock)
+Service -> DAO: update(Product)
+DAO -> DB: UPDATE products SET stock=? WHERE code=?
+DB --> DAO: success
+DAO --> Service: ok
+Service --> Controller: ok
+Controller -> Service: findAll()
+Service -> DAO: findAll()
+DAO -> DB: SELECT * FROM products
+DB --> DAO: result set
+DAO --> Service: List<Product>
+Service --> Controller: List<Product>
+Controller -> View: update product table
+
+== Hapus Produk ==
+User -> View: select product
+User -> View: click btnDeleteProduct
+View -> Controller: deleteProduct()
+Controller -> Service: delete(code)
+Service -> DAO: delete(code)
+DAO -> DB: DELETE FROM products WHERE code=?
+DB --> DAO: success
+DAO --> Service: ok
+Service --> Controller: ok
+Controller -> Service: findAll()
+Service -> DAO: findAll()
+DAO -> DB: SELECT * FROM products
+DB --> DAO: result set
+DAO --> Service: List<Product>
+Service --> Controller: List<Product>
+Controller -> View: update product table
+
+@enduml
