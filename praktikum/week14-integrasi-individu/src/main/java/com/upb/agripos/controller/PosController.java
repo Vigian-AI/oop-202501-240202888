@@ -1,13 +1,20 @@
 package com.upb.agripos.controller;
 
-import com.upb.agripos.model.Product;
-import com.upb.agripos.service.ProductService;
-import com.upb.agripos.service.CartService;
-import com.upb.agripos.view.ReceiptView;
-import javafx.scene.control.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+
+import com.upb.agripos.model.Product;
+import com.upb.agripos.service.CartService;
+import com.upb.agripos.service.ProductService;
+import com.upb.agripos.view.ReceiptView;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 
 public class PosController {
     private final ProductService productService;
@@ -27,8 +34,14 @@ public class PosController {
 
             Product product = new Product(code, name, price, stock);
             productService.insert(product);
-            tableView.getItems().clear();
-            tableView.getItems().addAll(productService.findAll());
+            var fresh = productService.findAll();
+            var productItems = tableView.getItems();
+            if (productItems instanceof javafx.collections.transformation.FilteredList) {
+                javafx.collections.ObservableList<Product> src = (javafx.collections.ObservableList<Product>) ((javafx.collections.transformation.FilteredList<Product>) productItems).getSource();
+                src.setAll(fresh);
+            } else {
+                productItems.setAll(fresh);
+            }
             clearFields(txtCode, txtName, txtPrice, txtStock);
         } catch (NumberFormatException e) {
             showAlert("Error", "Input tidak valid: " + e.getMessage());
@@ -44,8 +57,14 @@ public class PosController {
         if (selectedProduct != null) {
             try {
                 productService.delete(selectedProduct.getCode());
-                tableView.getItems().clear();
-                tableView.getItems().addAll(productService.findAll());
+                var fresh = productService.findAll();
+                var productItems = tableView.getItems();
+                if (productItems instanceof javafx.collections.transformation.FilteredList) {
+                    javafx.collections.ObservableList<Product> src = (javafx.collections.ObservableList<Product>) ((javafx.collections.transformation.FilteredList<Product>) productItems).getSource();
+                    src.setAll(fresh);
+                } else {
+                    productItems.setAll(fresh);
+                }
             } catch (Exception e) {
                 showAlert("Error", "Gagal menghapus produk: " + e.getMessage());
             }
@@ -56,8 +75,14 @@ public class PosController {
 
     public void loadProducts(TableView<Product> tableView) {
         try {
-            tableView.getItems().clear();
-            tableView.getItems().addAll(productService.findAll());
+            var fresh = productService.findAll();
+            var productItems = tableView.getItems();
+            if (productItems instanceof javafx.collections.transformation.FilteredList) {
+                javafx.collections.ObservableList<Product> src = (javafx.collections.ObservableList<Product>) ((javafx.collections.transformation.FilteredList<Product>) productItems).getSource();
+                src.setAll(fresh);
+            } else {
+                productItems.setAll(fresh);
+            }
         } catch (Exception e) {
             showAlert("Error", "Gagal memuat produk: " + e.getMessage());
         }

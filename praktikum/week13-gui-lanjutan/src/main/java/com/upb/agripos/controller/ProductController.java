@@ -51,8 +51,14 @@ public class ProductController {
     }
 
     public void loadData(TableView<Product> tableView) {
-        tableView.getItems().clear();
-        tableView.getItems().addAll(productService.getAllProducts());
+        var fresh = productService.getAllProducts();
+        var productItems = tableView.getItems();
+        if (productItems instanceof javafx.collections.transformation.FilteredList) {
+            javafx.collections.ObservableList<Product> src = (javafx.collections.ObservableList<Product>) ((javafx.collections.transformation.FilteredList<Product>) productItems).getSource();
+            src.setAll(fresh);
+        } else {
+            productItems.setAll(fresh);
+        }
     }
 
     private void clearFields() {

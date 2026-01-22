@@ -91,11 +91,13 @@ public class GudangView extends VBox {
         descLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #666666;");
 
         // Buttons for reports
-        btnStockInReport = createStyledButton("📥 Laporan Produk Masuk", "#1976d2");
-        btnStockOutReport = createStyledButton("📤 Laporan Produk Keluar", "#f57c00");
+        btnStockInReport = createStyledButton("📥 Laporan Produk Masuk", "#2cee56");
+        btnStockOutReport = createStyledButton("📤 Laporan Produk Keluar", "#ef1e0b");
 
         HBox buttonBox = new HBox(15);
         buttonBox.setAlignment(Pos.CENTER);
+        HBox.setHgrow(btnStockInReport, Priority.ALWAYS);
+        HBox.setHgrow(btnStockOutReport, Priority.ALWAYS);
         buttonBox.getChildren().addAll(btnStockInReport, btnStockOutReport);
 
         laporanTab.getChildren().addAll(laporanLabel, descLabel, buttonBox);
@@ -139,7 +141,7 @@ public class GudangView extends VBox {
         HBox.setHgrow(txtStock, Priority.ALWAYS);
 
         // Buttons
-        btnAddProduct = createStyledButton("➕ Tambah Produk", "#d84315");
+        btnAddProduct = createStyledButton("➕ Tambah Produk", "#2cee56");
         btnDeleteProduct = createStyledButton("🗑️ Hapus Produk", "#c62828");
         btnIncreaseStock = createStyledButton("⬆️ Tambah Stok", "#1976d2");
         btnDecreaseStock = createStyledButton("⬇️ Kurangi Stok", "#f57c00");
@@ -212,6 +214,10 @@ public class GudangView extends VBox {
     private Button createStyledButton(String text, String color) {
         Button button = new Button(text);
         button.setPrefHeight(35);
+        // allow button to grow to fill available width when HBox.setHgrow(..., Priority.ALWAYS) is used
+        button.setMaxWidth(Double.MAX_VALUE);
+        // give a reasonable preferred width for consistent initial sizing
+        button.setPrefWidth(150);
         button.setStyle("-fx-font-size: 11; -fx-font-weight: bold; -fx-padding: 8; " +
                 "-fx-background-color: " + color + "; -fx-text-fill: white; -fx-cursor: hand; " +
                 "-fx-border-radius: 3;");

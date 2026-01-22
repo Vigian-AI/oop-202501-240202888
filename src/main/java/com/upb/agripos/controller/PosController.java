@@ -313,11 +313,21 @@ public class PosController {
             showAlert("Info", "Checkout berhasil. Total: " + String.format("Rp %,.0f", totalAmount));
             cartService.clearCart();
             updateCartDisplay(cartTable, totalLabel);
-            // Refresh product table after stock changes
-            productTable.getItems().clear();
-            productTable.getItems().addAll(productService.findAll());
+            // Refresh product table after stock changes (handle FilteredList safely)
+            ObservableList<Product> productItems = productTable.getItems();
+            var fresh = productService.findAll();
+            if (productItems instanceof FilteredList) {
+                ObservableList<Product> src = (ObservableList<Product>) ((FilteredList<Product>) productItems).getSource();
+                src.setAll(fresh);
+            } else {
+                productItems.setAll(fresh);
+            }
         } catch (Exception e) {
-            showAlert("Error", "Gagal checkout: " + e.getMessage());
+            // Log full stacktrace for debugging
+            e.printStackTrace();
+            // Guard against null message (some exceptions have null message)
+            String msg = e.getMessage() != null ? e.getMessage() : e.toString();
+            showAlert("Error", "Gagal checkout: " + msg);
         }
     }
 
@@ -419,8 +429,14 @@ public class PosController {
     }
 
     private void updateCartDisplay(TableView<CartItem> cartTable, Label totalLabel) {
-        cartTable.getItems().clear();
-        cartTable.getItems().addAll(cartService.getCart().getItems());
+        javafx.collections.ObservableList<CartItem> cartItems = cartTable.getItems();
+        var fresh = cartService.getCart().getItems();
+        if (cartItems instanceof FilteredList) {
+            javafx.collections.ObservableList<CartItem> src = (javafx.collections.ObservableList<CartItem>) ((FilteredList<CartItem>) cartItems).getSource();
+            src.setAll(fresh);
+        } else {
+            cartItems.setAll(fresh);
+        }
         totalLabel.setText("Total: " + cartService.getTotalPrice());
     }
 
@@ -440,8 +456,14 @@ public class PosController {
 
     public void loadKasirHistory(TableView<Transaction> historyTable, int userId) {
         try {
-            historyTable.getItems().clear();
-            historyTable.getItems().addAll(transactionService.getTransactionsByUserId(userId));
+            javafx.collections.ObservableList<Transaction> historyItems = historyTable.getItems();
+            var fresh = transactionService.getTransactionsByUserId(userId);
+            if (historyItems instanceof FilteredList) {
+                javafx.collections.ObservableList<Transaction> src = (javafx.collections.ObservableList<Transaction>) ((FilteredList<Transaction>) historyItems).getSource();
+                src.setAll(fresh);
+            } else {
+                historyItems.setAll(fresh);
+            }
         } catch (Exception e) {
             showAlert("Error", "Gagal memuat history penjualan: " + e.getMessage());
         }

@@ -55,8 +55,14 @@ public class AdminController {
 
     public void loadUsers(TableView<User> userTable) {
         try {
-            userTable.getItems().clear();
-            userTable.getItems().addAll(userService.getAllUsers());
+            javafx.collections.ObservableList<User> userItems = userTable.getItems();
+            var fresh = userService.getAllUsers();
+            if (userItems instanceof javafx.collections.transformation.FilteredList) {
+                javafx.collections.ObservableList<User> src = (javafx.collections.ObservableList<User>) ((javafx.collections.transformation.FilteredList<User>) userItems).getSource();
+                src.setAll(fresh);
+            } else {
+                userItems.setAll(fresh);
+            }
         } catch (Exception e) {
             showAlert("Error", "Gagal memuat users: " + e.getMessage());
         }
@@ -64,8 +70,14 @@ public class AdminController {
 
     public void loadHistory(TableView<Transaction> historyTable) {
         try {
-            historyTable.getItems().clear();
-            historyTable.getItems().addAll(transactionService.getAllTransactions());
+            javafx.collections.ObservableList<Transaction> historyItems = historyTable.getItems();
+            var fresh = transactionService.getAllTransactions();
+            if (historyItems instanceof javafx.collections.transformation.FilteredList) {
+                javafx.collections.ObservableList<Transaction> src = (javafx.collections.ObservableList<Transaction>) ((javafx.collections.transformation.FilteredList<Transaction>) historyItems).getSource();
+                src.setAll(fresh);
+            } else {
+                historyItems.setAll(fresh);
+            }
         } catch (Exception e) {
             showAlert("Error", "Gagal memuat history: " + e.getMessage());
         }

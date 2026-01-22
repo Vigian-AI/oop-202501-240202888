@@ -119,21 +119,33 @@ public class AdminView extends VBox {
         TableColumn<User, Integer> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         idCol.setPrefWidth(50);
+        idCol.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<User, String> usernameCol = new TableColumn<>("Username");
         usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
         usernameCol.setPrefWidth(100);
+        usernameCol.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<User, String> fullNameCol = new TableColumn<>("Nama Lengkap");
         fullNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         fullNameCol.setPrefWidth(150);
+        fullNameCol.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<User, String> roleCol = new TableColumn<>("Role");
         roleCol.setCellValueFactory(new PropertyValueFactory<>("role"));
         roleCol.setPrefWidth(80);
+        roleCol.setStyle("-fx-alignment: CENTER;");
 
         userTable.getColumns().addAll(idCol, usernameCol, fullNameCol, roleCol);
         userTable.setPrefHeight(200);
+        // Make table expand to full width and distribute columns evenly
+        userTable.setMaxWidth(Double.MAX_VALUE);
+        userTable.setColumnResizePolicy(javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY);
+        // bind each column to equal share of the table width
+        idCol.prefWidthProperty().bind(userTable.widthProperty().divide(4));
+        usernameCol.prefWidthProperty().bind(userTable.widthProperty().divide(4));
+        fullNameCol.prefWidthProperty().bind(userTable.widthProperty().divide(4));
+        roleCol.prefWidthProperty().bind(userTable.widthProperty().divide(4));
 
         HBox formBox = new HBox(10, txtUsername, txtPassword, txtFullName, cbRole, btnAddUser);
         formBox.setAlignment(Pos.CENTER_LEFT);
@@ -217,6 +229,8 @@ public class AdminView extends VBox {
 
         HBox buttonBox = new HBox(15);
         buttonBox.setAlignment(Pos.CENTER);
+        HBox.setHgrow(btnCashierReport, Priority.ALWAYS);
+        HBox.setHgrow(btnWarehouseReport, Priority.ALWAYS);
         buttonBox.getChildren().addAll(btnCashierReport, btnWarehouseReport);
 
         laporanTab.getChildren().addAll(laporanLabel, descLabel, buttonBox);
@@ -226,6 +240,10 @@ public class AdminView extends VBox {
     private Button createStyledButton(String text, String color) {
         Button button = new Button(text);
         button.setPrefHeight(35);
+        // allow button to grow to fill available width when HBox.setHgrow(..., Priority.ALWAYS) is used
+        button.setMaxWidth(Double.MAX_VALUE);
+        // give a reasonable preferred width for consistent initial sizing
+        button.setPrefWidth(150);
         button.setStyle("-fx-font-size: 11; -fx-font-weight: bold; -fx-padding: 8; " +
                 "-fx-background-color: " + color + "; -fx-text-fill: white; -fx-cursor: hand; " +
                 "-fx-border-radius: 3;");
