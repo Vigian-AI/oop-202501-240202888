@@ -17,9 +17,9 @@ import javafx.scene.layout.VBox;
 
 public class GudangView extends VBox {
     private TextField txtCode, txtName, txtPrice, txtStock;
-    private Button btnAddProduct, btnDeleteProduct, btnIncreaseStock, btnDecreaseStock, btnRefresh, btnLogout;
+    private Button btnAddProduct, btnDeleteProduct, btnIncreaseStock, btnDecreaseStock, btnLogout;
     private TableView<Product> productTable;
-    private Label userInfoLabel;
+    private Label userInfoLabel; 
     private TabPane tabPane;
     private Button btnStockInReport, btnStockOutReport;
 
@@ -143,16 +143,14 @@ public class GudangView extends VBox {
         btnDeleteProduct = createStyledButton("🗑️ Hapus Produk", "#c62828");
         btnIncreaseStock = createStyledButton("⬆️ Tambah Stok", "#1976d2");
         btnDecreaseStock = createStyledButton("⬇️ Kurangi Stok", "#f57c00");
-        btnRefresh = createStyledButton("🔄 Refresh", "#555555");
 
         HBox buttonRow1 = new HBox(8, btnAddProduct, btnDeleteProduct);
         HBox.setHgrow(btnAddProduct, Priority.ALWAYS);
         HBox.setHgrow(btnDeleteProduct, Priority.ALWAYS);
 
-        HBox buttonRow2 = new HBox(8, btnIncreaseStock, btnDecreaseStock, btnRefresh);
+        HBox buttonRow2 = new HBox(8, btnIncreaseStock, btnDecreaseStock);
         HBox.setHgrow(btnIncreaseStock, Priority.ALWAYS);
         HBox.setHgrow(btnDecreaseStock, Priority.ALWAYS);
-        HBox.setHgrow(btnRefresh, Priority.ALWAYS);
 
         formSection.getChildren().addAll(
             formLabel,
@@ -276,10 +274,6 @@ public class GudangView extends VBox {
 
     public Button getBtnDecreaseStock() {
         return btnDecreaseStock;
-    }
-
-    public Button getBtnRefresh() {
-        return btnRefresh;
     }
 
     public TableView<Product> getProductTable() {

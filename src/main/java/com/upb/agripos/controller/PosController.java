@@ -22,6 +22,7 @@ import com.upb.agripos.view.WarehouseReportDialog;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -83,16 +84,43 @@ public class PosController {
             showAlert("Unauthorized", "Akses ditolak. Hanya user GUDANG yang dapat menghapus produk.");
             return;
         }
+
         Product selectedProduct = tableView.getSelectionModel().getSelectedItem();
-        if (selectedProduct != null) {
-            try {
-                productService.delete(selectedProduct.getCode());
-                loadProducts(tableView);
-            } catch (Exception e) {
+        if (selectedProduct == null) {
+            showAlert("Error", "Pilih produk untuk dihapus");
+            return;
+        }
+
+        // Confirm deletion
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Konfirmasi Hapus");
+        confirm.setHeaderText("Hapus Produk");
+        confirm.setContentText("Anda yakin ingin menghapus produk '" + selectedProduct.getName() + "' (Kode: " + selectedProduct.getCode() + ")?");
+
+        var res = confirm.showAndWait();
+        if (res.isEmpty() || res.get() != ButtonType.OK) return;
+
+        try {
+            productService.delete(selectedProduct.getCode());
+            loadProducts(tableView);
+            showAlert("Info", "Produk berhasil dihapus");
+        } catch (Exception e) {
+            // Try to detect foreign key / integrity constraint errors for a friendlier message
+            Throwable cause = e;
+            boolean fkRelated = false;
+            while (cause != null) {
+                String m = cause.getMessage() != null ? cause.getMessage().toLowerCase() : "";
+                if (cause instanceof java.sql.SQLIntegrityConstraintViolationException || m.contains("foreign key") || m.contains("constraint") || m.contains("referenced")) {
+                    fkRelated = true;
+                    break;
+                }
+                cause = cause.getCause();
+            }
+            if (fkRelated) {
+                showAlert("Error", "Tidak dapat menghapus produk karena sudah direferensikan oleh transaksi/keranjang. Pertimbangkan untuk menonaktifkan produk atau menghapus histori terkait.");
+            } else {
                 showAlert("Error", "Gagal menghapus produk: " + e.getMessage());
             }
-        } else {
-            showAlert("Error", "Pilih produk untuk dihapus");
         }
     }
 

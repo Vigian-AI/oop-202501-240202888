@@ -80,7 +80,6 @@ public class AppJavaFX extends Application {
         view.getBtnDeleteProduct().setOnAction(e -> controller.deleteProduct(view.getProductTable()));
         view.getBtnIncreaseStock().setOnAction(e -> controller.increaseStock(view.getProductTable()));
         view.getBtnDecreaseStock().setOnAction(e -> controller.decreaseStock(view.getProductTable()));
-        view.getBtnRefresh().setOnAction(e -> controller.loadProducts(view.getProductTable()));
 
         // Bind logout action
         view.getBtnLogout().setOnAction(e -> {
