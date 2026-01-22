@@ -11,11 +11,10 @@ import com.upb.agripos.service.ProductService;
 import com.upb.agripos.service.TransactionService;
 import com.upb.agripos.service.UserService;
 import com.upb.agripos.view.ReportDialog;
-import com.upb.agripos.view.WarehouseReportDialog;
 import com.upb.agripos.view.TransactionDetailView;
+import com.upb.agripos.view.WarehouseReportDialog;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -84,49 +83,28 @@ public class AdminController {
     }
 
     public void showCashierSalesReport() {
-        // Get all users for selection
+        // Show report for all cashiers without selection
         try {
-            var allUsers = userService.getAllUsers();
-            var cashierUsers = allUsers.stream()
-                .filter(u -> "kasir".equalsIgnoreCase(u.getRole()))
-                .toList();
+            TextInputDialog startDateDialog = new TextInputDialog(LocalDate.now().minusDays(7).toString());
+            startDateDialog.setTitle("Laporan Penjualan Kasir");
+            startDateDialog.setHeaderText("Masukkan tanggal mulai (format: YYYY-MM-DD)");
+            startDateDialog.setContentText("Tanggal Mulai:");
+            Optional<String> startResult = startDateDialog.showAndWait();
 
-            if (cashierUsers.isEmpty()) {
-                showAlert("Info", "Tidak ada user kasir yang terdaftar");
-                return;
-            }
+            if (startResult.isPresent()) {
+                LocalDate startDate = LocalDate.parse(startResult.get().trim());
 
-            // Create choice dialog for cashier selection
-            ChoiceDialog<User> cashierDialog = new ChoiceDialog<>(cashierUsers.get(0), cashierUsers);
-            cashierDialog.setTitle("Pilih Kasir");
-            cashierDialog.setHeaderText("Pilih kasir untuk laporan penjualan");
-            cashierDialog.setContentText("Kasir:");
+                TextInputDialog endDateDialog = new TextInputDialog(LocalDate.now().toString());
+                endDateDialog.setTitle("Laporan Penjualan Kasir");
+                endDateDialog.setHeaderText("Masukkan tanggal akhir (format: YYYY-MM-DD)");
+                endDateDialog.setContentText("Tanggal Akhir:");
+                Optional<String> endResult = endDateDialog.showAndWait();
 
-            Optional<User> selectedCashier = cashierDialog.showAndWait();
-            if (selectedCashier.isPresent()) {
-                User cashier = selectedCashier.get();
-
-                TextInputDialog startDateDialog = new TextInputDialog(LocalDate.now().minusDays(7).toString());
-                startDateDialog.setTitle("Laporan Penjualan Kasir");
-                startDateDialog.setHeaderText("Masukkan tanggal mulai (format: YYYY-MM-DD)");
-                startDateDialog.setContentText("Tanggal Mulai:");
-                Optional<String> startResult = startDateDialog.showAndWait();
-
-                if (startResult.isPresent()) {
-                    LocalDate startDate = LocalDate.parse(startResult.get().trim());
-
-                    TextInputDialog endDateDialog = new TextInputDialog(LocalDate.now().toString());
-                    endDateDialog.setTitle("Laporan Penjualan Kasir");
-                    endDateDialog.setHeaderText("Masukkan tanggal akhir (format: YYYY-MM-DD)");
-                    endDateDialog.setContentText("Tanggal Akhir:");
-                    Optional<String> endResult = endDateDialog.showAndWait();
-
-                    if (endResult.isPresent()) {
-                        LocalDate endDate = LocalDate.parse(endResult.get().trim());
-                        ReportDialog reportDialog = new ReportDialog(transactionService, startDate, endDate,
-                            "Laporan Penjualan Kasir " + cashier.getFullName());
-                        reportDialog.showAndWait();
-                    }
+                if (endResult.isPresent()) {
+                    LocalDate endDate = LocalDate.parse(endResult.get().trim());
+                    ReportDialog reportDialog = new ReportDialog(transactionService, startDate, endDate,
+                        "Laporan Penjualan Semua Kasir");
+                    reportDialog.showAndWait();
                 }
             }
         } catch (Exception e) {
