@@ -137,13 +137,21 @@ public class PosView extends VBox {
                 "-fx-border-radius: 5;");
         btnCheckout.setPrefHeight(45);
 
+        // Clear Cart Button
+        Button btnClearCart = createStyledButton("🗑️ Hapus Keranjang", "#d32f2f");
+        btnClearCart.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 12; " +
+                "-fx-background-color: #d32f2f; -fx-text-fill: white; -fx-cursor: hand; " +
+                "-fx-border-radius: 5;");
+        btnClearCart.setPrefHeight(45);
+
         cartPanel.getChildren().addAll(
             cartTitleLabel,
             separator1,
             cartList,
             separator2,
             totalLabel,
-            btnCheckout
+            btnCheckout,
+            btnClearCart
         );
 
         VBox.setVgrow(cartList, Priority.ALWAYS);
@@ -191,6 +199,13 @@ public class PosView extends VBox {
 
     public Button getBtnAddToCart() {
         return btnAddToCart;
+    }
+
+    // New: button to clear entire cart
+    private Button btnClearCart;
+
+    public Button getBtnClearCart() {
+        return btnClearCart;
     }
 
     public Button getBtnCheckout() {

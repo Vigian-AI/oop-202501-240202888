@@ -39,6 +39,7 @@ public class KasirView extends VBox {
     private Button btnLogout;
     private TabPane tabPane;
     private TableView<Transaction> historyTable;
+    private Button btnClearCart;
 
     public KasirView() {
         // ========== MAIN STYLING ==========
@@ -303,10 +304,28 @@ public class KasirView extends VBox {
 
         // Checkout Button
         btnCheckout = createStyledButton("✅ CHECKOUT", "#1976d2");
-        btnCheckout.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 12; " +
+        btnCheckout.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-padding: 14 18; " +
                 "-fx-background-color: #1976d2; -fx-text-fill: white; -fx-cursor: hand; " +
                 "-fx-border-radius: 5;");
-        btnCheckout.setPrefHeight(45);
+        btnCheckout.setPrefHeight(50);
+        // Make Checkout visually larger (wider)
+        btnCheckout.setPrefWidth(220);
+
+        // Clear Cart Button
+        btnClearCart = createStyledButton("🗑️ Hapus Semua", "#d32f2f");
+        btnClearCart.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 12; " +
+                "-fx-background-color: #d32f2f; -fx-text-fill: white; -fx-cursor: hand; " +
+                "-fx-border-radius: 5;");
+        btnClearCart.setPrefHeight(45);
+
+        // Put Clear on the left and Checkout on the right with a spacer in between
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(10);
+        javafx.scene.layout.Region spacer = new javafx.scene.layout.Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        // Clear on left, spacer expands, then Checkout (larger) on right
+        buttonBox.getChildren().addAll(btnClearCart, spacer, btnCheckout);
+        buttonBox.setAlignment(Pos.CENTER); // vertical centering
 
         cartPanel.getChildren().addAll(
             cartTitleLabel,
@@ -314,12 +333,12 @@ public class KasirView extends VBox {
             cartTable,
             separator2,
             totalLabel,
-            btnCheckout
+            buttonBox
         );
 
-        VBox.setVgrow(cartTable, Priority.ALWAYS);
-        return cartPanel;
-    }
+         VBox.setVgrow(cartTable, Priority.ALWAYS);
+         return cartPanel;
+     }
 
     private Button createStyledButton(String text, String color) {
         Button button = new Button(text);
@@ -398,5 +417,9 @@ public class KasirView extends VBox {
 
     public TabPane getTabPane() {
         return tabPane;
+    }
+
+    public Button getBtnClearCart() {
+        return btnClearCart;
     }
 }

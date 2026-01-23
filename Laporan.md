@@ -105,13 +105,43 @@ Pengujian sistem dilakukan pada tiga level utama: unit testing, integrasi, dan p
   4. Generate laporan penjualan dan ekspor CSV → verifikasi isi file CSV.
   5. Backup & Restore data → verifikasi data setelah restore.
 
-  Semua langkah di atas telah didemonstrasikan pada lingkungan pengembangan; bukti screenshot dapat ditemukan di `praktikum/week15-proyek-kelompok/screenshots`.
 
-Temuan dan catatan:
-- Ditemukan beberapa isu minor terkait validasi input (mis. handling masukan kosong pada form harga) dan pesan error yang masih bisa diperjelas. Masalah ini dicatat pada *issue tracker* untuk perbaikan berikutnya.
-- Rekomendasi perbaikan termasuk menambah validasi sisi-klien (JavaFX) dan menambahkan UI tests (mis. TestFX) untuk otomatisasi demonstrasi.
-
-Kesimpulan pengujian: fungsi-fungsi inti (CRUD, transaksi, pelaporan) berfungsi sesuai harapan pada lingkungan pengembangan; beberapa perbaikan minor dicatat untuk sprint selanjutnya.
+| No | Test Class | Test Method | Status | Deskripsi |
+|----:|------------|-------------|:------:|----------|
+| 1 | ProductServiceTest | insertValidProduct | ✅ | Menyisipkan produk valid melalui service -> tersimpan di DAO |
+| 2 | ProductServiceTest | insertInvalidCode | ✅ | Validasi menolak produk dengan kode kosong |
+| 3 | ProductServiceTest | insertNegativePrice | ✅ | Menangani/menolak harga negatif sesuai kebijakan model/service |
+| 4 | ProductServiceTest | updateStockValid | ✅ | Memperbarui stok produk berhasil dan tercermin di DAO |
+| 5 | ProductServiceTest | updateStockNegative | ✅ | Menolak operasi update stok dengan nilai negatif |
+| 6 | ProductServiceMoreTest | productFindAllAfterInsert | ✅ | `findAll()` mengembalikan semua produk setelah insert berganda |
+| 7 | ProductServiceMoreTest | productDecreaseStockWorks | ✅ | `decreaseStock` mengurangi stok sesuai jumlah yang diminta |
+| 8 | ProductServiceMoreTest | productDeleteRemoves | ✅ | Menghapus produk menghilangkan entri dari penyimpanan DAO |
+| 9 | CartServiceTest | addItemValid | ✅ | Menambah item valid ke keranjang melalui CartService berhasil |
+| 10 | CartServiceTest | addItemNotFound | ✅ | Menambah produk yang tidak ada memicu IllegalArgumentException |
+| 11 | CartServiceTest | addItemInsufficientStock | ✅ | Menambah item melebihi stok ditolak |
+| 12 | CartServiceTest | addItemInvalidQty | ✅ | Menambah dengan qty <=0 ditolak |
+| 13 | CartServiceTest | updateQuantityValid | ✅ | Memperbarui quantity item berhasil & total terupdate |
+| 14 | CartServiceTest | updateQuantityNegative | ✅ | Menolak update quantity negatif |
+| 15 | CartServiceTest | saveCartReturnsId | ✅ | Menyimpan keranjang lewat service mengembalikan id (>= -1) |
+| 16 | CartServiceTest | removeItemFromCartService | ✅ | removeItem lewat service menghapus entry cart |
+| 17 | CartServiceTest | clearCartService | ✅ | clearCart() menghapus seluruh item di keranjang |
+| 18 | CartServiceTest | getTotalPriceReflectsCart | ✅ | getTotalPrice() merefleksikan isi cart saat ini |
+| 19 | CartServiceSaveTest | cartServiceSaveReturnsId | ✅ | Save cart via DAO mengembalikan cart id atau -1 pada kegagalan |
+| 20 | CartServiceTest | testCartTotalPrice | ✅ | Kalkulasi total pada model cart (simple scenario) |
+| 21 | CartServiceTest | testCartAddItem | ✅ | Menambah item ke cart model dan merge quantity |
+| 22 | ProductModelTest | productProperties | ✅ | Verifikasi getter/setter dan atribut dasar produk |
+| 23 | ProductModelTest | productSetters | ✅ | Setter bekerja dan memperbarui atribut produk |
+| 24 | ProductModelTest | productNegativePriceAllowedInModel | ✅ | Model mengizinkan harga negatif (behavior diuji) |
+| 25 | ProductModelTest | productStockProperty | ✅ | Properti stok tersimpan dan terbaca |
+| 26 | ProductModelTest | productCodeNonEmpty | ✅ | Code produk tidak boleh kosong |
+| 27 | CartTest | testAddNewItem | ✅ | Menambah item baru ke cart membuat entry baru |
+| 28 | CartTest | testAddMergeQuantity | ✅ | Menambah produk sama menggabungkan quantity |
+| 29 | CartTest | testRemoveItem | ✅ | removeItem menghapus entry produk |
+| 30 | CartTest | testUpdateQuantity | ✅ | updateQuantity mengatur jumlah item |
+| 31 | CartTest | testUpdateQuantityToZeroRemoves | ✅ | Mengatur qty ke 0 menghapus item |
+| 32 | CartTest | testGetTotalPrice | ✅ | getTotalPrice menggabungkan subtotal item |
+| 33 | CartModelMoreTest | cartClearRemovesAll | ✅ | clear() mengosongkan keranjang |
+| 34 | CartModelMoreTest | cartGetTotalWithMultipleItems | ✅ | Total dihitung untuk beberapa item berbeda |
 
 ---
 

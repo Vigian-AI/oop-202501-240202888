@@ -162,7 +162,10 @@ public class AppJavaFX extends Application {
         view.getBtnAddToCart().setOnAction(e -> controller.addToCart(
             view.getProductTable(), view.getCartTable(), view.getTotalLabel()
         ));
-        view.getBtnCheckout().setOnAction(e -> controller.checkout(view.getProductTable(), view.getCartTable(), view.getTotalLabel()));
+        // Pass history table so checkout can refresh it after success
+        view.getBtnCheckout().setOnAction(e -> controller.checkout(view.getProductTable(), view.getCartTable(), view.getTotalLabel(), view.getHistoryTable()));
+        // Clear cart button (remove all items)
+        view.getBtnClearCart().setOnAction(e -> controller.clearCart(view.getCartTable(), view.getTotalLabel()));
 
         // Set callbacks for cart quantity changes
         view.setOnIncreaseQuantity(productCode -> controller.increaseQuantity(productCode, view.getCartTable(), view.getTotalLabel()));

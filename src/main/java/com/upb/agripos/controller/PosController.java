@@ -251,7 +251,8 @@ public class PosController {
         }
     }
 
-    public void checkout(TableView<Product> productTable, TableView<CartItem> cartTable, Label totalLabel) {
+    // Modified checkout signature: add historyTable parameter so we can refresh kasir history after success
+    public void checkout(TableView<Product> productTable, TableView<CartItem> cartTable, Label totalLabel, TableView<Transaction> historyTable) {
         if (cartService.getCart().getItems().isEmpty()) {
             showAlert("Error", "Keranjang kosong");
             return;
@@ -313,6 +314,7 @@ public class PosController {
             showAlert("Info", "Checkout berhasil. Total: " + String.format("Rp %,.0f", totalAmount));
             cartService.clearCart();
             updateCartDisplay(cartTable, totalLabel);
+
             // Refresh product table after stock changes (handle FilteredList safely)
             ObservableList<Product> productItems = productTable.getItems();
             var fresh = productService.findAll();
@@ -321,6 +323,16 @@ public class PosController {
                 src.setAll(fresh);
             } else {
                 productItems.setAll(fresh);
+            }
+
+            // --- NEW: refresh kasir history table so the UI updates immediately for the cashier ---
+            try {
+                if (historyTable != null) {
+                    loadKasirHistory(historyTable, currentUser.getId());
+                }
+            } catch (Exception ex) {
+                // Don't block checkout success for history refresh failures; log and continue
+                ex.printStackTrace();
             }
         } catch (Exception e) {
             // Log full stacktrace for debugging
@@ -425,6 +437,22 @@ public class PosController {
             }
         } catch (Exception e) {
             showAlert("Error", "Gagal mengurangi quantity: " + e.getMessage());
+        }
+    }
+
+    // New: clear entire cart with confirmation
+    public void clearCart(TableView<CartItem> cartTable, Label totalLabel) {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Konfirmasi Hapus Semua");
+        confirm.setHeaderText("Hapus Semua Item dari Keranjang");
+        confirm.setContentText("Anda yakin ingin menghapus semua item dari keranjang?");
+        var res = confirm.showAndWait();
+        if (res.isEmpty() || res.get() != ButtonType.OK) return;
+        try {
+            cartService.clearCart();
+            updateCartDisplay(cartTable, totalLabel);
+        } catch (Exception e) {
+            showAlert("Error", "Gagal menghapus semua item: " + e.getMessage());
         }
     }
 
