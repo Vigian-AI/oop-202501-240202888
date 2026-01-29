@@ -37,7 +37,7 @@ Topik: GUI Dasar JavaFX (Event-Driven Programming)
 ---
 
 ## Kode Program
-Berikut adalah potongan kode implementasi event handler sesuai dengan implementasi pada `AppJavaFX.java` (dikomentari agar aman untuk ditampilkan di laporan):
+Berikut adalah potongan kode implementasi event handler sesuai dengan implementasi pada `AppJavaFX.java` 
 
 ```java
 
