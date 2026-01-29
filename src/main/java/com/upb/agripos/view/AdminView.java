@@ -140,7 +140,7 @@ public class AdminView extends VBox {
         userTable.setPrefHeight(200);
         // Make table expand to full width and distribute columns evenly
         userTable.setMaxWidth(Double.MAX_VALUE);
-        userTable.setColumnResizePolicy(javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY);
+        userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         // bind each column to equal share of the table width
         idCol.prefWidthProperty().bind(userTable.widthProperty().divide(4));
         usernameCol.prefWidthProperty().bind(userTable.widthProperty().divide(4));

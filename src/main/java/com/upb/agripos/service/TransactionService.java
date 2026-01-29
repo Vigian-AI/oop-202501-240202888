@@ -201,7 +201,7 @@ public class TransactionService {
     }
 
     // New helper to fetch cart items for a saved cart id
-    public java.util.List<CartItem> getCartItemsByCartId(int cartId) {
+    public List<CartItem> getCartItemsByCartId(int cartId) {
         return cartDAO.findCartItemsByCartId(cartId);
     }
 }

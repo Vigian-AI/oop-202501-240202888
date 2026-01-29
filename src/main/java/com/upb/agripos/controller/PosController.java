@@ -457,10 +457,10 @@ public class PosController {
     }
 
     private void updateCartDisplay(TableView<CartItem> cartTable, Label totalLabel) {
-        javafx.collections.ObservableList<CartItem> cartItems = cartTable.getItems();
+        ObservableList<CartItem> cartItems = cartTable.getItems();
         var fresh = cartService.getCart().getItems();
         if (cartItems instanceof FilteredList) {
-            javafx.collections.ObservableList<CartItem> src = (javafx.collections.ObservableList<CartItem>) ((FilteredList<CartItem>) cartItems).getSource();
+            ObservableList<CartItem> src = (ObservableList<CartItem>) ((FilteredList<CartItem>) cartItems).getSource();
             src.setAll(fresh);
         } else {
             cartItems.setAll(fresh);
@@ -484,10 +484,10 @@ public class PosController {
 
     public void loadKasirHistory(TableView<Transaction> historyTable, int userId) {
         try {
-            javafx.collections.ObservableList<Transaction> historyItems = historyTable.getItems();
+            ObservableList<Transaction> historyItems = historyTable.getItems();
             var fresh = transactionService.getTransactionsByUserId(userId);
             if (historyItems instanceof FilteredList) {
-                javafx.collections.ObservableList<Transaction> src = (javafx.collections.ObservableList<Transaction>) ((FilteredList<Transaction>) historyItems).getSource();
+                ObservableList<Transaction> src = (ObservableList<Transaction>) ((FilteredList<Transaction>) historyItems).getSource();
                 src.setAll(fresh);
             } else {
                 historyItems.setAll(fresh);
@@ -557,7 +557,7 @@ public class PosController {
             Optional<String> startResult = startDateDialog.showAndWait();
 
             if (startResult.isPresent()) {
-                java.time.LocalDate startDate = java.time.LocalDate.parse(startResult.get().trim());
+                LocalDate startDate = LocalDate.parse(startResult.get().trim());
 
                 TextInputDialog endDateDialog = new TextInputDialog(LocalDate.now().toString());
                 endDateDialog.setTitle("Laporan Produk Keluar");
@@ -566,9 +566,9 @@ public class PosController {
                 Optional<String> endResult = endDateDialog.showAndWait();
 
                 if (endResult.isPresent()) {
-                    java.time.LocalDate endDate = java.time.LocalDate.parse(endResult.get().trim());
-                    java.time.LocalDateTime start = startDate.atStartOfDay();
-                    java.time.LocalDateTime end = endDate.atTime(23,59,59);
+                    LocalDate endDate = LocalDate.parse(endResult.get().trim());
+                    LocalDateTime start = startDate.atStartOfDay();
+                    LocalDateTime end = endDate.atTime(23,59,59);
 
                     WarehouseReportDialog warehouseDialog = new WarehouseReportDialog(
                         productService, cartService, start, end, "Laporan Gudang - " + startDate + " sampai " + endDate);

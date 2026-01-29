@@ -66,9 +66,8 @@ public class CartDAO {
             System.err.println("Error saving cart items: " + e.getMessage());
         }
     }
-
-    public java.util.List<com.upb.agripos.model.SoldProduct> findSoldProductsByDateRange(java.time.LocalDateTime start, java.time.LocalDateTime end) {
-        java.util.List<com.upb.agripos.model.SoldProduct> list = new java.util.ArrayList<>();
+    public List<com.upb.agripos.model.SoldProduct> findSoldProductsByDateRange(java.time.LocalDateTime start, java.time.LocalDateTime end) {
+        List<com.upb.agripos.model.SoldProduct> list = new java.util.ArrayList<>();
         String sql = "SELECT ci.product_code, p.name, SUM(ci.quantity) AS qty, SUM(ci.subtotal) AS value " +
                      "FROM cart_items ci " +
                      "JOIN carts c ON ci.cart_id = c.id " +
@@ -97,8 +96,8 @@ public class CartDAO {
         return list;
     }
 
-    public java.util.List<com.upb.agripos.model.SoldProduct> findSoldProductsByDateRangeAndUser(java.time.LocalDateTime start, java.time.LocalDateTime end, int userId) {
-        java.util.List<com.upb.agripos.model.SoldProduct> list = new java.util.ArrayList<>();
+    public List<com.upb.agripos.model.SoldProduct> findSoldProductsByDateRangeAndUser(java.time.LocalDateTime start, java.time.LocalDateTime end, int userId) {
+        List<com.upb.agripos.model.SoldProduct> list = new java.util.ArrayList<>();
         String sql = "SELECT ci.product_code, p.name, SUM(ci.quantity) AS qty, SUM(ci.subtotal) AS value " +
                      "FROM cart_items ci " +
                      "JOIN carts c ON ci.cart_id = c.id " +
@@ -129,8 +128,8 @@ public class CartDAO {
     }
 
     // New: fetch cart items (with product details) for given cart id
-    public java.util.List<CartItem> findCartItemsByCartId(int cartId) {
-        java.util.List<CartItem> items = new java.util.ArrayList<>();
+    public List<CartItem> findCartItemsByCartId(int cartId) {
+        List<CartItem> items = new java.util.ArrayList<>();
         String sql = "SELECT ci.product_code, ci.quantity, ci.subtotal, p.name, p.price, p.stock " +
                      "FROM cart_items ci " +
                      "JOIN products p ON p.code = ci.product_code " +

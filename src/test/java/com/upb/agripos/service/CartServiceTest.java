@@ -30,7 +30,7 @@ public class CartServiceTest {
         productService = new FakeProductService();
         productService.map.put("P1", new Product("P1", "A", 1000.0, 10));
         productService.map.put("P2", new Product("P2", "B", 500.0, 1));
-        cartDAO = com.upb.agripos.dao.CartDAO.getInstance();
+        cartDAO = CartDAO.getInstance();
         cartService = new CartService(productService, cartDAO);
     }
 
