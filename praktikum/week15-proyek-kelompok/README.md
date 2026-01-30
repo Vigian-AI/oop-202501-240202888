@@ -156,6 +156,6 @@ Proyek ini dibuat untuk keperluan mata kuliah OOP di Universitas Putra Bangsa. S
 
 --
 
-Updated: 23 Januari 2026
+Updated: 30 Januari 2026
 Version: 1.0-SNAPSHOT
 
